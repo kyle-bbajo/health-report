@@ -76,10 +76,15 @@ p { margin: 0; }
 .chain div.now b { background: #c2410c; }
 /* 한 번만 도는 등장 순서. 움직임 줄이기면 바로 최종 상태 */
 @media (prefers-reduced-motion: no-preference) {
-  .cal td.missed, .chain div { animation: pop .45s ease-out both; }
+  /* 결석 칸 → 연락 단계가 차례로 나타났다가 사라지고 9초마다 다시 시작한다 */
+  .cal td.missed, .chain div { animation: pop 9s ease-out infinite both; }
   .cal td.missed:nth-of-type(n) { animation-delay: calc(var(--i, 0) * .35s + .6s); }
   .chain div { animation-delay: calc(var(--i, 0) * .35s + 2.2s); }
-  @keyframes pop { from { opacity: 0; transform: translateY(6px) } to { opacity: 1; transform: none } }
+  @keyframes pop {
+    0% { opacity: 0; transform: translateY(6px) }
+    5%, 70% { opacity: 1; transform: none }
+    78%, 100% { opacity: 0; transform: none }
+  }
 }
 
 /* 숫자: 카드 없이 글로 */
