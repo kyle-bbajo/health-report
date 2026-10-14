@@ -6,6 +6,6 @@
 
 - 처음 화면: index.html
 - 관리자 화면: admin.html
-- 회원 화면: my.html (예: M007 / 1972)
+- 회원 화면: my.html (예: yuc / 2011)
 
 저장, 문자 발송, 음식 사진 읽기, 엑셀 내려받기는 설치판에서 동작합니다. 이 폴더는 설치판의 `python scripts/export_static.py`로 만듭니다.

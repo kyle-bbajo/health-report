@@ -6,6 +6,7 @@
   window.fetch = function () { return Promise.resolve(new Response(null, {status: 404})); };
   if (navigator.serviceWorker) navigator.serviceWorker.register = function () { return Promise.reject(); };
   var MEMBERS = {"M001": "1952", "M002": "1963", "M003": "1968", "M004": "1974", "M005": "1987", "M006": "1980", "M007": "1972", "M008": "1968", "M009": "1955", "M010": "1982", "M011": "1999", "M012": "1979", "M013": "1952", "M014": "1981", "M015": "1952", "M016": "2002", "M017": "1974", "M018": "1987", "M019": "1952", "M020": "1986", "M021": "1954", "M022": "1955", "M023": "1956", "M024": "1965", "M025": "1953", "M026": "1956", "M027": "1979", "M028": "1964", "M029": "1964", "M030": "1969", "M031": "1981", "M032": "2001", "M033": "1972", "M034": "1984", "M035": "1974", "M036": "2000", "M037": "1974", "M038": "1983", "M039": "1978", "M040": "1997", "M041": "1953", "M042": "1981", "M043": "1999", "M044": "1977", "M045": "1996", "M046": "1958", "M047": "1967", "M048": "1986", "M049": "1999", "M050": "1982", "M051": "1956", "M052": "1965", "M053": "1976", "M054": "1992", "M055": "1953", "M056": "1973", "M057": "1999", "M058": "1954", "M059": "1998", "M060": "1988"};
+  var ALIAS = {"YUC": ["M007", "2011"]};      // 시연용 쉬운 로그인: yuc / 2011 → 용도공(M007)
   function toast(msg) {
     var t = document.getElementById('demo-toast');
     if (!t) { t = document.createElement('div'); t.id = 'demo-toast'; t.setAttribute('role', 'status'); document.body.appendChild(t); }
@@ -23,8 +24,9 @@
     var f = e.target;
     if (f.hasAttribute('data-demo-login')) {
       var id = (f.member_id.value || '').trim().toUpperCase(), by = (f.birth_year.value || '').trim();
+      if (ALIAS[id] && ALIAS[id][1] === by) { location.href = 'my-' + ALIAS[id][0] + '.html'; return; }
       if (MEMBERS[id] && MEMBERS[id] === by) { location.href = 'my-' + id + '.html'; return; }
-      toast('회원번호나 태어난 해가 맞지 않습니다. 예: M007 / 1972'); return;
+      toast('회원번호나 태어난 해가 맞지 않습니다. 예: yuc / 2011'); return;
     }
     toast(SAVE);
   }, true);
@@ -246,7 +248,7 @@
           
         </div>
       </div>
-      <div class="sub" style="margin-top:10px">그래디언트 부스팅(scikit-learn) 두 개: ① 오늘 올 확률 ② 도착 시각의 90% 지점(분위 회귀). 특징은 그 요일·강좌 출석률(최근일수록 무겁게), 연속 결석, 마지막 출석 후 날수, 평소 시각과 들쭉날쭉함, 요일·월, 나이, 날씨(최저·최고·강수·적설·도착 전 3시간 강수), 시설 전체 출석 흐름. 결석은 규칙과 똑같이 모두 알리고, 모델은 언제 알릴지를 정합니다. 학습 2026-10-14 07:14.</div>
+      <div class="sub" style="margin-top:10px">그래디언트 부스팅(scikit-learn) 두 개: ① 오늘 올 확률 ② 도착 시각의 90% 지점(분위 회귀). 특징은 그 요일·강좌 출석률(최근일수록 무겁게), 연속 결석, 마지막 출석 후 날수, 평소 시각과 들쭉날쭉함, 요일·월, 나이, 날씨(최저·최고·강수·적설·도착 전 3시간 강수), 시설 전체 출석 흐름. 결석은 규칙과 똑같이 모두 알리고, 모델은 언제 알릴지를 정합니다. 학습 2026-10-14 08:21.</div>
       
     </div>
   </div>
