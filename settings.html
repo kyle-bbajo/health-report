@@ -180,7 +180,7 @@
           <div class="sub">템플릿에 쓸 수 있는 변수: <code>#{이름}</code> <code>#{기관}</code> <code>#{강좌}</code> <code>#{보호자}</code> <code>#{관계}</code> <code>#{연속미출석}</code> <code>#{미출석일수}</code> <code>#{마지막출석}</code> <code>#{링크}</code> <code>#{평소시각}</code> <code>#{날씨}</code> <code>#{경과일}</code> <code>#{종료일}</code> <code>#{마지막측정}</code> <code>#{측정경과일}</code> </div>
         </div>
         <label class="sub">문자 속 링크 주소 (보호자가 휴대폰으로 여는 이 서버 주소)
-          <input name="public_url" value="" placeholder="예: https://care.yongin.example.kr  ·  같은 와이파이 시험: http://192.168.0.10:8000" class="btn" style="width:100%;margin-top:3px;cursor:text"></label>
+          <input name="public_url" value="" placeholder="예: https://care.yongin.example.kr" class="btn" style="width:100%;margin-top:3px;cursor:text"></label>
         <label class="sub"><input type="checkbox" name="auto" value="1" checked> <b>조건이 되면 직원 확인 없이 자동으로 보내기</b> (본인 안부 2번·7일, 보호자 안부 3번·14일, 보호자 동의 요청, 출석 독려, 재등록·재측정·건강 체크 안내. 9시~20시에만 보내고, 휴회 기간은 세지 않으며, 같은 일로 두 번 보내지 않음)</label>
         <div><button type="submit" class="btn primary"><svg class="ic "><use href="#i-check"/></svg> 저장</button></div>
       </form>
@@ -197,7 +197,12 @@
     </div>
   </div>
 </div>
-<div class="foot">발송 순서: ① 솔라피 가입 → ② 발신번호 등록(기관 대표번호 등, 통신서비스 이용증명원 필요) → ③ API Key 발급 → ④ 여기에 넣고 시험 문자. 알림톡은 그 위에 ⑤ 기관 카카오 비즈니스 채널 개설 → ⑥ 솔라피에 채널 연동 → ⑦ 문자 종류마다 템플릿 등록·검수(며칠) → ⑧ 채널 ID와 템플릿 ID 입력. 알림톡은 승인된 문장 그대로 나가므로 AI 가 다듬은 문장은 쓰이지 않고 변수만 채워집니다. 국민비서(구삐)는 기관이 행안부에 연계를 신청해 승인받으면 core/sender.py 의 발송 목록에 함수 하나를 더해 켭니다. 보호자 문자에는 동의·확인 링크가 들어가므로, 링크 주소는 보호자 휴대폰(LTE)에서 열리는 외부 주소여야 합니다. 비워 두면 지금 접속한 주소가 들어갑니다. 90바이트(한글 약 45자)가 넘는 문자는 장문(LMS)으로 나갑니다. 키는 산출물 폴더 settings.json 에만 저장되고 환경변수 SOLAPI_API_KEY · SOLAPI_API_SECRET 로도 넣을 수 있습니다.</div>
+<div class="foot">
+  <b>문자 연결 순서</b> ① 솔라피 가입 → ② 발신번호 등록 (기관 대표번호, 통신서비스 이용증명원 필요) → ③ API Key 발급 → ④ 여기에 넣고 시험 문자<br>
+  <b>알림톡은 그 위에</b> ⑤ 기관 카카오 비즈니스 채널 개설 → ⑥ 솔라피에 채널 연동 → ⑦ 문자 종류마다 템플릿 등록·검수 (며칠) → ⑧ 채널 ID와 템플릿 ID 입력. 승인된 문장 그대로 나가고 변수만 채워집니다.<br>
+  <b>링크 주소</b> 보호자 문자의 동의·확인 링크가 열리려면 보호자 휴대폰(LTE)에서 닿는 외부 주소여야 합니다. 비워 두면 지금 접속한 주소가 들어갑니다. 같은 와이파이 시험은 http://192.168.x.x:8000 처럼 넣습니다.<br>
+  <b>그 밖에</b> 90바이트(한글 약 45자)가 넘으면 장문(LMS)으로 나갑니다. 국민비서(구삐)는 행안부 연계 승인 뒤 core/sender.py 발송 목록에 더합니다. 키는 산출물 폴더 settings.json에만 저장되고 환경변수 SOLAPI_API_KEY · SOLAPI_API_SECRET로도 넣을 수 있습니다.
+</div>
 
 
   </main>
