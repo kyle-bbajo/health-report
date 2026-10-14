@@ -48,6 +48,7 @@
 <link rel="stylesheet" href="static/style.css">
 </head>
 <body>
+
 <svg xmlns="http://www.w3.org/2000/svg" style="display:none" aria-hidden="true">
   <symbol id="i-grid" viewBox="0 0 24 24"><rect x="3" y="3" width="8" height="8" rx="1.5"/><rect x="13" y="3" width="8" height="8" rx="1.5"/><rect x="3" y="13" width="8" height="8" rx="1.5"/><rect x="13" y="13" width="8" height="8" rx="1.5"/></symbol>
   <symbol id="i-users" viewBox="0 0 24 24"><circle cx="9" cy="8" r="3.5"/><path d="M2.5 20v-1.5a5 5 0 0 1 5-5h3a5 5 0 0 1 5 5V20"/><path d="M16 4.3a3.5 3.5 0 0 1 0 7.4"/><path d="M18 13.6a5 5 0 0 1 3.5 4.9V20"/></symbol>
@@ -165,6 +166,11 @@
       <a class="chip " href="admin-view-EC-88-98-EA-B0-95-EC-A2-85-EB-A3-8C.html">수강 종료</a>
       
     </div>
+    <select name="sport" class="btn sm" aria-label="종목" onchange="this.form.submit()">
+      <option value="">종목 전체</option>
+      <option value="걷기" >걷기</option><option value="배드민턴" >배드민턴</option><option value="수영" >수영</option><option value="아쿠아로빅" >아쿠아로빅</option><option value="요가" >요가</option><option value="필라테스" >필라테스</option><option value="헬스" >헬스</option>
+    </select>
+    <input type="hidden" name="view" value="휴회">
     <span class="count">3명</span>
   </form>
   <div style="overflow-x:auto">

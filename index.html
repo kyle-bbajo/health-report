@@ -1,85 +1,282 @@
 <!doctype html>
-<html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>고독사 위험 조기 발견 · 건강 리포트</title>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>공공체육시설 출석 기반 고독사 위험 조기 발견 · 건강 리포트</title>
+<meta name="description" content="체육시설이 이미 가진 출석 기록으로 평소 시간에 안 온 날을 찾아 본인·보호자·주민센터 순으로 알리는 안부 확인 서비스. 가상 데이터 시연판.">
+<link rel="icon" href="static/icon-192.png">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
 <style>
-/* 한 열: 제품 이름 → 두 입구(관리자·회원) → 바로 들어갈 회원 표 → 화면 미리보기 → 안 되는 것 */
+/* 토큰: 앱(관리자 사이드바 남색, 파랑 강조, 출석 초록, 결석 분홍)과 같은 색을 쓴다 */
 :root {
-  --bg: #f1f3f6; --panel: #ffffff; --line: #dfe3e9; --ink: #1c2430; --ink-2: #4b5563;
-  --accent: #2456c9; --accent-ink: #ffffff; --accent-bg: #e9effb; --warn: #c2410c;
+  --ink: #1b2533; --ink-2: #4b5563; --muted: #7b8594;
+  --paper: #f4f6f9; --panel: #ffffff; --line: #dfe3e9;
+  --blue: #2456c9; --blue-bg: #e9effb;
+  --came: #178a4f; --came-bg: #d9f0e2;
+  --missed: #b91c1c; --missed-bg: #fde3e3;
+  --off: #e7eaef;
   --font: "Pretendard", "Apple SD Gothic Neo", "Malgun Gothic", "Noto Sans KR", system-ui, sans-serif;
 }
-@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
-  --bg: #121820; --panel: #1b2430; --line: #2d3846; --ink: #e8edf3; --ink-2: #a9b4c2;
-  --accent: #7ea6ff; --accent-ink: #0f1722; --accent-bg: #1e2c47; --warn: #f2a46d; color-scheme: dark } }
-:root[data-theme="dark"] {
-  --bg: #121820; --panel: #1b2430; --line: #2d3846; --ink: #e8edf3; --ink-2: #a9b4c2;
-  --accent: #7ea6ff; --accent-ink: #0f1722; --accent-bg: #1e2c47; --warn: #f2a46d; color-scheme: dark }
 * { box-sizing: border-box; }
-body { margin: 0; background: var(--bg); color: var(--ink); font-family: var(--font); font-size: 15px; line-height: 1.6; word-break: keep-all; overflow-wrap: anywhere; }
-.wrap { max-width: 880px; margin: 0 auto; padding-inline: 16px; padding-block: 36px 56px; display: grid; gap: 28px; }
-.eyebrow { font-size: 12.5px; letter-spacing: .04em; color: var(--ink-2); margin: 0; }
-h1 { font-size: clamp(24px, 4.2vw, 34px); line-height: 1.25; margin: 6px 0 10px; text-wrap: balance; letter-spacing: -.01em; }
-.lead { font-size: 16px; color: var(--ink-2); max-width: 62ch; margin: 0; }
-.doors { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 14px; }
-.door { background: var(--panel); border: 1px solid var(--line); border-radius: 12px; padding: 18px 18px 16px; display: grid; gap: 10px; align-content: start; min-width: 0; }
-.door h2 { font-size: 17px; margin: 0; }
-.door ul { margin: 0; padding-left: 18px; color: var(--ink-2); font-size: 14px; }
-.btn { display: inline-flex; justify-content: center; align-items: center; gap: 6px; background: var(--accent); color: var(--accent-ink);
-  border-radius: 9px; padding: 11px 16px; font-weight: 600; text-decoration: none; font-size: 15px; justify-self: start; }
-.btn:focus-visible, a:focus-visible { outline: 3px solid var(--accent); outline-offset: 2px; }
-h2.sec { font-size: 17px; margin: 0 0 10px; }
-.tablewrap { overflow-x: auto; background: var(--panel); border: 1px solid var(--line); border-radius: 12px; }
-table { border-collapse: collapse; width: 100%; font-size: 14px; }
-th, td { text-align: left; padding: 11px 14px; border-bottom: 1px solid var(--line); vertical-align: top; }
-tr:last-child td { border-bottom: 0; }
-th { font-size: 12.5px; color: var(--ink-2); font-weight: 600; background: var(--accent-bg); }
-td code { font-family: ui-monospace, "SF Mono", Menlo, monospace; font-size: 13px; font-variant-numeric: tabular-nums; }
-td a { color: var(--accent); font-weight: 600; white-space: nowrap; }
-figure { margin: 0; }
-figure img { width: 100%; height: auto; border-radius: 12px; border: 1px solid var(--line); display: block; }
-figcaption { font-size: 13px; color: var(--ink-2); margin-top: 8px; }
-.limits { font-size: 14px; color: var(--ink-2); border-left: 3px solid var(--warn); padding: 2px 0 2px 14px; margin: 0; }
-.limits b { color: var(--ink); font-weight: 600; }
+html { scroll-behavior: smooth; }
+body { margin: 0; background: var(--paper); color: var(--ink); font-family: var(--font); font-size: 16px; line-height: 1.65;
+  word-break: keep-all; overflow-wrap: anywhere; -webkit-font-smoothing: antialiased; }
+a { color: var(--blue); }
+a:focus-visible, button:focus-visible { outline: 3px solid var(--blue); outline-offset: 3px; }
+img { max-width: 100%; height: auto; display: block; }
+.wrap { max-width: 1080px; margin: 0 auto; padding-inline: 20px; }
+h1, h2, h3 { margin: 0; line-height: 1.25; text-wrap: balance; letter-spacing: -.015em; }
+h2 { font-size: clamp(22px, 3vw, 28px); font-weight: 700; }
+p { margin: 0; }
+.num { font-variant-numeric: tabular-nums; }
+
+/* 상단 */
+.top { display: flex; align-items: center; justify-content: space-between; gap: 16px; padding-block: 18px; }
+.top .org { font-weight: 700; display: flex; align-items: center; gap: 10px; color: var(--ink); text-decoration: none; }
+.top .org img { width: 28px; height: 28px; border-radius: 7px; }
+.top nav { display: flex; gap: 6px; flex-wrap: wrap; }
+.top nav a { text-decoration: none; color: var(--ink-2); font-size: 14px; padding: 7px 12px; border-radius: 999px; }
+.top nav a:hover { background: var(--off); color: var(--ink); }
+.top nav a.primary { background: var(--ink); color: #fff; }
+.top nav a.primary:hover { background: #0f1620; }
+
+/* 히어로: 왼쪽 글, 오른쪽 출석 달력 */
+.hero { display: grid; grid-template-columns: minmax(0, 1.05fr) minmax(0, .95fr); gap: 48px; align-items: center; padding-block: 48px 64px; }
+.hero h1 { font-size: clamp(30px, 4.6vw, 48px); font-weight: 800; }
+.hero .lead { margin-top: 18px; font-size: 17.5px; color: var(--ink-2); max-width: 36em; }
+.hero .who { margin-top: 10px; font-size: 14px; color: var(--muted); }
+.cta { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 28px; }
+.btn { display: inline-flex; align-items: center; gap: 8px; padding: 13px 20px; border-radius: 10px; font-weight: 700; font-size: 15.5px; text-decoration: none; border: 1.5px solid transparent; }
+.btn.fill { background: var(--blue); color: #fff; }
+.btn.fill:hover { background: #1c47a8; }
+.btn.line { background: var(--panel); color: var(--ink); border-color: var(--line); }
+.btn.line:hover { border-color: var(--ink); }
+.btn svg { width: 18px; height: 18px; stroke: currentColor; fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+
+/* 달력 그림 (핵심 장치): 월·수에 오던 회원이 2주째 안 오면 → 연락 단계 */
+.cal { background: var(--panel); border: 1px solid var(--line); border-radius: 18px; padding: 20px 20px 18px; box-shadow: 0 20px 50px -30px rgba(27,37,51,.35); }
+.cal .hd { display: flex; justify-content: space-between; align-items: baseline; flex-wrap: wrap; gap: 2px 12px; margin-bottom: 12px; }
+.cal .hd b { font-size: 15px; white-space: nowrap; }
+.cal .hd span { font-size: 12.5px; color: var(--muted); }
+.cal table { border-collapse: separate; border-spacing: 6px; width: 100%; }
+.cal th { font-size: 11.5px; font-weight: 600; color: var(--muted); padding-bottom: 2px; }
+.cal td { height: 40px; text-align: center; font-size: 13px; border-radius: 9px; background: var(--off); color: var(--ink-2); position: relative; }
+.cal td.came { background: var(--came-bg); color: var(--came); font-weight: 700; }
+.cal td.missed { background: var(--missed-bg); color: var(--missed); font-weight: 700; }
+.cal td.today { outline: 2px solid var(--blue); outline-offset: -2px; background: #fff; color: var(--blue); font-weight: 700; }
+.cal td.off { background: repeating-linear-gradient(135deg, #eef0f3 0 6px, #e4e7ec 6px 12px); color: #aab2bf; }
+.cal td.blank { background: transparent; }
+.cal .key { display: flex; gap: 14px; flex-wrap: wrap; margin-top: 10px; font-size: 12.5px; color: var(--ink-2); }
+.cal .key i { display: inline-block; width: 10px; height: 10px; border-radius: 3px; margin-right: 5px; vertical-align: -1px; }
+.chain { margin-top: 14px; display: grid; gap: 6px; }
+.chain div { display: flex; align-items: center; gap: 10px; font-size: 13.5px; padding: 8px 12px; border-radius: 9px; background: var(--paper); border: 1px solid var(--line); }
+.chain div b { font-size: 11px; font-weight: 700; color: #fff; background: var(--ink); border-radius: 6px; padding: 2px 7px; flex: none; }
+.chain div.now { border-color: #e7b56b; background: #fff8ec; }
+.chain div.now b { background: #c2410c; }
+/* 한 번만 도는 등장 순서. 움직임 줄이기면 바로 최종 상태 */
+@media (prefers-reduced-motion: no-preference) {
+  .cal td.missed, .chain div { animation: pop .45s ease-out both; }
+  .cal td.missed:nth-of-type(n) { animation-delay: calc(var(--i, 0) * .35s + .6s); }
+  .chain div { animation-delay: calc(var(--i, 0) * .35s + 2.2s); }
+  @keyframes pop { from { opacity: 0; transform: translateY(6px) } to { opacity: 1; transform: none } }
+}
+
+/* 숫자: 카드 없이 글로 */
+.facts { border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); padding-block: 22px; display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 18px 32px; }
+.facts div b { display: block; font-size: 26px; font-weight: 800; letter-spacing: -.02em; line-height: 1.1; }
+.facts div span { font-size: 13.5px; color: var(--ink-2); }
+.facts .note { grid-column: 1 / -1; font-size: 12.5px; color: var(--muted); }
+
+section { padding-block: 56px; }
+section > .wrap > h2 { margin-bottom: 8px; }
+section > .wrap > .sub { color: var(--ink-2); max-width: 44em; margin-bottom: 28px; }
+
+/* 어떻게 동작하나: 실제 순서라 번호를 붙인다 */
+.steps { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 18px; counter-reset: s; }
+.step { counter-increment: s; padding-top: 14px; border-top: 3px solid var(--line); min-width: 0; }
+.step.hot { border-top-color: var(--blue); }
+.step::before { content: counter(s); display: inline-block; font-size: 13px; font-weight: 700; color: var(--blue); margin-bottom: 8px; }
+.step h3 { font-size: 17px; font-weight: 700; margin-bottom: 8px; }
+.step p { font-size: 14.5px; color: var(--ink-2); }
+.step p small { display: block; color: var(--muted); font-size: 12.5px; margin-top: 6px; }
+
+/* 화면: 관리자 가로 1장 + 휴대폰 2장 */
+.shots { display: grid; grid-template-columns: minmax(0, 1.6fr) minmax(0, .55fr) minmax(0, .55fr); gap: 20px; align-items: start; }
+.shot { text-decoration: none; color: inherit; min-width: 0; }
+.shot img { border: 1px solid var(--line); border-radius: 12px; background: #fff; }
+.shot figcaption { margin-top: 10px; font-size: 14px; color: var(--ink-2); }
+.shot figcaption b { color: var(--ink); display: block; font-size: 15px; }
+.shot:hover img { border-color: var(--blue); }
+
+/* 바로 들어가 보기 */
+.try { background: var(--panel); border: 1px solid var(--line); border-radius: 14px; overflow: hidden; }
+.try table { width: 100%; border-collapse: collapse; font-size: 15px; }
+.try th, .try td { padding: 14px 18px; text-align: left; vertical-align: top; border-bottom: 1px solid var(--line); }
+.try tr:last-child td { border-bottom: 0; }
+.try th { font-size: 13px; color: var(--ink-2); font-weight: 600; background: var(--paper); }
+.try code { font-family: ui-monospace, "SF Mono", Menlo, monospace; font-size: 14px; background: var(--off); padding: 2px 7px; border-radius: 6px; white-space: nowrap; }
+.try td a { font-weight: 700; text-decoration: none; white-space: nowrap; }
+.try td a:hover { text-decoration: underline; }
+
+/* 묶은 자료 · 안 하는 일 */
+.cols { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 40px; }
+.cols h3 { font-size: 17px; font-weight: 700; margin-bottom: 12px; }
+.list { list-style: none; margin: 0; padding: 0; display: grid; gap: 10px; }
+.list li { display: grid; grid-template-columns: 9.5em minmax(0, 1fr); gap: 12px; font-size: 14.5px; padding-bottom: 10px; border-bottom: 1px solid var(--line); }
+.list li span:first-child { color: var(--ink); font-weight: 600; }
+.list li span:last-child { color: var(--ink-2); }
+.rules { list-style: none; margin: 0; padding: 0; display: grid; gap: 12px; }
+.rules li { padding-left: 26px; position: relative; font-size: 14.5px; color: var(--ink-2); }
+.rules li::before { content: ""; position: absolute; left: 0; top: 7px; width: 14px; height: 14px; border-radius: 50%; background: var(--came-bg); border: 2px solid var(--came); }
+
+/* 바닥 */
+footer { border-top: 1px solid var(--line); padding-block: 28px 44px; font-size: 13.5px; color: var(--muted); }
+footer p + p { margin-top: 6px; }
+footer a { color: var(--ink-2); }
+
+@media (max-width: 860px) {
+  .hero { grid-template-columns: 1fr; gap: 32px; padding-block: 28px 44px; }
+  .steps { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .shots { grid-template-columns: 1fr 1fr; }
+  .shots .shot:first-child { grid-column: 1 / -1; }
+  .cols { grid-template-columns: 1fr; gap: 32px; }
+}
+@media (max-width: 520px) {
+  .steps { grid-template-columns: 1fr; }
+  .top nav a.ghost { display: none; }
+  .list li { grid-template-columns: 1fr; gap: 2px; }
+  .try th:nth-child(2), .try td:nth-child(2) { display: none; }
+}
 </style>
-</head><body>
-<main class="wrap">
-  <header>
-    <p class="eyebrow">용인도시공사 · 2026 공공 AI 대전환 챌린지 세션 1 · 시연판</p>
-    <h1>공공체육시설 출석 기반 고독사 위험 조기 발견 · 건강 리포트</h1>
-    <p class="lead">혼자 사는 고령 회원이 안 보여도 아무도 모르는 문제를, 새 장비 없이 체육시설 출석 기록으로 평소 시간에 안 온 날을 찾아 본인·보호자·주민센터 순으로 알려 해결합니다.</p>
-  </header>
+</head>
+<body>
 
-  <section class="doors" aria-label="화면 고르기">
-    <div class="door">
-      <h2>관리자 화면</h2>
-      <ul><li>장기 미출석 회원 명단 (보호자 없음 먼저)</li><li>회원별 출석·평소 시간·문자 기록</li><li>문자 종류별 보낼 차례, 설정</li></ul>
-      <a class="btn" href="admin.html">관리자 화면 열기</a>
+<header class="wrap top">
+  <a class="org" href="start.html"><img src="static/icon-192.png" alt="">용인도시공사</a>
+  <nav>
+    <a class="ghost" href="#how">어떻게 동작하나</a>
+    <a class="ghost" href="#screens">화면</a>
+    <a href="my.html">회원 화면</a>
+    <a class="primary" href="admin.html">관리자 화면</a>
+  </nav>
+</header>
+
+<main>
+  <div class="wrap hero">
+    <div>
+      <h1>꾸준히 오시던&nbsp;분이 안&nbsp;보이면, 먼저 알아차립니다</h1>
+      <p class="lead">공공체육시설에 이미 쌓이는 출석 기록으로 회원마다 평소 오는 요일과 시간을 찾고, 그 시간이 지나도 안 오면 본인, 보호자, 주민센터 순으로 알립니다. 새 장비도, 직원의 전화 당번도 필요 없습니다.</p>
+      <p class="who">2026 공공 AI 대전환 챌린지 세션 1 출품작. 가상 회원 60명으로 미리 그린 시연판입니다.</p>
+      <div class="cta">
+        <a class="btn fill" href="admin.html"><svg viewBox="0 0 24 24"><circle cx="9" cy="8" r="3.5"/><path d="M2.5 20v-1.5a5 5 0 0 1 5-5h3a5 5 0 0 1 5 5V20"/><path d="M16 4.3a3.5 3.5 0 0 1 0 7.4"/></svg>관리자 화면 열기</a>
+        <a class="btn line" href="my-M007.html"><svg viewBox="0 0 24 24"><path d="M6 9a6 6 0 0 1 12 0c0 6 2.5 7.5 2.5 7.5h-17S6 15 6 9"/><path d="M10 20a2 2 0 0 0 4 0"/></svg>회원 화면 열기</a>
+      </div>
     </div>
-    <div class="door">
-      <h2>회원 화면 (휴대폰)</h2>
-      <ul><li>평소 시간에 안 오면 뜨는 알림</li><li>30일 뒤 체지방률, 출석 달력, 강좌 추천</li><li>건강 체크, 식단 기록</li></ul>
-      <a class="btn" href="my.html">회원 로그인</a>
+
+    <figure class="cal" aria-label="월·수요일에 오던 회원이 2주째 안 오자 연락이 단계별로 나가는 예">
+      <div class="hd"><b>안미영님 · 수영 초급</b><span>평소 월·수 오전 8시 50분</span></div>
+      <table>
+        <thead><tr><th>월</th><th>화</th><th>수</th><th>목</th><th>금</th><th>토</th><th>일</th></tr></thead>
+        <tbody>
+          <tr><td class="blank"></td><td class="blank"></td><td class="blank"></td><td>1</td><td>2</td><td>3</td><td class="off">4</td></tr>
+          <tr><td class="came">5</td><td>6</td><td class="came">7</td><td>8</td><td>9</td><td>10</td><td class="off">11</td></tr>
+          <tr><td class="came">12</td><td>13</td><td class="missed" style="--i:0">14</td><td>15</td><td>16</td><td>17</td><td class="off">18</td></tr>
+          <tr><td class="missed" style="--i:1">19</td><td>20</td><td class="missed" style="--i:2">21</td><td>22</td><td>23</td><td>24</td><td class="off">25</td></tr>
+          <tr><td class="today">26</td><td>27</td><td>28</td><td>29</td><td>30</td><td>31</td><td class="blank"></td></tr>
+        </tbody>
+      </table>
+      <div class="key"><span><i style="background:var(--came-bg);border:1px solid var(--came)"></i>오신 날</span><span><i style="background:var(--missed-bg);border:1px solid var(--missed)"></i>평소 오는 날인데 안 옴</span><span><i style="background:#e4e7ec"></i>휴관</span></div>
+      <div class="chain">
+        <div style="--i:0"><b>1번째</b>회원 앱에 알림: 오늘 수영 시간이 지났어요</div>
+        <div style="--i:1"><b>2번째</b>본인에게 안부 문자</div>
+        <div style="--i:2"><b>3번째</b>동의한 보호자에게 문자</div>
+        <div class="now" style="--i:3"><b>오늘</b>보호자가 없거나 답이 없음. 주민센터 전달 명단에 오름</div>
+      </div>
+    </figure>
+  </div>
+
+  <div class="wrap facts">
+    <div><b>새 장비 0대</b><span>회원관리 프로그램과 인바디 기록을 그대로 씀</span></div>
+    <div><b class="num">0건 / 7,434건</b><span>평소 오던 날 결석을 놓친 알림</span></div>
+    <div><b class="num">25~32% 적게</b><span>규칙보다 줄어든 헛알림 (알렸는데 늦게라도 온 날)</span></div>
+    <div><b class="num">1분 52초</b><span>회원 2만 명 10년치 출석 학습 시간, 일반 PC</span></div>
+    <p class="note">가상 회원 2만 명, 출석 423만 건으로 실험한 수치입니다. 실제 효과는 기관 자료로 다시 학습해야 압니다.</p>
+  </div>
+
+  <section id="how">
+    <div class="wrap">
+      <h2>어떻게 동작하나</h2>
+      <p class="sub">판단은 규칙이 하고, AI는 규칙으로 안 되는 일만 맡습니다. AI가 없거나 실패해도 규칙으로 계속 동작합니다.</p>
+      <div class="steps">
+        <div class="step"><h3>출석 기록을 읽습니다</h3><p>회원관리 프로그램의 입장 기록을 조회만 합니다. 휴회, 휴관, 수강 기간 밖은 세지 않습니다.<small>인바디 측정과 기상청 날씨, 천문연 공휴일도 함께</small></p></div>
+        <div class="step"><h3>평소 오는 시간을 찾습니다</h3><p>최근 26주에서 요일마다 절반 넘게 온 요일, 최근 12번 도착 시각의 중앙값을 그 회원의 평소로 봅니다.<small>오는 시간이 바뀌면 따라갑니다</small></p></div>
+        <div class="step hot"><h3>안 오면 단계별로 알립니다</h3><p>평소 시간이 지나면 앱 알림, 2번 연속이면 본인 문자, 3번이면 보호자 문자. 폭염과 한파 예보일에는 하루 앞당깁니다.<small>몇 시에 알릴지는 날씨와 그날 시설 흐름을 본 예측 모델이 정합니다</small></p></div>
+        <div class="step"><h3>닿지 않으면 주민센터로</h3><p>보호자가 없거나 답이 없는 회원만 엑셀 명단으로 정리합니다. 직원이 할 일은 이 명단을 확인하는 것뿐입니다.<small>개인정보는 꼭 필요한 칸만</small></p></div>
+      </div>
     </div>
   </section>
 
-  <section>
-    <h2 class="sec">바로 들어가 보기</h2>
-    <div class="tablewrap"><table>
-      <thead><tr><th>회원번호 / 태어난 해</th><th>볼 것</th><th></th></tr></thead>
-      <tbody>
-        <tr><td><code>M007 / 1972</code></td><td>평소 월요일 아침 수영 회원. "오늘 수영 초급 시간이 지났어요" 알림</td><td><a href="my-M007.html">열기</a></td></tr>
-        <tr><td><code>M051 / 1956</code></td><td>평소 오던 날 여러 번 연속 미출석. 보호자 등록과 안부 단계</td><td><a href="my-M051.html">열기</a></td></tr>
-        <tr><td><code>M004 / 1974</code></td><td>30일 뒤 체지방률 4가지 경우, 지난 측정, 출석 달력, 추천 강좌</td><td><a href="my-M004-body.html">열기</a></td></tr>
-        <tr><td>관리자</td><td>장기 미출석 5명, 그중 보호자 없음 5명</td><td><a href="admin.html">열기</a></td></tr>
-      </tbody>
-    </table></div>
+  <section id="screens" style="padding-top:0">
+    <div class="wrap">
+      <h2>화면</h2>
+      <p class="sub">관리자는 PC에서, 회원은 휴대폰에서 봅니다. 눌러서 들어가 보세요.</p>
+      <div class="shots">
+        <a class="shot" href="admin.html"><figure><img src="img/admin.png" alt="관리자 화면: 장기 미출석 회원 명단과 회원 목록"><figcaption><b>관리자: 장기 미출석 회원</b>보호자 없는 회원이 위로 오고, 주민센터 전달용 엑셀을 바로 내려받습니다.</figcaption></figure></a>
+        <a class="shot" href="my-M007.html"><figure><img src="img/phone-alerts.png" alt="회원 화면: 오늘 수영 초급 시간이 지났어요 알림"><figcaption><b>회원: 알림</b>평소 시간이 지나면 먼저 본인에게 알립니다.</figcaption></figure></a>
+        <a class="shot" href="my-M004-body.html"><figure><img src="img/phone-body.png" alt="회원 화면: 내 몸 리포트, 체지방률과 출석"><figcaption><b>회원: 내 몸 리포트</b>인바디 결과, 30일 뒤 체지방률, 출석 달력, 강좌 추천.</figcaption></figure></a>
+      </div>
+    </div>
   </section>
 
-  <figure>
-    <img src="screens.png" alt="관리자 장기 미출석 화면, 회원 알림 화면, 내 몸 리포트 화면">
-    <figcaption>왼쪽부터 관리자 화면, 회원 알림, 내 몸 리포트</figcaption>
-  </figure>
+  <section style="padding-top:0">
+    <div class="wrap">
+      <h2>바로 들어가 보기</h2>
+      <p class="sub">회원 화면은 회원번호와 태어난 해로 들어갑니다. 시연판에서는 아래 회원으로 바로 열립니다.</p>
+      <div class="try"><table>
+        <thead><tr><th>회원</th><th>번호 / 태어난 해</th><th>볼 것</th><th></th></tr></thead>
+        <tbody>
+          <tr><td>안미영</td><td><code>M007 / 1972</code></td><td>평소 월요일 아침 수영. 오늘 시간이 지나 알림이 떠 있음</td><td><a href="my-M007.html">열기</a></td></tr>
+          <tr><td>최성호</td><td><code>M051 / 1956</code></td><td>평소 오던 날 여러 번 연속 미출석. 보호자 등록과 안부 단계</td><td><a href="my-M051.html">열기</a></td></tr>
+          <tr><td>황광수</td><td><code>M004 / 1974</code></td><td>30일 뒤 체지방률 4가지 경우, 지난 측정, 출석 달력, 추천 강좌</td><td><a href="my-M004-body.html">열기</a></td></tr>
+          <tr><td>관리자</td><td>로그인 없음</td><td>장기 미출석 5명, 그중 보호자 없음 5명</td><td><a href="admin.html">열기</a></td></tr>
+        </tbody>
+      </table></div>
+    </div>
+  </section>
 
-  <p class="limits"><b>시연판에서 안 되는 것.</b> 가상 회원 60명, 2026-10-26 낮 12시 기준으로 미리 그린 화면입니다. 저장, 문자 발송, 음식 사진 읽기, 주민센터 엑셀 내려받기, 지도는 설치판(<code>bash setup.sh</code> → <code>bash run.sh</code>)에서 동작합니다.</p>
+  <section style="padding-top:0">
+    <div class="wrap cols">
+      <div>
+        <h3>묶어 쓰는 자료</h3>
+        <ul class="list">
+          <li><span>회원관리 프로그램</span><span>회원, 수강, 출석 시각, 휴회. 조회 전용 계정으로 읽기만</span></li>
+          <li><span>인바디</span><span>체성분, 혈압. LookinBody 저장 파일 또는 DB</span></li>
+          <li><span>기상청</span><span>오늘 예보로 폭염·한파 판단, 과거 시간자료로 출석 예측 학습</span></li>
+          <li><span>한국천문연구원</span><span>공휴일을 미출석에서 제외</span></li>
+          <li><span>행정안전부 · 국토교통부</span><span>시설 주소를 좌표로 바꿔 날씨 격자를 정함</span></li>
+        </ul>
+      </div>
+      <div>
+        <h3>잘못 알리지 않기 위해</h3>
+        <ul class="rules">
+          <li>회원관리 DB를 못 읽으면 판정과 자동 문자를 멈추고, 다시 읽히면 재개합니다.</li>
+          <li>문자를 보내다 꺼지거나 응답이 없으면 다시 보내지 않고 사람이 확인합니다.</li>
+          <li>예측 모델은 지난 28일에서 규칙보다 나을 때만 씁니다. 결석을 놓치는 일은 모델이 있든 없든 없습니다.</li>
+          <li>안부 확인은 기본으로 켜져 있고, 회원이 앱이나 문자 링크에서 언제든 끌 수 있습니다.</li>
+          <li>문장 모델은 안내 문구와 사진 읽기에만 씁니다. 안부 문자는 정해진 문장으로만 나갑니다.</li>
+        </ul>
+      </div>
+    </div>
+  </section>
 </main>
-</body></html>
+
+<footer>
+  <div class="wrap">
+    <p>이 페이지는 설치 없이 둘러보는 시연판입니다. 가상 회원 60명, 2026년 10월 26일 낮 12시 기준으로 화면을 미리 그려 두었고, 저장·문자 발송·사진 읽기·엑셀 내려받기는 설치판에서 동작합니다.</p>
+    <p>용인도시공사 · 2026 공공 AI 대전환 챌린지 세션 1</p>
+  </div>
+</footer>
+
+</body>
+</html>
