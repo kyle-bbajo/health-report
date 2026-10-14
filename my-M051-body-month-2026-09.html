@@ -1,0 +1,409 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<script>
+(function () {
+  window.fetch = function () { return Promise.resolve(new Response(null, {status: 404})); };
+  if (navigator.serviceWorker) navigator.serviceWorker.register = function () { return Promise.reject(); };
+  var MEMBERS = {"M001": "1952", "M002": "1963", "M003": "1968", "M004": "1974", "M005": "1987", "M006": "1980", "M007": "1972", "M008": "1968", "M009": "1955", "M010": "1982", "M011": "1999", "M012": "1979", "M013": "1952", "M014": "1981", "M015": "1952", "M016": "2002", "M017": "1974", "M018": "1987", "M019": "1952", "M020": "1986", "M021": "1954", "M022": "1955", "M023": "1956", "M024": "1965", "M025": "1953", "M026": "1956", "M027": "1979", "M028": "1964", "M029": "1964", "M030": "1969", "M031": "1981", "M032": "2001", "M033": "1972", "M034": "1984", "M035": "1974", "M036": "2000", "M037": "1974", "M038": "1983", "M039": "1978", "M040": "1997", "M041": "1953", "M042": "1981", "M043": "1999", "M044": "1977", "M045": "1996", "M046": "1958", "M047": "1967", "M048": "1986", "M049": "1999", "M050": "1982", "M051": "1956", "M052": "1965", "M053": "1976", "M054": "1992", "M055": "1953", "M056": "1973", "M057": "1999", "M058": "1954", "M059": "1998", "M060": "1988"};
+  function toast(msg) {
+    var t = document.getElementById('demo-toast');
+    if (!t) { t = document.createElement('div'); t.id = 'demo-toast'; t.setAttribute('role', 'status'); document.body.appendChild(t); }
+    t.textContent = msg; t.className = 'show';
+    clearTimeout(t._h); t._h = setTimeout(function () { t.className = ''; }, 2800);
+  }
+  var SAVE = '시연판이라 저장·문자 발송·엑셀은 되지 않습니다. 설치판에서 동작합니다.';
+  var PAGE = '시연판에는 이 화면이 없습니다. 회원 상세 탭과 지난 달 달력은 M004·M007·M051과 장기 미출석 회원만 있습니다.';
+  document.addEventListener('click', function (e) {
+    var a = e.target.closest && e.target.closest('a[href="#demo"], a[href="#demo-page"]');
+    if (a) { e.preventDefault(); toast(a.getAttribute('href') === '#demo' ? SAVE : PAGE); }
+  }, true);
+  document.addEventListener('submit', function (e) {
+    e.preventDefault();
+    var f = e.target;
+    if (f.hasAttribute('data-demo-login')) {
+      var id = (f.member_id.value || '').trim().toUpperCase(), by = (f.birth_year.value || '').trim();
+      if (MEMBERS[id] && MEMBERS[id] === by) { location.href = 'my-' + id + '.html'; return; }
+      toast('회원번호나 태어난 해가 맞지 않습니다. 예: M007 / 1972'); return;
+    }
+    toast(SAVE);
+  }, true);
+  document.addEventListener('DOMContentLoaded', function () {
+    var b = document.createElement('div'); b.id = 'demo-bar';
+    b.innerHTML = '시연판 · 가상 데이터 · 2026-10-26 낮 12시 화면 · <a href="start.html">처음으로</a>';
+    document.body.insertBefore(b, document.body.firstChild);
+  });
+})();
+</script>
+<style>
+#demo-bar{background:#1b2533;color:#c5cdd8;font-size:12.5px;padding:6px 16px;text-align:center}
+#demo-bar a{color:#9ec1ff;text-decoration:underline}
+#demo-toast{position:fixed;left:50%;bottom:96px;transform:translateX(-50%);background:#1c2430;color:#fff;padding:10px 16px;border-radius:10px;font-size:14px;line-height:1.45;opacity:0;pointer-events:none;transition:opacity .2s;z-index:9999;width:max-content;max-width:min(420px,88vw);text-align:center}
+#demo-toast.show{opacity:.96}
+</style>
+
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>최성호님의 리포트</title>
+<meta name="theme-color" content="#ffffff">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="내 건강">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+
+<link rel="apple-touch-icon" href="static/icon-180.png">
+<link rel="icon" href="static/icon-192.png">
+<link rel="stylesheet" href="static/style.css">
+</head>
+<body class="my">
+<svg xmlns="http://www.w3.org/2000/svg" style="display:none" aria-hidden="true">
+  <symbol id="i-grid" viewBox="0 0 24 24"><rect x="3" y="3" width="8" height="8" rx="1.5"/><rect x="13" y="3" width="8" height="8" rx="1.5"/><rect x="3" y="13" width="8" height="8" rx="1.5"/><rect x="13" y="13" width="8" height="8" rx="1.5"/></symbol>
+  <symbol id="i-users" viewBox="0 0 24 24"><circle cx="9" cy="8" r="3.5"/><path d="M2.5 20v-1.5a5 5 0 0 1 5-5h3a5 5 0 0 1 5 5V20"/><path d="M16 4.3a3.5 3.5 0 0 1 0 7.4"/><path d="M18 13.6a5 5 0 0 1 3.5 4.9V20"/></symbol>
+  <symbol id="i-user" viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 21v-1a6 6 0 0 1 6-6h4a6 6 0 0 1 6 6v1"/></symbol>
+  <symbol id="i-scale" viewBox="0 0 24 24"><rect x="4" y="3" width="16" height="18" rx="3"/><path d="M8 10a4 4 0 0 1 8 0"/><path d="m12 10 2.2-2.2"/></symbol>
+  <symbol id="i-calendar" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4"/><path d="m9 15 2 2 4-4"/></symbol>
+  <symbol id="i-trend" viewBox="0 0 24 24"><path d="M3 17l6-6 4 4 8-8"/><path d="M15 7h6v6"/></symbol>
+  <symbol id="i-dumbbell" viewBox="0 0 24 24"><path d="M3 10v4M21 10v4"/><rect x="5" y="8" width="3" height="8" rx="1"/><rect x="16" y="8" width="3" height="8" rx="1"/><path d="M8 12h8"/></symbol>
+  <symbol id="i-heart" viewBox="0 0 24 24"><path d="M19.5 12.6 12 20l-7.5-7.4A4.6 4.6 0 0 1 12 6.4a4.6 4.6 0 0 1 7.5 6.2z"/><path d="M4.5 12h3l1.5-2.5 2.5 5 2-3.5h4.5"/></symbol>
+  <symbol id="i-database" viewBox="0 0 24 24"><ellipse cx="12" cy="5" rx="8" ry="3"/><path d="M4 5v14c0 1.7 3.6 3 8 3s8-1.3 8-3V5"/><path d="M4 12c0 1.7 3.6 3 8 3s8-1.3 8-3"/></symbol>
+  <symbol id="i-refresh" viewBox="0 0 24 24"><path d="M20 11a8 8 0 0 0-14.5-4.5L3 9"/><path d="M3 4v5h5"/><path d="M4 13a8 8 0 0 0 14.5 4.5L21 15"/><path d="M21 20v-5h-5"/></symbol>
+  <symbol id="i-camera" viewBox="0 0 24 24"><path d="M4 8h3l1.5-2h7L17 8h3a1 1 0 0 1 1 1v9a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V9a1 1 0 0 1 1-1z"/><circle cx="12" cy="13" r="3.5"/></symbol>
+  <symbol id="i-search" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></symbol>
+  <symbol id="i-wave" viewBox="0 0 24 24"><path d="M2 10c2 0 2-2 4-2s2 2 4 2 2-2 4-2 2 2 4 2 2-2 4-2"/><path d="M2 16c2 0 2-2 4-2s2 2 4 2 2-2 4-2 2 2 4 2 2-2 4-2"/></symbol>
+  <symbol id="i-stretch" viewBox="0 0 24 24"><circle cx="12" cy="4.5" r="2"/><path d="M12 8v5"/><path d="m5 11 7 2 7-2"/><path d="m7 21 5-8 5 8"/></symbol>
+  <symbol id="i-walk" viewBox="0 0 24 24"><circle cx="13.5" cy="4" r="2"/><path d="m8 21 3.5-7"/><path d="m11.5 14 3 2.5V21"/><path d="M9 11.5 12 9l3 1 2.5 3.5"/><path d="M12 9l-1.5 5"/><path d="M6 13l3-1.5"/></symbol>
+  <symbol id="i-bowl" viewBox="0 0 24 24"><path d="M3 12h18"/><path d="M4 12a8 8 0 0 0 16 0"/><path d="M8 20h8"/><path d="M9 9V5M15 9V6"/></symbol>
+  <symbol id="i-plus-circle" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 8v8M8 12h8"/></symbol>
+  <symbol id="i-star" viewBox="0 0 24 24"><path d="m12 3 2.8 5.7 6.2.9-4.5 4.4 1.1 6.2L12 17.3 6.4 20.2l1.1-6.2L3 9.6l6.2-.9z"/></symbol>
+  <symbol id="i-alert" viewBox="0 0 24 24"><path d="M12 3 2.5 20h19z"/><path d="M12 10v4M12 17.3v.4"/></symbol>
+  <symbol id="i-check" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="m8 12 3 3 5-6"/></symbol>
+  <symbol id="i-shield" viewBox="0 0 24 24"><path d="M12 3 4 6v6c0 4.5 3.4 7.8 8 9 4.6-1.2 8-4.5 8-9V6z"/><path d="m9 12 2 2 4-4"/></symbol>
+  <symbol id="i-bell" viewBox="0 0 24 24"><path d="M6 9a6 6 0 0 1 12 0c0 6 2.5 7.5 2.5 7.5h-17S6 15 6 9"/><path d="M10 20a2 2 0 0 0 4 0"/></symbol>
+  <symbol id="i-clock" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></symbol>
+  <symbol id="i-file" viewBox="0 0 24 24"><path d="M14 3H6a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"/><path d="M14 3v6h6"/></symbol>
+  <symbol id="i-link" viewBox="0 0 24 24"><path d="M10 14a4 4 0 0 0 5.7 0l3-3a4 4 0 0 0-5.7-5.7l-1 1"/><path d="M14 10a4 4 0 0 0-5.7 0l-3 3a4 4 0 0 0 5.7 5.7l1-1"/></symbol>
+  <symbol id="i-cpu" viewBox="0 0 24 24"><rect x="6" y="6" width="12" height="12" rx="2"/><rect x="10" y="10" width="4" height="4"/><path d="M9 2v4M15 2v4M9 18v4M15 18v4M2 9h4M2 15h4M18 9h4M18 15h4"/></symbol>
+  <symbol id="i-chat" viewBox="0 0 24 24"><path d="M4 5h16a1 1 0 0 1 1 1v9a1 1 0 0 1-1 1H9l-5 4V6a1 1 0 0 1 1-1z"/></symbol>
+  <symbol id="i-arrow-down" viewBox="0 0 24 24"><path d="M12 5v14"/><path d="m6 13 6 6 6-6"/></symbol>
+  <symbol id="i-arrow-up" viewBox="0 0 24 24"><path d="M12 19V5"/><path d="m6 11 6-6 6 6"/></symbol>
+  <symbol id="i-minus" viewBox="0 0 24 24"><path d="M6 12h12"/></symbol>
+  <symbol id="i-ruler" viewBox="0 0 24 24"><path d="M3 8h18v8H3z"/><path d="M7 8v3M11 8v4M15 8v3M19 8v4"/></symbol>
+  <symbol id="i-map" viewBox="0 0 24 24"><path d="M12 21s-6-5.6-6-11a6 6 0 0 1 12 0c0 5.4-6 11-6 11z"/><circle cx="12" cy="10" r="2.2"/></symbol>
+  <symbol id="i-target" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1"/></symbol>
+  <symbol id="i-list" viewBox="0 0 24 24"><path d="M8 6h13M8 12h13M8 18h13"/><path d="M3 6h.5M3 12h.5M3 18h.5"/></symbol>
+  <symbol id="i-back" viewBox="0 0 24 24"><path d="M19 12H5"/><path d="m11 18-6-6 6-6"/></symbol>
+  <symbol id="i-print" viewBox="0 0 24 24"><path d="M6 9V3h12v6"/><rect x="3" y="9" width="18" height="9" rx="2"/><path d="M6 14h12v7H6z"/></symbol>
+</svg>
+
+<header class="my-top">
+  <div class="my-top-in">
+    <div class="org">용인도시공사</div>
+    <a class="out" href="my.html">나가기</a>
+  </div>
+</header>
+<main class="my-wrap">
+  
+    
+  
+  
+<div class="my-hello">
+  <h1>최성호님</h1>
+  <p>요가 · 화·금 20:00</p>
+  
+  
+</div>
+
+
+
+<a class="my-banner link" href="my-M051.html">
+  <b>수강이 5일 뒤 끝납니다</b><span>알림이 2개 더 있습니다. 눌러서 보세요.</span></a>
+
+
+
+
+<section class="my-card">
+  <h2>내 몸</h2>
+  <p class="my-when">10월 20일에 잰 결과</p>
+  <div class="my-key">
+    <span class="lab">체지방률</span>
+    <b class="num">9.1<small>%</small></b>
+    <span class="my-pill lean">낮음</span>
+  </div>
+  <p class="my-msg down">처음보다 8.9%p 줄었어요</p>
+  <div class="my-rows">
+    <div><span class="k">체중</span><span class="v num">64.9<small>kg</small></span></div>
+    <div><span class="k">근육량</span><span class="v num">35.4<small>kg</small></span></div>
+    <div><span class="k">혈압</span><span class="v num">102/68</span><span class="my-pill ok">정상</span></div>
+  </div>
+  
+  <details class="my-more my-hist"><summary>지난 측정 22번 보기</summary>
+    <div class="my-rows">
+      
+      <div><span class="k">10월 20일<small>체중 64.9kg · 근육 35.4kg</small></span>
+        <span class="v num">9.1<small>%</small><em class="up">+0.1</em></span></div>
+      
+      <div><span class="k">9월 21일<small>체중 65.1kg · 근육 35.5kg</small></span>
+        <span class="v num">9.0<small>%</small><em class="down">-0.7</em></span></div>
+      
+      <div><span class="k">8월 24일<small>체중 65.1kg · 근육 35.3kg</small></span>
+        <span class="v num">9.7<small>%</small><em class="down">-0.4</em></span></div>
+      
+      <div><span class="k">7월 20일<small>체중 65.4kg · 근육 35.3kg</small></span>
+        <span class="v num">10.1<small>%</small><em class="down">-0.5</em></span></div>
+      
+      <div><span class="k">6월 22일<small>체중 65.5kg · 근육 35.1kg</small></span>
+        <span class="v num">10.6<small>%</small><em class="down">-0.6</em></span></div>
+      
+      <div><span class="k">5월 28일<small>체중 65.6kg · 근육 34.9kg</small></span>
+        <span class="v num">11.2<small>%</small><em class="down">-0.8</em></span></div>
+      
+      <div><span class="k">5월 12일<small>체중 65.5kg · 근육 34.6kg</small></span>
+        <span class="v num">12.0<small>%</small><em class="down">-1.4</em></span></div>
+      
+      <div><span class="k">4월 7일<small>체중 66.0kg · 근육 34.3kg</small></span>
+        <span class="v num">13.4<small>%</small><em class="down">-0.2</em></span></div>
+      
+      <div><span class="k">3월 16일<small>체중 66.5kg · 근육 34.4kg</small></span>
+        <span class="v num">13.6<small>%</small><em class="down">-0.1</em></span></div>
+      
+      <div><span class="k">3월 2일<small>체중 65.8kg · 근육 34.1kg</small></span>
+        <span class="v num">13.7<small>%</small><em class="">+0.0</em></span></div>
+      
+      <div><span class="k">2월 12일<small>체중 66.6kg · 근육 34.5kg</small></span>
+        <span class="v num">13.7<small>%</small><em class="down">-0.6</em></span></div>
+      
+      <div><span class="k">1월 22일<small>체중 66.8kg · 근육 34.3kg</small></span>
+        <span class="v num">14.3<small>%</small><em class="down">-0.1</em></span></div>
+      
+      <div><span class="k">1월 6일<small>체중 67.2kg · 근육 34.5kg</small></span>
+        <span class="v num">14.4<small>%</small><em class="down">-1.0</em></span></div>
+      
+      <div><span class="k">2025년 12월 10일<small>체중 67.5kg · 근육 34.0kg</small></span>
+        <span class="v num">15.4<small>%</small><em class="down">-0.7</em></span></div>
+      
+      <div><span class="k">2025년 11월 15일<small>체중 67.5kg · 근육 33.7kg</small></span>
+        <span class="v num">16.1<small>%</small><em class="up">+0.3</em></span></div>
+      
+      <div><span class="k">2025년 11월 1일<small>체중 67.5kg · 근육 33.7kg</small></span>
+        <span class="v num">15.8<small>%</small><em class="">+0.0</em></span></div>
+      
+      <div><span class="k">2025년 10월 15일<small>체중 67.3kg · 근육 33.4kg</small></span>
+        <span class="v num">15.8<small>%</small><em class="down">-0.7</em></span></div>
+      
+      <div><span class="k">2025년 9월 15일<small>체중 67.4kg · 근육 33.1kg</small></span>
+        <span class="v num">16.5<small>%</small><em class="">+0.0</em></span></div>
+      
+      <div><span class="k">2025년 8월 24일<small>체중 67.3kg · 근육 32.9kg</small></span>
+        <span class="v num">16.5<small>%</small><em class="down">-0.5</em></span></div>
+      
+      <div><span class="k">2025년 8월 3일<small>체중 67.1kg · 근육 32.6kg</small></span>
+        <span class="v num">17.0<small>%</small><em class="down">-0.4</em></span></div>
+      
+      <div><span class="k">2025년 7월 18일<small>체중 67.3kg · 근육 32.5kg</small></span>
+        <span class="v num">17.4<small>%</small><em class="down">-0.6</em></span></div>
+      
+      <div><span class="k">2025년 6월 23일<small>체중 66.8kg · 근육 32.0kg</small></span>
+        <span class="v num">18.0<small>%</small></span></div>
+      
+    </div>
+    
+  </details>
+  
+</section>
+
+<section class="my-card">
+  <h2>출석</h2>
+  <p class="my-when">최근 30일</p>
+  <div class="my-key"><b class="num">1</b><span class="unit">번 나오셨어요</span></div>
+  
+  <div class="my-bar" role="img" aria-label="출석률 12%"><i class="low" style="width:12%"></i></div>
+  <p class="my-p">수업 8번 중 <b>1번</b> 출석 (출석률 12%)</p>
+  
+  <p class="my-p">마지막으로 오신 날: <b>9월 29일</b></p>
+  
+  <div class="my-cal-hd">
+    <a href="my-M051-body-month-2026-08.html" aria-label="이전 달">‹</a>
+    <b id="cal">2026년 9월</b>
+    <a href="my-M051-body-month-2026-10.html" aria-label="다음 달">›</a>
+  </div>
+  <table class="my-cal">
+    <thead><tr><th>월</th><th>화</th><th>수</th><th>목</th><th>금</th><th>토</th><th>일</th></tr></thead>
+    <tbody><tr>
+      <td></td>
+    
+      <td class="missed" >1</td>
+    
+      <td class="" >2</td>
+    
+      <td class="" >3</td>
+    
+      <td class="came" title="19:58">4</td>
+    
+      <td class="" >5</td>
+    
+      <td class="closed" >6</td>
+    </tr><tr>
+      <td class="" >7</td>
+    
+      <td class="missed" >8</td>
+    
+      <td class="" >9</td>
+    
+      <td class="" >10</td>
+    
+      <td class="came" title="19:47">11</td>
+    
+      <td class="" >12</td>
+    
+      <td class="closed" >13</td>
+    </tr><tr>
+      <td class="" >14</td>
+    
+      <td class="came" title="19:54">15</td>
+    
+      <td class="" >16</td>
+    
+      <td class="" >17</td>
+    
+      <td class="came" title="19:47">18</td>
+    
+      <td class="" >19</td>
+    
+      <td class="closed" >20</td>
+    </tr><tr>
+      <td class="" >21</td>
+    
+      <td class="came" title="19:56">22</td>
+    
+      <td class="" >23</td>
+    
+      <td class="" >24</td>
+    
+      <td class="came" title="19:51">25</td>
+    
+      <td class="" >26</td>
+    
+      <td class="closed" >27</td>
+    </tr><tr>
+      <td class="" >28</td>
+    
+      <td class="came" title="19:49">29</td>
+    
+      <td class="" >30</td>
+    
+      <td></td>
+    
+      <td></td>
+    
+      <td></td>
+    
+      <td></td>
+    </tr></tbody>
+  </table>
+  <p class="my-small"><span class="cal-dot came"></span>오신 날 7일 &nbsp;<span class="cal-dot missed"></span>평소 오시는 요일인데 못 오신 날 &nbsp;<span class="cal-dot off"></span>휴회·휴관</p>
+  
+  <div class="my-box cheer"><b>체지방률이 8.9%p 줄었어요</b><br>운동한 만큼 몸이 달라지고 있습니다. 이번 주에 한 번 더 나와 보세요.</div>
+  
+</section>
+
+<section class="my-card">
+  <h2>30일 뒤 체지방률은?</h2>
+  <p class="my-when">지금은 9.1% · 운동량 공식으로 계산 (출석·체중·강좌 운동량)</p>
+  <div class="my-rows">
+    
+    <div class="">
+      <span class="k">지금처럼 다니면
+        <small>한 달 1번 출석</small></span>
+      <span class="v num">9.1<small>%</small></span>
+    </div>
+    
+    <div class="">
+      <span class="k">식단만 조절하면
+        <small>하루 300 kcal 덜 먹기</small></span>
+      <span class="v num">7.4<small>%</small></span>
+    </div>
+    
+    <div class="">
+      <span class="k">주 1회 더 나오면
+        <small>한 달 5번 출석</small></span>
+      <span class="v num">8.9<small>%</small></span>
+    </div>
+    
+    <div class="best">
+      <span class="k"><b>추천</b><br>주 1회 더 + 식단 조절
+        <small>한 달 5번 + 하루 300 kcal 덜 먹기</small></span>
+      <span class="v num">7.2<small>%</small></span>
+    </div>
+    
+  </div>
+</section>
+
+<section class="my-card">
+  <h2>추천 강좌</h2>
+  <p class="my-when">일주일에 3번을 목표로 해 보세요</p>
+  <div class="my-list">
+    
+    <div class="item"><div>
+      <b>헬스(자유이용)</b>
+      <div class="t">월·화·수·목·금요일 06:00~07:00</div>
+      <div class="m">근력 운동 · 60분</div>
+      <div class="m">건강 체크 반영</div>
+    </div></div>
+    
+  </div>
+  <div class="my-box caution">65세 이상: 저·중강도 프로그램 우선</div>
+  
+  <details class="my-more"><summary>추천 이유</summary><p class="my-p">최근 측정 체지방률은 9.1%(낮음)이고, 최근 30일 동안 1회 출석하셨습니다. 지금처럼 다니시면 30일 뒤 9.1%, 주 1회 더 나오시면 8.9%로 예상됩니다. 근력 위주로 헬스(자유이용) 프로그램을 주 3회 목표로 권해 드립니다. 주의 사항을 확인하고 무리하지 않는 범위에서 시작하세요.</p></details>
+  
+</section>
+
+<section class="my-card">
+  <h2>식단</h2>
+  
+  <p class="my-p">식사를 기록하면 얼마나 드셨는지 알려 드립니다.</p>
+  <a class="my-btn ghost" href="my-M051-diet.html">식사 기록하러 가기</a>
+</section>
+
+
+
+<p class="my-note">예측은 출석과 체성분 기록으로 계산한 참고용입니다. 실제 변화는 사람마다 다르며, 의료적 판단에 쓸 수 없습니다.</p>
+
+</main>
+
+<nav class="my-tabs" aria-label="메뉴">
+  
+  <a href="my-M051.html" class="" ><svg class="ic lg" aria-hidden="true"><use href="#i-bell"/></svg><span>알림</span><em id="alert-count"  aria-label="알림 3개">3</em></a>
+  <a href="my-M051-body.html" class="on" aria-current="page"><svg class="ic lg" aria-hidden="true"><use href="#i-trend"/></svg><span>내 몸</span></a>
+  <a href="my-M051-health.html" class="" ><svg class="ic lg" aria-hidden="true"><use href="#i-shield"/></svg><span>건강</span></a>
+  <a href="my-M051-diet.html" class="" ><svg class="ic lg" aria-hidden="true"><use href="#i-bowl"/></svg><span>식단</span></a>
+</nav>
+<script>
+(function () {
+  if ('serviceWorker' in navigator) { navigator.serviceWorker.register('/sw.js', {scope: '/'}).catch(function () {}); }
+  var seen = {};
+  try { seen = JSON.parse(localStorage.getItem('alerts-seen') || '{}'); } catch (e) {}
+  function notify(a) {
+    if (!('Notification' in window) || Notification.permission !== 'granted') return;
+    var opt = {body: a.text, tag: a.key, icon: '/static/icon-192.png'};
+    if (navigator.serviceWorker && navigator.serviceWorker.ready) {
+      navigator.serviceWorker.ready.then(function (reg) { reg.showNotification(a.title, opt); }).catch(function () {});
+    } else { try { new Notification(a.title, opt); } catch (e) {} }
+  }
+  function check() {
+    fetch('/my/alerts.json', {credentials: 'same-origin'}).then(function (r) { return r.ok ? r.json() : null; }).then(function (d) {
+      if (!d) return;
+      var el = document.getElementById('alert-count');
+      if (el) { el.textContent = d.count; el.hidden = !d.count; }
+      d.alerts.forEach(function (a) {
+        if (a.level === 'now' && !seen[a.key]) { seen[a.key] = 1; notify(a); }
+      });
+      try { localStorage.setItem('alerts-seen', JSON.stringify(seen)); } catch (e) {}
+    }).catch(function () {});
+  }
+  check(); setInterval(check, 60000);
+  document.addEventListener('visibilitychange', function () { if (!document.hidden) check(); });
+})();
+</script>
+
+</body>
+</html>

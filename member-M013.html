@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<script>
+(function () {
+  window.fetch = function () { return Promise.resolve(new Response(null, {status: 404})); };
+  if (navigator.serviceWorker) navigator.serviceWorker.register = function () { return Promise.reject(); };
+  var MEMBERS = {"M001": "1952", "M002": "1963", "M003": "1968", "M004": "1974", "M005": "1987", "M006": "1980", "M007": "1972", "M008": "1968", "M009": "1955", "M010": "1982", "M011": "1999", "M012": "1979", "M013": "1952", "M014": "1981", "M015": "1952", "M016": "2002", "M017": "1974", "M018": "1987", "M019": "1952", "M020": "1986", "M021": "1954", "M022": "1955", "M023": "1956", "M024": "1965", "M025": "1953", "M026": "1956", "M027": "1979", "M028": "1964", "M029": "1964", "M030": "1969", "M031": "1981", "M032": "2001", "M033": "1972", "M034": "1984", "M035": "1974", "M036": "2000", "M037": "1974", "M038": "1983", "M039": "1978", "M040": "1997", "M041": "1953", "M042": "1981", "M043": "1999", "M044": "1977", "M045": "1996", "M046": "1958", "M047": "1967", "M048": "1986", "M049": "1999", "M050": "1982", "M051": "1956", "M052": "1965", "M053": "1976", "M054": "1992", "M055": "1953", "M056": "1973", "M057": "1999", "M058": "1954", "M059": "1998", "M060": "1988"};
+  function toast(msg) {
+    var t = document.getElementById('demo-toast');
+    if (!t) { t = document.createElement('div'); t.id = 'demo-toast'; t.setAttribute('role', 'status'); document.body.appendChild(t); }
+    t.textContent = msg; t.className = 'show';
+    clearTimeout(t._h); t._h = setTimeout(function () { t.className = ''; }, 2800);
+  }
+  var SAVE = '시연판이라 저장·문자 발송·엑셀은 되지 않습니다. 설치판에서 동작합니다.';
+  var PAGE = '시연판에는 이 화면이 없습니다. 회원 상세 탭과 지난 달 달력은 M004·M007·M051과 장기 미출석 회원만 있습니다.';
+  document.addEventListener('click', function (e) {
+    var a = e.target.closest && e.target.closest('a[href="#demo"], a[href="#demo-page"]');
+    if (a) { e.preventDefault(); toast(a.getAttribute('href') === '#demo' ? SAVE : PAGE); }
+  }, true);
+  document.addEventListener('submit', function (e) {
+    e.preventDefault();
+    var f = e.target;
+    if (f.hasAttribute('data-demo-login')) {
+      var id = (f.member_id.value || '').trim().toUpperCase(), by = (f.birth_year.value || '').trim();
+      if (MEMBERS[id] && MEMBERS[id] === by) { location.href = 'my-' + id + '.html'; return; }
+      toast('회원번호나 태어난 해가 맞지 않습니다. 예: M007 / 1972'); return;
+    }
+    toast(SAVE);
+  }, true);
+  document.addEventListener('DOMContentLoaded', function () {
+    var b = document.createElement('div'); b.id = 'demo-bar';
+    b.innerHTML = '시연판 · 가상 데이터 · 2026-10-26 낮 12시 화면 · <a href="start.html">처음으로</a>';
+    document.body.insertBefore(b, document.body.firstChild);
+  });
+})();
+</script>
+<style>
+#demo-bar{background:#1b2533;color:#c5cdd8;font-size:12.5px;padding:6px 16px;text-align:center}
+#demo-bar a{color:#9ec1ff;text-decoration:underline}
+#demo-toast{position:fixed;left:50%;bottom:96px;transform:translateX(-50%);background:#1c2430;color:#fff;padding:10px 16px;border-radius:10px;font-size:14px;line-height:1.45;opacity:0;pointer-events:none;transition:opacity .2s;z-index:9999;width:max-content;max-width:min(420px,88vw);text-align:center}
+#demo-toast.show{opacity:.96}
+</style>
+
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>홍영수 · 회원 정보</title>
+<link rel="stylesheet" href="static/style.css">
+</head>
+<body>
+<svg xmlns="http://www.w3.org/2000/svg" style="display:none" aria-hidden="true">
+  <symbol id="i-grid" viewBox="0 0 24 24"><rect x="3" y="3" width="8" height="8" rx="1.5"/><rect x="13" y="3" width="8" height="8" rx="1.5"/><rect x="3" y="13" width="8" height="8" rx="1.5"/><rect x="13" y="13" width="8" height="8" rx="1.5"/></symbol>
+  <symbol id="i-users" viewBox="0 0 24 24"><circle cx="9" cy="8" r="3.5"/><path d="M2.5 20v-1.5a5 5 0 0 1 5-5h3a5 5 0 0 1 5 5V20"/><path d="M16 4.3a3.5 3.5 0 0 1 0 7.4"/><path d="M18 13.6a5 5 0 0 1 3.5 4.9V20"/></symbol>
+  <symbol id="i-user" viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 21v-1a6 6 0 0 1 6-6h4a6 6 0 0 1 6 6v1"/></symbol>
+  <symbol id="i-scale" viewBox="0 0 24 24"><rect x="4" y="3" width="16" height="18" rx="3"/><path d="M8 10a4 4 0 0 1 8 0"/><path d="m12 10 2.2-2.2"/></symbol>
+  <symbol id="i-calendar" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4"/><path d="m9 15 2 2 4-4"/></symbol>
+  <symbol id="i-trend" viewBox="0 0 24 24"><path d="M3 17l6-6 4 4 8-8"/><path d="M15 7h6v6"/></symbol>
+  <symbol id="i-dumbbell" viewBox="0 0 24 24"><path d="M3 10v4M21 10v4"/><rect x="5" y="8" width="3" height="8" rx="1"/><rect x="16" y="8" width="3" height="8" rx="1"/><path d="M8 12h8"/></symbol>
+  <symbol id="i-heart" viewBox="0 0 24 24"><path d="M19.5 12.6 12 20l-7.5-7.4A4.6 4.6 0 0 1 12 6.4a4.6 4.6 0 0 1 7.5 6.2z"/><path d="M4.5 12h3l1.5-2.5 2.5 5 2-3.5h4.5"/></symbol>
+  <symbol id="i-database" viewBox="0 0 24 24"><ellipse cx="12" cy="5" rx="8" ry="3"/><path d="M4 5v14c0 1.7 3.6 3 8 3s8-1.3 8-3V5"/><path d="M4 12c0 1.7 3.6 3 8 3s8-1.3 8-3"/></symbol>
+  <symbol id="i-refresh" viewBox="0 0 24 24"><path d="M20 11a8 8 0 0 0-14.5-4.5L3 9"/><path d="M3 4v5h5"/><path d="M4 13a8 8 0 0 0 14.5 4.5L21 15"/><path d="M21 20v-5h-5"/></symbol>
+  <symbol id="i-camera" viewBox="0 0 24 24"><path d="M4 8h3l1.5-2h7L17 8h3a1 1 0 0 1 1 1v9a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V9a1 1 0 0 1 1-1z"/><circle cx="12" cy="13" r="3.5"/></symbol>
+  <symbol id="i-search" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></symbol>
+  <symbol id="i-wave" viewBox="0 0 24 24"><path d="M2 10c2 0 2-2 4-2s2 2 4 2 2-2 4-2 2 2 4 2 2-2 4-2"/><path d="M2 16c2 0 2-2 4-2s2 2 4 2 2-2 4-2 2 2 4 2 2-2 4-2"/></symbol>
+  <symbol id="i-stretch" viewBox="0 0 24 24"><circle cx="12" cy="4.5" r="2"/><path d="M12 8v5"/><path d="m5 11 7 2 7-2"/><path d="m7 21 5-8 5 8"/></symbol>
+  <symbol id="i-walk" viewBox="0 0 24 24"><circle cx="13.5" cy="4" r="2"/><path d="m8 21 3.5-7"/><path d="m11.5 14 3 2.5V21"/><path d="M9 11.5 12 9l3 1 2.5 3.5"/><path d="M12 9l-1.5 5"/><path d="M6 13l3-1.5"/></symbol>
+  <symbol id="i-bowl" viewBox="0 0 24 24"><path d="M3 12h18"/><path d="M4 12a8 8 0 0 0 16 0"/><path d="M8 20h8"/><path d="M9 9V5M15 9V6"/></symbol>
+  <symbol id="i-plus-circle" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 8v8M8 12h8"/></symbol>
+  <symbol id="i-star" viewBox="0 0 24 24"><path d="m12 3 2.8 5.7 6.2.9-4.5 4.4 1.1 6.2L12 17.3 6.4 20.2l1.1-6.2L3 9.6l6.2-.9z"/></symbol>
+  <symbol id="i-alert" viewBox="0 0 24 24"><path d="M12 3 2.5 20h19z"/><path d="M12 10v4M12 17.3v.4"/></symbol>
+  <symbol id="i-check" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="m8 12 3 3 5-6"/></symbol>
+  <symbol id="i-shield" viewBox="0 0 24 24"><path d="M12 3 4 6v6c0 4.5 3.4 7.8 8 9 4.6-1.2 8-4.5 8-9V6z"/><path d="m9 12 2 2 4-4"/></symbol>
+  <symbol id="i-bell" viewBox="0 0 24 24"><path d="M6 9a6 6 0 0 1 12 0c0 6 2.5 7.5 2.5 7.5h-17S6 15 6 9"/><path d="M10 20a2 2 0 0 0 4 0"/></symbol>
+  <symbol id="i-clock" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></symbol>
+  <symbol id="i-file" viewBox="0 0 24 24"><path d="M14 3H6a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"/><path d="M14 3v6h6"/></symbol>
+  <symbol id="i-link" viewBox="0 0 24 24"><path d="M10 14a4 4 0 0 0 5.7 0l3-3a4 4 0 0 0-5.7-5.7l-1 1"/><path d="M14 10a4 4 0 0 0-5.7 0l-3 3a4 4 0 0 0 5.7 5.7l1-1"/></symbol>
+  <symbol id="i-cpu" viewBox="0 0 24 24"><rect x="6" y="6" width="12" height="12" rx="2"/><rect x="10" y="10" width="4" height="4"/><path d="M9 2v4M15 2v4M9 18v4M15 18v4M2 9h4M2 15h4M18 9h4M18 15h4"/></symbol>
+  <symbol id="i-chat" viewBox="0 0 24 24"><path d="M4 5h16a1 1 0 0 1 1 1v9a1 1 0 0 1-1 1H9l-5 4V6a1 1 0 0 1 1-1z"/></symbol>
+  <symbol id="i-arrow-down" viewBox="0 0 24 24"><path d="M12 5v14"/><path d="m6 13 6 6 6-6"/></symbol>
+  <symbol id="i-arrow-up" viewBox="0 0 24 24"><path d="M12 19V5"/><path d="m6 11 6-6 6 6"/></symbol>
+  <symbol id="i-minus" viewBox="0 0 24 24"><path d="M6 12h12"/></symbol>
+  <symbol id="i-ruler" viewBox="0 0 24 24"><path d="M3 8h18v8H3z"/><path d="M7 8v3M11 8v4M15 8v3M19 8v4"/></symbol>
+  <symbol id="i-map" viewBox="0 0 24 24"><path d="M12 21s-6-5.6-6-11a6 6 0 0 1 12 0c0 5.4-6 11-6 11z"/><circle cx="12" cy="10" r="2.2"/></symbol>
+  <symbol id="i-target" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1"/></symbol>
+  <symbol id="i-list" viewBox="0 0 24 24"><path d="M8 6h13M8 12h13M8 18h13"/><path d="M3 6h.5M3 12h.5M3 18h.5"/></symbol>
+  <symbol id="i-back" viewBox="0 0 24 24"><path d="M19 12H5"/><path d="m11 18-6-6 6-6"/></symbol>
+  <symbol id="i-print" viewBox="0 0 24 24"><path d="M6 9V3h12v6"/><rect x="3" y="9" width="18" height="9" rx="2"/><path d="M6 14h12v7H6z"/></symbol>
+</svg>
+
+
+<div class="app">
+  <aside class="side">
+    <div class="brand"><svg class="ic lg"><use href="#i-heart"/></svg><div>용인도시공사<small>관리자 · 공공체육시설 출석 기반 고독사 위험 조기 발견 · 건강 리포트</small></div></div>
+    <nav>
+      <a href="admin.html" class="on"><svg class="ic "><use href="#i-users"/></svg> 회원</a>
+      <a href="messages.html" class=""><svg class="ic "><use href="#i-chat"/></svg> 문자</a>
+      
+      
+      
+      <a href="settings.html" class=""><svg class="ic "><use href="#i-cpu"/></svg> 설정</a>
+      <a href="my.html" target="_blank" style="margin-top:10px;opacity:.75"><svg class="ic "><use href="#i-user"/></svg> 회원 화면 열기</a>
+    </nav>
+    <div class="foot">
+      <div class="row"><svg class="ic "><use href="#i-calendar"/></svg> 기준일 2026-10-26</div>
+      <div class="row"><span class="dot off"></span> 자동 처리 꺼짐</div>
+      <div class="row"><span class="dot ok"></span> 미출석 판정 예측 모델</div>
+      <div class="row"><span class="dot off"></span> 문자 발송 연결 안 됨</div>
+      <div class="row"><span class="dot off" id="llm-dot"></span> <span title="LLM 미사용 (규칙 기반 문장)">문장 생성 미사용</span></div>
+    </div>
+  </aside>
+  <main class="main ">
+    
+      
+    
+    
+    
+    
+<div class="topline">
+  <h1>홍영수</h1><span class="sub">M013 · 수강 중</span>
+  <div class="right">
+    <a class="btn sm" href="#demo-page"><svg class="ic "><use href="#i-trend"/></svg> 건강 리포트</a>
+    <a class="btn sm" href="#demo-page"><svg class="ic "><use href="#i-bowl"/></svg> 식단</a>
+    <a class="btn sm" href="admin.html"><svg class="ic "><use href="#i-back"/></svg> 목록</a>
+  </div>
+</div>
+
+
+
+
+<div class="grid g-12" style="margin-bottom:14px">
+  <div class="panel c-8">
+    <div class="hd"><svg class="ic "><use href="#i-user"/></svg> 기본정보</div>
+    <div class="kv">
+      <div class="k">회원번호</div><div class="v num">M013</div>
+      <div class="k">회원 이름</div><div class="v">홍영수</div>
+      <div class="k">성별 · 나이</div><div class="v">남 · 74세</div>
+      <div class="k">키</div><div class="v">175 cm</div>
+      <div class="k">휴대전화</div><div class="v num">010-****-7906</div>
+      <div class="k">등록일</div><div class="v num">2024-11-18</div>
+      <div class="k">수강 강좌</div><div class="v">아쿠아로빅</div>
+      <div class="k">수강 기간</div><div class="v num">2026-10-01 ~ 2026-10-31 <span class="badge info">재등록 안내</span></div>
+      <div class="k">마지막 출석</div><div class="v num">2026-10-24 <span class="sub">2일 전</span></div>
+      <div class="k">최근 30일 출석</div><div class="v num">5회 · 42%</div>
+      <div class="k">평소 오는 시간</div><div class="v"><div>화·토 오전 9시 50분 · 아쿠아로빅</div></div>
+      <div class="k">검진 연계 동의</div><div class="v">안 함</div>
+    </div>
+  </div>
+  <div class="panel c-4">
+    <div class="hd"><svg class="ic "><use href="#i-users"/></svg> 보호자</div>
+    <div class="bd sub">등록된 보호자가 없습니다. 회원 앱 알림 화면에서 2명까지 등록합니다.</div>
+    <div class="bd sub" style="border-top:1px solid var(--line)">연속 미출석 <b>0</b> / 3번 · 출석 없이 <b>0</b> / 14일</div>
+  </div>
+</div>
+
+<div class="panel">
+  <div class="toolbar"><div class="chips">
+    
+    <a class="chip on" href="#demo-page">출석 달력</a>
+    
+    <a class="chip " href="#demo-page">수강 내역</a>
+    
+    <a class="chip " href="#demo-page">안부 기록</a>
+    
+    <a class="chip " href="#demo-page">문자 기록</a>
+    
+  </div></div>
+
+  
+  <div class="bd">
+    <div style="display:flex;align-items:center;gap:8px;margin-bottom:10px">
+      <a class="btn sm" href="#demo-page">‹ 이전 달</a>
+      <b style="font-size:16px">2026년 10월</b>
+      
+      <span class="sub" style="margin-left:auto">출석 5일 · 평소 요일 미출석 6일 · 전체 140회 (첫 출석 2024-11-23)</span>
+    </div>
+    <table class="cal">
+      <thead><tr><th>월</th><th>화</th><th>수</th><th>목</th><th>금</th><th>토</th><th>일</th></tr></thead>
+      <tbody><tr>
+        <td class="blank"></td>
+      
+        <td class="blank"></td>
+      
+        <td class="blank"></td>
+      
+        <td class="came"><span class="d">1</span>
+          <div class="v">09:45 <small>아쿠아로빅</small></div>
+          </td>
+        
+      
+        <td class=""><span class="d">2</span>
+          
+          </td>
+        
+      
+        <td class="missed"><span class="d">3</span>
+          
+          <div class="v">미출석</div></td>
+        
+      
+        <td class="closed"><span class="d">4</span>
+          
+          <div class="v">휴관</div></td>
+        
+      </tr><tr>
+        <td class=""><span class="d">5</span>
+          
+          </td>
+        
+      
+        <td class="missed"><span class="d">6</span>
+          
+          <div class="v">미출석</div></td>
+        
+      
+        <td class=""><span class="d">7</span>
+          
+          </td>
+        
+      
+        <td class="missed"><span class="d">8</span>
+          
+          <div class="v">미출석</div></td>
+        
+      
+        <td class=""><span class="d">9</span>
+          
+          </td>
+        
+      
+        <td class="came"><span class="d">10</span>
+          <div class="v">09:44 <small>아쿠아로빅</small></div>
+          </td>
+        
+      
+        <td class="closed"><span class="d">11</span>
+          
+          <div class="v">휴관</div></td>
+        
+      </tr><tr>
+        <td class=""><span class="d">12</span>
+          
+          </td>
+        
+      
+        <td class="missed"><span class="d">13</span>
+          
+          <div class="v">미출석</div></td>
+        
+      
+        <td class=""><span class="d">14</span>
+          
+          </td>
+        
+      
+        <td class="missed"><span class="d">15</span>
+          
+          <div class="v">미출석</div></td>
+        
+      
+        <td class=""><span class="d">16</span>
+          
+          </td>
+        
+      
+        <td class="came"><span class="d">17</span>
+          <div class="v">10:03 <small>아쿠아로빅</small></div>
+          </td>
+        
+      
+        <td class="closed"><span class="d">18</span>
+          
+          <div class="v">휴관</div></td>
+        
+      </tr><tr>
+        <td class=""><span class="d">19</span>
+          
+          </td>
+        
+      
+        <td class="came"><span class="d">20</span>
+          <div class="v">09:44 <small>아쿠아로빅</small></div>
+          </td>
+        
+      
+        <td class=""><span class="d">21</span>
+          
+          </td>
+        
+      
+        <td class="missed"><span class="d">22</span>
+          
+          <div class="v">미출석</div></td>
+        
+      
+        <td class=""><span class="d">23</span>
+          
+          </td>
+        
+      
+        <td class="came"><span class="d">24</span>
+          <div class="v">09:40 <small>아쿠아로빅</small></div>
+          </td>
+        
+      
+        <td class="closed"><span class="d">25</span>
+          
+          <div class="v">휴관</div></td>
+        
+      </tr><tr>
+        <td class=" today"><span class="d">26</span>
+          
+          </td>
+        
+      
+        <td class="future"><span class="d">27</span>
+          
+          </td>
+        
+      
+        <td class="future"><span class="d">28</span>
+          
+          </td>
+        
+      
+        <td class="future"><span class="d">29</span>
+          
+          </td>
+        
+      
+        <td class="future"><span class="d">30</span>
+          
+          </td>
+        
+      
+        <td class="future"><span class="d">31</span>
+          
+          </td>
+        
+      
+        <td class="blank"></td>
+      </tr></tbody>
+    </table>
+    <div class="sub" style="margin-top:6px"><span class="cal-key came"></span> 출석 <span class="cal-key missed"></span> 평소 오던 요일인데 안 옴 <span class="cal-key off"></span> 휴회 <span class="cal-key closed"></span> 휴관 · 수강 내역 탭에서 지난 기간 달력으로 바로 갈 수 있습니다.</div>
+  </div>
+  <table>
+    <thead><tr><th>출석일</th><th>요일</th><th>강좌</th><th>출석 시각</th></tr></thead>
+    <tbody><tr><td class="num">2026-10-24</td><td>토</td><td>아쿠아로빅</td><td class="num">09:40</td></tr>
+    <tr><td class="num">2026-10-20</td><td>화</td><td>아쿠아로빅</td><td class="num">09:44</td></tr>
+    <tr><td class="num">2026-10-17</td><td>토</td><td>아쿠아로빅</td><td class="num">10:03</td></tr>
+    <tr><td class="num">2026-10-10</td><td>토</td><td>아쿠아로빅</td><td class="num">09:44</td></tr>
+    <tr><td class="num">2026-10-01</td><td>목</td><td>아쿠아로빅</td><td class="num">09:45</td></tr>
+    <tr><td class="num">2026-09-26</td><td>토</td><td>아쿠아로빅</td><td class="num">09:46</td></tr>
+    <tr><td class="num">2026-09-24</td><td>목</td><td>아쿠아로빅</td><td class="num">09:54</td></tr>
+    <tr><td class="num">2026-09-17</td><td>목</td><td>아쿠아로빅</td><td class="num">09:43</td></tr>
+    <tr><td class="num">2026-09-15</td><td>화</td><td>아쿠아로빅</td><td class="num">09:48</td></tr>
+    <tr><td class="num">2026-09-10</td><td>목</td><td>아쿠아로빅</td><td class="num">09:45</td></tr>
+    <tr><td class="num">2026-09-08</td><td>화</td><td>아쿠아로빅</td><td class="num">09:52</td></tr>
+    <tr><td class="num">2026-09-05</td><td>토</td><td>아쿠아로빅</td><td class="num">09:46</td></tr>
+    <tr><td class="num">2026-08-29</td><td>토</td><td>아쿠아로빅</td><td class="num">09:40</td></tr>
+    <tr><td class="num">2026-08-27</td><td>목</td><td>아쿠아로빅</td><td class="num">09:55</td></tr>
+    <tr><td class="num">2026-08-25</td><td>화</td><td>아쿠아로빅</td><td class="num">09:37</td></tr>
+    <tr><td class="num">2026-08-20</td><td>목</td><td>아쿠아로빅</td><td class="num">10:04</td></tr>
+    <tr><td class="num">2026-08-13</td><td>목</td><td>아쿠아로빅</td><td class="num">09:43</td></tr>
+    <tr><td class="num">2026-08-08</td><td>토</td><td>아쿠아로빅</td><td class="num">09:53</td></tr>
+    <tr><td class="num">2026-08-06</td><td>목</td><td>아쿠아로빅</td><td class="num">09:42</td></tr>
+    <tr><td class="num">2026-08-04</td><td>화</td><td>아쿠아로빅</td><td class="num">09:44</td></tr>
+    <tr><td class="num">2026-08-01</td><td>토</td><td>아쿠아로빅</td><td class="num">09:39</td></tr>
+    <tr><td class="num">2026-07-30</td><td>목</td><td>아쿠아로빅</td><td class="num">09:51</td></tr>
+    <tr><td class="num">2026-07-25</td><td>토</td><td>아쿠아로빅</td><td class="num">09:34</td></tr>
+    <tr><td class="num">2026-07-21</td><td>화</td><td>아쿠아로빅</td><td class="num">09:51</td></tr>
+    <tr><td class="num">2026-07-18</td><td>토</td><td>아쿠아로빅</td><td class="num">09:46</td></tr>
+    <tr><td class="num">2026-07-14</td><td>화</td><td>아쿠아로빅</td><td class="num">09:54</td></tr>
+    <tr><td class="num">2026-07-09</td><td>목</td><td>아쿠아로빅</td><td class="num">09:54</td></tr>
+    <tr><td class="num">2026-05-28</td><td>목</td><td>아쿠아로빅</td><td class="num">09:54</td></tr>
+    <tr><td class="num">2026-05-23</td><td>토</td><td>아쿠아로빅</td><td class="num">09:56</td></tr>
+    <tr><td class="num">2026-05-21</td><td>목</td><td>아쿠아로빅</td><td class="num">09:46</td></tr>
+    <tr><td class="num">2026-05-19</td><td>화</td><td>아쿠아로빅</td><td class="num">09:50</td></tr>
+    <tr><td class="num">2026-05-16</td><td>토</td><td>아쿠아로빅</td><td class="num">09:55</td></tr>
+    <tr><td class="num">2026-05-12</td><td>화</td><td>아쿠아로빅</td><td class="num">09:41</td></tr>
+    <tr><td class="num">2026-05-07</td><td>목</td><td>아쿠아로빅</td><td class="num">09:36</td></tr>
+    <tr><td class="num">2026-05-05</td><td>화</td><td>아쿠아로빅</td><td class="num">09:49</td></tr>
+    <tr><td class="num">2026-02-28</td><td>토</td><td>아쿠아로빅</td><td class="num">09:38</td></tr>
+    <tr><td class="num">2026-02-24</td><td>화</td><td>아쿠아로빅</td><td class="num">09:40</td></tr>
+    <tr><td class="num">2026-02-21</td><td>토</td><td>아쿠아로빅</td><td class="num">09:43</td></tr>
+    <tr><td class="num">2026-02-19</td><td>목</td><td>아쿠아로빅</td><td class="num">09:38</td></tr>
+    <tr><td class="num">2026-02-17</td><td>화</td><td>아쿠아로빅</td><td class="num">09:42</td></tr>
+    </tbody>
+  </table>
+
+  
+</div>
+
+  </main>
+</div>
+
+</body>
+</html>

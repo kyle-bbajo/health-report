@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<script>
+(function () {
+  window.fetch = function () { return Promise.resolve(new Response(null, {status: 404})); };
+  if (navigator.serviceWorker) navigator.serviceWorker.register = function () { return Promise.reject(); };
+  var MEMBERS = {"M001": "1952", "M002": "1963", "M003": "1968", "M004": "1974", "M005": "1987", "M006": "1980", "M007": "1972", "M008": "1968", "M009": "1955", "M010": "1982", "M011": "1999", "M012": "1979", "M013": "1952", "M014": "1981", "M015": "1952", "M016": "2002", "M017": "1974", "M018": "1987", "M019": "1952", "M020": "1986", "M021": "1954", "M022": "1955", "M023": "1956", "M024": "1965", "M025": "1953", "M026": "1956", "M027": "1979", "M028": "1964", "M029": "1964", "M030": "1969", "M031": "1981", "M032": "2001", "M033": "1972", "M034": "1984", "M035": "1974", "M036": "2000", "M037": "1974", "M038": "1983", "M039": "1978", "M040": "1997", "M041": "1953", "M042": "1981", "M043": "1999", "M044": "1977", "M045": "1996", "M046": "1958", "M047": "1967", "M048": "1986", "M049": "1999", "M050": "1982", "M051": "1956", "M052": "1965", "M053": "1976", "M054": "1992", "M055": "1953", "M056": "1973", "M057": "1999", "M058": "1954", "M059": "1998", "M060": "1988"};
+  function toast(msg) {
+    var t = document.getElementById('demo-toast');
+    if (!t) { t = document.createElement('div'); t.id = 'demo-toast'; t.setAttribute('role', 'status'); document.body.appendChild(t); }
+    t.textContent = msg; t.className = 'show';
+    clearTimeout(t._h); t._h = setTimeout(function () { t.className = ''; }, 2800);
+  }
+  var SAVE = '시연판이라 저장·문자 발송·엑셀은 되지 않습니다. 설치판에서 동작합니다.';
+  var PAGE = '시연판에는 이 화면이 없습니다. 회원 상세 탭과 지난 달 달력은 M004·M007·M051과 장기 미출석 회원만 있습니다.';
+  document.addEventListener('click', function (e) {
+    var a = e.target.closest && e.target.closest('a[href="#demo"], a[href="#demo-page"]');
+    if (a) { e.preventDefault(); toast(a.getAttribute('href') === '#demo' ? SAVE : PAGE); }
+  }, true);
+  document.addEventListener('submit', function (e) {
+    e.preventDefault();
+    var f = e.target;
+    if (f.hasAttribute('data-demo-login')) {
+      var id = (f.member_id.value || '').trim().toUpperCase(), by = (f.birth_year.value || '').trim();
+      if (MEMBERS[id] && MEMBERS[id] === by) { location.href = 'my-' + id + '.html'; return; }
+      toast('회원번호나 태어난 해가 맞지 않습니다. 예: M007 / 1972'); return;
+    }
+    toast(SAVE);
+  }, true);
+  document.addEventListener('DOMContentLoaded', function () {
+    var b = document.createElement('div'); b.id = 'demo-bar';
+    b.innerHTML = '시연판 · 가상 데이터 · 2026-10-26 낮 12시 화면 · <a href="start.html">처음으로</a>';
+    document.body.insertBefore(b, document.body.firstChild);
+  });
+})();
+</script>
+<style>
+#demo-bar{background:#1b2533;color:#c5cdd8;font-size:12.5px;padding:6px 16px;text-align:center}
+#demo-bar a{color:#9ec1ff;text-decoration:underline}
+#demo-toast{position:fixed;left:50%;bottom:96px;transform:translateX(-50%);background:#1c2430;color:#fff;padding:10px 16px;border-radius:10px;font-size:14px;line-height:1.45;opacity:0;pointer-events:none;transition:opacity .2s;z-index:9999;width:max-content;max-width:min(420px,88vw);text-align:center}
+#demo-toast.show{opacity:.96}
+</style>
+
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>데이터 연동</title>
+<link rel="stylesheet" href="static/style.css">
+</head>
+<body>
+<svg xmlns="http://www.w3.org/2000/svg" style="display:none" aria-hidden="true">
+  <symbol id="i-grid" viewBox="0 0 24 24"><rect x="3" y="3" width="8" height="8" rx="1.5"/><rect x="13" y="3" width="8" height="8" rx="1.5"/><rect x="3" y="13" width="8" height="8" rx="1.5"/><rect x="13" y="13" width="8" height="8" rx="1.5"/></symbol>
+  <symbol id="i-users" viewBox="0 0 24 24"><circle cx="9" cy="8" r="3.5"/><path d="M2.5 20v-1.5a5 5 0 0 1 5-5h3a5 5 0 0 1 5 5V20"/><path d="M16 4.3a3.5 3.5 0 0 1 0 7.4"/><path d="M18 13.6a5 5 0 0 1 3.5 4.9V20"/></symbol>
+  <symbol id="i-user" viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 21v-1a6 6 0 0 1 6-6h4a6 6 0 0 1 6 6v1"/></symbol>
+  <symbol id="i-scale" viewBox="0 0 24 24"><rect x="4" y="3" width="16" height="18" rx="3"/><path d="M8 10a4 4 0 0 1 8 0"/><path d="m12 10 2.2-2.2"/></symbol>
+  <symbol id="i-calendar" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4"/><path d="m9 15 2 2 4-4"/></symbol>
+  <symbol id="i-trend" viewBox="0 0 24 24"><path d="M3 17l6-6 4 4 8-8"/><path d="M15 7h6v6"/></symbol>
+  <symbol id="i-dumbbell" viewBox="0 0 24 24"><path d="M3 10v4M21 10v4"/><rect x="5" y="8" width="3" height="8" rx="1"/><rect x="16" y="8" width="3" height="8" rx="1"/><path d="M8 12h8"/></symbol>
+  <symbol id="i-heart" viewBox="0 0 24 24"><path d="M19.5 12.6 12 20l-7.5-7.4A4.6 4.6 0 0 1 12 6.4a4.6 4.6 0 0 1 7.5 6.2z"/><path d="M4.5 12h3l1.5-2.5 2.5 5 2-3.5h4.5"/></symbol>
+  <symbol id="i-database" viewBox="0 0 24 24"><ellipse cx="12" cy="5" rx="8" ry="3"/><path d="M4 5v14c0 1.7 3.6 3 8 3s8-1.3 8-3V5"/><path d="M4 12c0 1.7 3.6 3 8 3s8-1.3 8-3"/></symbol>
+  <symbol id="i-refresh" viewBox="0 0 24 24"><path d="M20 11a8 8 0 0 0-14.5-4.5L3 9"/><path d="M3 4v5h5"/><path d="M4 13a8 8 0 0 0 14.5 4.5L21 15"/><path d="M21 20v-5h-5"/></symbol>
+  <symbol id="i-camera" viewBox="0 0 24 24"><path d="M4 8h3l1.5-2h7L17 8h3a1 1 0 0 1 1 1v9a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V9a1 1 0 0 1 1-1z"/><circle cx="12" cy="13" r="3.5"/></symbol>
+  <symbol id="i-search" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></symbol>
+  <symbol id="i-wave" viewBox="0 0 24 24"><path d="M2 10c2 0 2-2 4-2s2 2 4 2 2-2 4-2 2 2 4 2 2-2 4-2"/><path d="M2 16c2 0 2-2 4-2s2 2 4 2 2-2 4-2 2 2 4 2 2-2 4-2"/></symbol>
+  <symbol id="i-stretch" viewBox="0 0 24 24"><circle cx="12" cy="4.5" r="2"/><path d="M12 8v5"/><path d="m5 11 7 2 7-2"/><path d="m7 21 5-8 5 8"/></symbol>
+  <symbol id="i-walk" viewBox="0 0 24 24"><circle cx="13.5" cy="4" r="2"/><path d="m8 21 3.5-7"/><path d="m11.5 14 3 2.5V21"/><path d="M9 11.5 12 9l3 1 2.5 3.5"/><path d="M12 9l-1.5 5"/><path d="M6 13l3-1.5"/></symbol>
+  <symbol id="i-bowl" viewBox="0 0 24 24"><path d="M3 12h18"/><path d="M4 12a8 8 0 0 0 16 0"/><path d="M8 20h8"/><path d="M9 9V5M15 9V6"/></symbol>
+  <symbol id="i-plus-circle" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 8v8M8 12h8"/></symbol>
+  <symbol id="i-star" viewBox="0 0 24 24"><path d="m12 3 2.8 5.7 6.2.9-4.5 4.4 1.1 6.2L12 17.3 6.4 20.2l1.1-6.2L3 9.6l6.2-.9z"/></symbol>
+  <symbol id="i-alert" viewBox="0 0 24 24"><path d="M12 3 2.5 20h19z"/><path d="M12 10v4M12 17.3v.4"/></symbol>
+  <symbol id="i-check" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="m8 12 3 3 5-6"/></symbol>
+  <symbol id="i-shield" viewBox="0 0 24 24"><path d="M12 3 4 6v6c0 4.5 3.4 7.8 8 9 4.6-1.2 8-4.5 8-9V6z"/><path d="m9 12 2 2 4-4"/></symbol>
+  <symbol id="i-bell" viewBox="0 0 24 24"><path d="M6 9a6 6 0 0 1 12 0c0 6 2.5 7.5 2.5 7.5h-17S6 15 6 9"/><path d="M10 20a2 2 0 0 0 4 0"/></symbol>
+  <symbol id="i-clock" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></symbol>
+  <symbol id="i-file" viewBox="0 0 24 24"><path d="M14 3H6a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"/><path d="M14 3v6h6"/></symbol>
+  <symbol id="i-link" viewBox="0 0 24 24"><path d="M10 14a4 4 0 0 0 5.7 0l3-3a4 4 0 0 0-5.7-5.7l-1 1"/><path d="M14 10a4 4 0 0 0-5.7 0l-3 3a4 4 0 0 0 5.7 5.7l1-1"/></symbol>
+  <symbol id="i-cpu" viewBox="0 0 24 24"><rect x="6" y="6" width="12" height="12" rx="2"/><rect x="10" y="10" width="4" height="4"/><path d="M9 2v4M15 2v4M9 18v4M15 18v4M2 9h4M2 15h4M18 9h4M18 15h4"/></symbol>
+  <symbol id="i-chat" viewBox="0 0 24 24"><path d="M4 5h16a1 1 0 0 1 1 1v9a1 1 0 0 1-1 1H9l-5 4V6a1 1 0 0 1 1-1z"/></symbol>
+  <symbol id="i-arrow-down" viewBox="0 0 24 24"><path d="M12 5v14"/><path d="m6 13 6 6 6-6"/></symbol>
+  <symbol id="i-arrow-up" viewBox="0 0 24 24"><path d="M12 19V5"/><path d="m6 11 6-6 6 6"/></symbol>
+  <symbol id="i-minus" viewBox="0 0 24 24"><path d="M6 12h12"/></symbol>
+  <symbol id="i-ruler" viewBox="0 0 24 24"><path d="M3 8h18v8H3z"/><path d="M7 8v3M11 8v4M15 8v3M19 8v4"/></symbol>
+  <symbol id="i-map" viewBox="0 0 24 24"><path d="M12 21s-6-5.6-6-11a6 6 0 0 1 12 0c0 5.4-6 11-6 11z"/><circle cx="12" cy="10" r="2.2"/></symbol>
+  <symbol id="i-target" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1"/></symbol>
+  <symbol id="i-list" viewBox="0 0 24 24"><path d="M8 6h13M8 12h13M8 18h13"/><path d="M3 6h.5M3 12h.5M3 18h.5"/></symbol>
+  <symbol id="i-back" viewBox="0 0 24 24"><path d="M19 12H5"/><path d="m11 18-6-6 6-6"/></symbol>
+  <symbol id="i-print" viewBox="0 0 24 24"><path d="M6 9V3h12v6"/><rect x="3" y="9" width="18" height="9" rx="2"/><path d="M6 14h12v7H6z"/></symbol>
+</svg>
+
+
+<div class="app">
+  <aside class="side">
+    <div class="brand"><svg class="ic lg"><use href="#i-heart"/></svg><div>용인도시공사<small>관리자 · 공공체육시설 출석 기반 고독사 위험 조기 발견 · 건강 리포트</small></div></div>
+    <nav>
+      <a href="admin.html" class=""><svg class="ic "><use href="#i-users"/></svg> 회원</a>
+      <a href="messages.html" class=""><svg class="ic "><use href="#i-chat"/></svg> 문자</a>
+      
+      
+      
+      <a href="settings.html" class="on"><svg class="ic "><use href="#i-cpu"/></svg> 설정</a>
+      <a href="my.html" target="_blank" style="margin-top:10px;opacity:.75"><svg class="ic "><use href="#i-user"/></svg> 회원 화면 열기</a>
+    </nav>
+    <div class="foot">
+      <div class="row"><svg class="ic "><use href="#i-calendar"/></svg> 기준일 2026-10-26</div>
+      <div class="row"><span class="dot off"></span> 자동 처리 꺼짐</div>
+      <div class="row"><span class="dot ok"></span> 미출석 판정 예측 모델</div>
+      <div class="row"><span class="dot off"></span> 문자 발송 연결 안 됨</div>
+      <div class="row"><span class="dot off" id="llm-dot"></span> <span title="LLM 미사용 (규칙 기반 문장)">문장 생성 미사용</span></div>
+    </div>
+  </aside>
+  <main class="main ">
+    
+      
+    
+    
+    
+    
+<div class="topline">
+  <h1>설정</h1><span class="sub">입력 폴더 <code>/home/claude/w/health-report/data/input</code></span>
+  <div class="right"><a class="btn sm" href="#demo"><svg class="ic "><use href="#i-refresh"/></svg> 다시 읽기</a></div>
+</div>
+
+<div class="chips" style="margin:0 0 14px">
+  <a class="chip " href="settings-tab-sms.html">문자 발송</a><a class="chip " href="settings-tab-weather.html">위치 · 날씨</a><a class="chip " href="settings-tab-closed.html">휴관일</a><a class="chip " href="settings-tab-timetable.html">강좌 시간표</a><a class="chip " href="settings-tab-features.html">기능</a><a class="chip " href="settings-tab-llm.html">문장 모델</a><a class="chip on" href="sources.html">데이터 · 학습</a>
+</div>
+
+<div class="tiles">
+  <div class="tile"><div class="ico"><svg class="ic lg"><use href="#i-users"/></svg></div><div><div class="k">회원</div><div class="v num">60<small>명</small></div></div></div>
+  <div class="tile"><div class="ico"><svg class="ic lg"><use href="#i-scale"/></svg></div><div><div class="k">체성분 · 혈압 측정</div><div class="v num">1371<small>건 · 1187건</small></div></div></div>
+  <div class="tile"><div class="ico"><svg class="ic lg"><use href="#i-calendar"/></svg></div><div><div class="k">출석 기록</div><div class="v num">9889<small>건</small></div></div></div>
+  <div class="tile"><div class="ico"><svg class="ic lg"><use href="#i-list"/></svg></div><div><div class="k">수강 내역 · 강좌</div><div class="v num">1263<small>건 · 8개</small></div></div></div>
+  <div class="tile"><div class="ico gray"><svg class="ic lg"><use href="#i-clock"/></svg></div><div><div class="k">기준일</div><div class="v num">2026-10-26</div></div></div>
+</div>
+
+<div class="grid g-12">
+  
+  <div class="panel c-4 src">
+    <div class="ico"><svg class="ic lg"><use href="#i-users"/></svg></div>
+    <div>
+      <h3>회원관리프로그램 <span class="badge ok">연결</span></h3>
+      <div class="method">내보내기 파일(CSV) · API 연동 가능 구조</div>
+      <table>
+        <thead><tr><th>자료</th><th class="r">건수</th><th>갱신</th></tr></thead>
+        <tbody>
+          <tr><td><svg class="ic "><use href="#i-file"/></svg> 회원 정보<div class="sub">members.csv</div></td><td class="r num">60</td><td class="sub">2026-10-13 11:34</td></tr>
+        
+          <tr><td><svg class="ic "><use href="#i-file"/></svg> 출석 기록<div class="sub">attendance.csv</div></td><td class="r num">9889</td><td class="sub">2026-10-13 11:34</td></tr>
+        
+          <tr><td><svg class="ic "><use href="#i-file"/></svg> 수강 내역 (월 단위)<div class="sub">enrollments.csv</div></td><td class="r num">1263</td><td class="sub">2026-10-13 11:34</td></tr>
+        
+          <tr><td><svg class="ic "><use href="#i-file"/></svg> 강좌 시간표<div class="sub">schedule.csv</div></td><td class="r num">8</td><td class="sub">2026-10-13 11:34</td></tr>
+        
+          <tr><td><svg class="ic "><use href="#i-file"/></svg> 휴회 · 정지 이력<div class="sub">suspensions.csv</div></td><td class="r num">8</td><td class="sub">2026-10-13 11:34</td></tr>
+        
+          <tr><td><svg class="ic "><use href="#i-file"/></svg> 운동 전 건강 체크 (등록 시)<div class="sub">health_check.csv</div></td><td class="r num">49</td><td class="sub">2026-10-13 11:34</td></tr>
+        </tbody>
+      </table>
+      <div class="note">회원번호로 다른 데이터와 연결합니다. 수강 내역이 없으면 회원 파일의 프로그램 항목을, 시간표가 없으면 설정 파일의 주당 횟수를 씁니다.</div>
+    </div>
+  </div>
+  
+  <div class="panel c-4 src">
+    <div class="ico"><svg class="ic lg"><use href="#i-scale"/></svg></div>
+    <div>
+      <h3>인바디 (LookinBody) <span class="badge ok">연결</span></h3>
+      <div class="method">.mdb 직접 읽기(mdbtools) · CSV 병행 · 체성분 + 혈압계</div>
+      <table>
+        <thead><tr><th>자료</th><th class="r">건수</th><th>갱신</th></tr></thead>
+        <tbody>
+          <tr><td><svg class="ic "><use href="#i-file"/></svg> mdb 추출 형식 CSV<div class="sub">body_composition.csv</div></td><td class="r num">1371</td><td class="sub">2026-10-13 11:34</td></tr>
+        
+          <tr><td><svg class="ic "><use href="#i-file"/></svg> 혈압계(BPBIO) 측정<div class="sub">blood_pressure.csv</div></td><td class="r num">1187</td><td class="sub">2026-10-13 11:34</td></tr>
+        </tbody>
+      </table>
+      <div class="note">mdbtools 없음 — .mdb 를 읽으려면 설치하세요 (brew install mdbtools / apt install mdbtools).</div>
+    </div>
+  </div>
+  
+  <div class="panel c-4 src">
+    <div class="ico"><svg class="ic lg"><use href="#i-heart"/></svg></div>
+    <div>
+      <h3>국가건강검진 (나의건강기록) <span class="badge ok">연결</span></h3>
+      <div class="method">본인 동의 후 불러오기 · 지금은 모의 저장소(CSV)</div>
+      <table>
+        <thead><tr><th>자료</th><th class="r">건수</th><th>갱신</th></tr></thead>
+        <tbody>
+          <tr><td><svg class="ic "><use href="#i-file"/></svg> 검진 결과<div class="sub">health_screening.csv</div></td><td class="r num">44</td><td class="sub">2026-10-13 11:34</td></tr>
+        </tbody>
+      </table>
+      <div class="note">동의한 회원의 기록만 읽습니다. 실제 연계 시 본인이 내려받은 검진 결과 업로드 또는 건강정보 고속도로 API로 교체합니다.</div>
+    </div>
+  </div>
+  
+
+  <div class="panel c-12">
+    <div class="hd"><svg class="ic "><use href="#i-refresh"/></svg> 자동 처리<span class="meta">꺼짐 (config.json → auto.enabled)</span></div>
+    <div class="bd">
+      <div class="sub" style="margin-bottom:8px">입력 파일이 바뀌면 다시 읽기 → 예측 모델 학습 → 안내 대상 선정 → 문자 작성 → 발송 대기함 기록까지 스스로 합니다. 아래 버튼들은 바로 확인하고 싶을 때만 씁니다.</div>
+      <div class="sub">아직 기록이 없습니다.</div>
+    </div>
+  </div>
+
+  <div class="panel c-12">
+    <div class="hd"><svg class="ic "><use href="#i-calendar"/></svg> 강좌 시간표<span class="meta">회원관리프로그램 · 운동 종류와 MET는 설정 파일의 강좌 코드·강좌명 키워드로 분류</span></div>
+    <table>
+      <thead><tr><th>강좌</th><th>코드</th><th>요일</th><th>시간</th><th class="r">분</th><th>종류</th><th>강도</th><th>충격</th><th>수중</th><th class="r">MET</th></tr></thead>
+      <tbody><tr><td><b>수영 초급</b></td><td class="sub">SWIM_BEG</td><td>월·수·금</td><td>09:00~09:50</td><td class="r num">50</td><td>유산소</td><td>중</td><td>저</td><td>●</td><td class="r num">6.0</td></tr><tr><td><b>아쿠아로빅</b></td><td class="sub">AQUA</td><td>화·목·토</td><td>10:00~10:50</td><td class="r num">50</td><td>유산소</td><td>중</td><td>저</td><td>●</td><td class="r num">5.3</td></tr><tr><td><b>건강 걷기 교실</b></td><td class="sub">WALK</td><td>화·목</td><td>07:00~08:00</td><td class="r num">60</td><td>유산소</td><td>저</td><td>저</td><td></td><td class="r num">3.8</td></tr><tr><td><b>배드민턴</b></td><td class="sub">BADMINTON</td><td>월·수</td><td>19:00~20:00</td><td class="r num">60</td><td>유산소</td><td>중</td><td>고</td><td></td><td class="r num">5.5</td></tr><tr><td><b>헬스(자유이용)</b></td><td class="sub">FIT</td><td>월·화·수·목·금</td><td>06:00~07:00</td><td class="r num">60</td><td>근력</td><td>중</td><td>중</td><td></td><td class="r num">4.0</td></tr><tr><td><b>그룹 근력 운동</b></td><td class="sub">STRENGTH</td><td>화·목</td><td>19:00~19:50</td><td class="r num">50</td><td>근력</td><td>고</td><td>중</td><td></td><td class="r num">6.0</td></tr><tr><td><b>필라테스</b></td><td class="sub">PILATES</td><td>월·수</td><td>11:00~11:50</td><td class="r num">50</td><td>근력</td><td>중</td><td>저</td><td></td><td class="r num">3.0</td></tr><tr><td><b>요가</b></td><td class="sub">YOGA</td><td>화·금</td><td>20:00~21:00</td><td class="r num">60</td><td>유연성</td><td>저</td><td>저</td><td></td><td class="r num">2.8</td></tr></tbody>
+    </table>
+  </div>
+
+  <div class="panel c-12" id="arrival">
+    <div class="hd"><svg class="ic "><use href="#i-clock"/></svg> 출석 예측 모델 (오늘 미출석 판정)<span class="meta">/tmp/static_demo_y5o5fyxo/arrival_model.pkl</span></div>
+    <div class="bd">
+      
+      
+      <div class="flash ok" style="margin:0 0 12px"><svg class="ic "><use href="#i-check"/></svg> 평가 기간에 규칙보다 헛알림이 적어 모델로 판정합니다.</div>
+      
+      <div class="grid g-12">
+        <div class="c-7">
+          <div class="sub" style="margin-bottom:6px">마지막 28일(2026-09-28~) 날짜 순서 평가 · 평소 오는 날 492번 중 결석 123번</div>
+          <table>
+            <thead><tr><th>판정 방법</th><th class="r">알림</th><th class="r">맞은 알림<br><small>(그날 결석)</small></th><th class="r">헛알림<br><small>(늦게라도 옴)</small></th><th class="r">놓친 결석</th><th class="r">알림 시각</th></tr></thead>
+            <tbody>
+              
+              <tr><td><b>출석 예측 모델</b></td><td class="r num">134</td><td class="r num">123</td>
+                  <td class="r num">11</td><td class="r num">0</td><td class="r num">평소 +27분</td></tr>
+              
+              <tr><td>규칙 (평소 시각 + 30~60분)</td><td class="r num">134</td><td class="r num">123</td>
+                  <td class="r num">11</td><td class="r num">0</td><td class="r num">평소 +30분</td></tr>
+              
+            </tbody>
+          </table>
+          <div class="sub" style="margin-top:8px">오늘 올 확률 구분력(AUC): 모델 0.661 · 그 요일 출석률만 0.644 — 올 확률은 안부 확인 순서를 정하는 데만 씁니다.</div>
+        </div>
+        <div class="c-5">
+          <div class="kpi" style="grid-template-columns:repeat(3,1fr)">
+            <div><div class="k">학습</div><div class="v num">12833<small>줄</small></div><div class="delta">59명 · 2024-11-12~</div></div>
+            <div><div class="k">평가</div><div class="v num">492<small>줄</small></div></div>
+            <div><div class="k">날씨</div><div class="v" style="font-size:15px">반영</div><div class="delta">입력 파일</div></div>
+          </div>
+          
+          <div class="sub" style="margin:10px 0 4px">올 확률에 영향이 큰 특징 (순열 중요도)</div>
+          
+          <div class="coef"><div class="row"><span>강좌 출석률</span><div class="track"><i style="left:0;width:100.0%"></i></div><span class="num" style="text-align:right">0.130</span></div><div class="row"><span>그 요일 출석률</span><div class="track"><i style="left:0;width:4.0%"></i></div><span class="num" style="text-align:right">0.005</span></div><div class="row"><span>최저기온</span><div class="track"><i style="left:0;width:4.0%"></i></div><span class="num" style="text-align:right">0.005</span></div><div class="row"><span>시설 출석 흐름</span><div class="track"><i style="left:0;width:2.0%"></i></div><span class="num" style="text-align:right">0.003</span></div><div class="row"><span>연속 결석</span><div class="track"><i style="left:0;width:1.0%"></i></div><span class="num" style="text-align:right">0.002</span></div><div class="row"><span>도착 시각 기온</span><div class="track"><i style="left:0;width:1.0%"></i></div><span class="num" style="text-align:right">0.001</span></div><div class="row"><span>요일</span><div class="track"><i style="left:0;width:1.0%"></i></div><span class="num" style="text-align:right">0.001</span></div></div>
+          
+        </div>
+      </div>
+      <div class="sub" style="margin-top:10px">그래디언트 부스팅(scikit-learn) 두 개: ① 오늘 올 확률 ② 도착 시각의 90% 지점(분위 회귀). 특징은 그 요일·강좌 출석률(최근일수록 무겁게), 연속 결석, 마지막 출석 후 날수, 평소 시각과 들쭉날쭉함, 요일·월, 나이, 날씨(최저·최고·강수·적설·도착 전 3시간 강수), 시설 전체 출석 흐름. 결석은 규칙과 똑같이 모두 알리고, 모델은 언제 알릴지를 정합니다. 학습 2026-10-14 10:26.</div>
+      
+    </div>
+  </div>
+
+  <div class="c-12">
+<div class="panel">
+  <div class="hd"><svg class="ic "><use href="#i-trend"/></svg> 출석률 구간별 체지방률 변화<span class="meta">회원별 최근 측정 기간(최대 120일)의 출석률 · 시간표 기준 · 휴회 제외</span></div>
+  <table>
+    <thead><tr><th>구간</th><th>출석률</th><th class="r">회원</th><th class="r">감소한 회원</th><th style="width:38%">30일당 평균 변화</th><th class="r">%p / 30일</th><th class="r">현재 해당</th></tr></thead>
+    <tbody>
+    
+      <tr><td><span class="badge tier-high">꾸준</span></td><td>80% 이상</td>
+          <td class="r num">14명</td><td class="r num">13명</td>
+          <td><div class="bar" style="margin:0"><i style="width:100%;background:var(--ok)"></i></div></td>
+          <td class="r num"><b>-0.53</b></td>
+          <td class="r num"><a href="admin-tier-high.html">16명</a></td></tr>
+    
+      <tr><td><span class="badge tier-mid">보통</span></td><td>50~80%</td>
+          <td class="r num">34명</td><td class="r num">27명</td>
+          <td><div class="bar" style="margin:0"><i style="width:53%;background:var(--ok)"></i></div></td>
+          <td class="r num"><b>-0.28</b></td>
+          <td class="r num"><a href="admin-tier-mid.html">24명</a></td></tr>
+    
+      <tr><td><span class="badge tier-low">부족</span></td><td>0~50%</td>
+          <td class="r num">10명</td><td class="r num">9명</td>
+          <td><div class="bar" style="margin:0"><i style="width:45%;background:var(--ok)"></i></div></td>
+          <td class="r num"><b>-0.24</b></td>
+          <td class="r num"><a href="admin-tier-low.html">10명</a></td></tr>
+    
+    </tbody>
+  </table>
+</div>
+
+  </div>
+
+  <div class="panel c-12">
+    <div class="hd"><svg class="ic "><use href="#i-cpu"/></svg> 예측 모델<span class="meta">/tmp/static_demo_y5o5fyxo/model.json</span></div>
+    <div class="bd">
+      
+      <div class="flash warn" style="margin:0 0 10px"><svg class="ic "><use href="#i-alert"/></svg> 학습 기록이 없습니다 — 예측은 생리학 공식으로 계산합니다.</div>
+      
+      <form method="post" action="/train" style="margin-top:12px;display:flex;gap:10px;align-items:center">
+        <button type="submit" class="btn primary"><svg class="ic "><use href="#i-cpu"/></svg> 현재 데이터로 학습</button>
+        <span class="sub">예측 = 생리학 공식(기준) + 학습된 보정. 측정 구간마다 공식 예상과 실제 변화의 차이를 릿지 회귀로 학습하고, 기준보다 정확할 때만 적용합니다. 공식의 기준값은 config.json → model.</span>
+      </form>
+    </div>
+  </div>
+
+  <div class="panel c-12">
+    <div class="hd"><svg class="ic "><use href="#i-chat"/></svg> 문장 생성 · 사진 분석 모델<span class="meta">교체 가능</span></div>
+    <div class="bd sub" style="font-size:12.5px">
+      설정 <b>LLM 미사용 (규칙 기반 문장)</b> — <code>config.json → llm</code> 또는 환경변수 <code>LLM_PROVIDER / LLM_MODEL / LLM_BASE_URL</code>로 교체합니다.
+      맡기는 일: 리포트 설명 문장 · 안내 문자 초안 · 자유 서술 → 건강 체크 항목 · 식단 사진 분석. 강좌 제외·수치 판정·예측은 맡기지 않습니다(규칙표와 공식).
+      연결이 없으면 각각 규칙 문장 · 기본 문장 · 키워드 일치 · 직접 입력으로 대체됩니다.
+    </div>
+  </div>
+</div>
+
+  </main>
+</div>
+
+</body>
+</html>

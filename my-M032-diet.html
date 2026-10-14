@@ -1,0 +1,477 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<script>
+(function () {
+  window.fetch = function () { return Promise.resolve(new Response(null, {status: 404})); };
+  if (navigator.serviceWorker) navigator.serviceWorker.register = function () { return Promise.reject(); };
+  var MEMBERS = {"M001": "1952", "M002": "1963", "M003": "1968", "M004": "1974", "M005": "1987", "M006": "1980", "M007": "1972", "M008": "1968", "M009": "1955", "M010": "1982", "M011": "1999", "M012": "1979", "M013": "1952", "M014": "1981", "M015": "1952", "M016": "2002", "M017": "1974", "M018": "1987", "M019": "1952", "M020": "1986", "M021": "1954", "M022": "1955", "M023": "1956", "M024": "1965", "M025": "1953", "M026": "1956", "M027": "1979", "M028": "1964", "M029": "1964", "M030": "1969", "M031": "1981", "M032": "2001", "M033": "1972", "M034": "1984", "M035": "1974", "M036": "2000", "M037": "1974", "M038": "1983", "M039": "1978", "M040": "1997", "M041": "1953", "M042": "1981", "M043": "1999", "M044": "1977", "M045": "1996", "M046": "1958", "M047": "1967", "M048": "1986", "M049": "1999", "M050": "1982", "M051": "1956", "M052": "1965", "M053": "1976", "M054": "1992", "M055": "1953", "M056": "1973", "M057": "1999", "M058": "1954", "M059": "1998", "M060": "1988"};
+  function toast(msg) {
+    var t = document.getElementById('demo-toast');
+    if (!t) { t = document.createElement('div'); t.id = 'demo-toast'; t.setAttribute('role', 'status'); document.body.appendChild(t); }
+    t.textContent = msg; t.className = 'show';
+    clearTimeout(t._h); t._h = setTimeout(function () { t.className = ''; }, 2800);
+  }
+  var SAVE = '시연판이라 저장·문자 발송·엑셀은 되지 않습니다. 설치판에서 동작합니다.';
+  var PAGE = '시연판에는 이 화면이 없습니다. 회원 상세 탭과 지난 달 달력은 M004·M007·M051과 장기 미출석 회원만 있습니다.';
+  document.addEventListener('click', function (e) {
+    var a = e.target.closest && e.target.closest('a[href="#demo"], a[href="#demo-page"]');
+    if (a) { e.preventDefault(); toast(a.getAttribute('href') === '#demo' ? SAVE : PAGE); }
+  }, true);
+  document.addEventListener('submit', function (e) {
+    e.preventDefault();
+    var f = e.target;
+    if (f.hasAttribute('data-demo-login')) {
+      var id = (f.member_id.value || '').trim().toUpperCase(), by = (f.birth_year.value || '').trim();
+      if (MEMBERS[id] && MEMBERS[id] === by) { location.href = 'my-' + id + '.html'; return; }
+      toast('회원번호나 태어난 해가 맞지 않습니다. 예: M007 / 1972'); return;
+    }
+    toast(SAVE);
+  }, true);
+  document.addEventListener('DOMContentLoaded', function () {
+    var b = document.createElement('div'); b.id = 'demo-bar';
+    b.innerHTML = '시연판 · 가상 데이터 · 2026-10-26 낮 12시 화면 · <a href="start.html">처음으로</a>';
+    document.body.insertBefore(b, document.body.firstChild);
+  });
+})();
+</script>
+<style>
+#demo-bar{background:#1b2533;color:#c5cdd8;font-size:12.5px;padding:6px 16px;text-align:center}
+#demo-bar a{color:#9ec1ff;text-decoration:underline}
+#demo-toast{position:fixed;left:50%;bottom:96px;transform:translateX(-50%);background:#1c2430;color:#fff;padding:10px 16px;border-radius:10px;font-size:14px;line-height:1.45;opacity:0;pointer-events:none;transition:opacity .2s;z-index:9999;width:max-content;max-width:min(420px,88vw);text-align:center}
+#demo-toast.show{opacity:.96}
+</style>
+
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>식단</title>
+<meta name="theme-color" content="#ffffff">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="내 건강">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+
+<link rel="apple-touch-icon" href="static/icon-180.png">
+<link rel="icon" href="static/icon-192.png">
+<link rel="stylesheet" href="static/style.css">
+</head>
+<body class="my">
+<svg xmlns="http://www.w3.org/2000/svg" style="display:none" aria-hidden="true">
+  <symbol id="i-grid" viewBox="0 0 24 24"><rect x="3" y="3" width="8" height="8" rx="1.5"/><rect x="13" y="3" width="8" height="8" rx="1.5"/><rect x="3" y="13" width="8" height="8" rx="1.5"/><rect x="13" y="13" width="8" height="8" rx="1.5"/></symbol>
+  <symbol id="i-users" viewBox="0 0 24 24"><circle cx="9" cy="8" r="3.5"/><path d="M2.5 20v-1.5a5 5 0 0 1 5-5h3a5 5 0 0 1 5 5V20"/><path d="M16 4.3a3.5 3.5 0 0 1 0 7.4"/><path d="M18 13.6a5 5 0 0 1 3.5 4.9V20"/></symbol>
+  <symbol id="i-user" viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 21v-1a6 6 0 0 1 6-6h4a6 6 0 0 1 6 6v1"/></symbol>
+  <symbol id="i-scale" viewBox="0 0 24 24"><rect x="4" y="3" width="16" height="18" rx="3"/><path d="M8 10a4 4 0 0 1 8 0"/><path d="m12 10 2.2-2.2"/></symbol>
+  <symbol id="i-calendar" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4"/><path d="m9 15 2 2 4-4"/></symbol>
+  <symbol id="i-trend" viewBox="0 0 24 24"><path d="M3 17l6-6 4 4 8-8"/><path d="M15 7h6v6"/></symbol>
+  <symbol id="i-dumbbell" viewBox="0 0 24 24"><path d="M3 10v4M21 10v4"/><rect x="5" y="8" width="3" height="8" rx="1"/><rect x="16" y="8" width="3" height="8" rx="1"/><path d="M8 12h8"/></symbol>
+  <symbol id="i-heart" viewBox="0 0 24 24"><path d="M19.5 12.6 12 20l-7.5-7.4A4.6 4.6 0 0 1 12 6.4a4.6 4.6 0 0 1 7.5 6.2z"/><path d="M4.5 12h3l1.5-2.5 2.5 5 2-3.5h4.5"/></symbol>
+  <symbol id="i-database" viewBox="0 0 24 24"><ellipse cx="12" cy="5" rx="8" ry="3"/><path d="M4 5v14c0 1.7 3.6 3 8 3s8-1.3 8-3V5"/><path d="M4 12c0 1.7 3.6 3 8 3s8-1.3 8-3"/></symbol>
+  <symbol id="i-refresh" viewBox="0 0 24 24"><path d="M20 11a8 8 0 0 0-14.5-4.5L3 9"/><path d="M3 4v5h5"/><path d="M4 13a8 8 0 0 0 14.5 4.5L21 15"/><path d="M21 20v-5h-5"/></symbol>
+  <symbol id="i-camera" viewBox="0 0 24 24"><path d="M4 8h3l1.5-2h7L17 8h3a1 1 0 0 1 1 1v9a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V9a1 1 0 0 1 1-1z"/><circle cx="12" cy="13" r="3.5"/></symbol>
+  <symbol id="i-search" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></symbol>
+  <symbol id="i-wave" viewBox="0 0 24 24"><path d="M2 10c2 0 2-2 4-2s2 2 4 2 2-2 4-2 2 2 4 2 2-2 4-2"/><path d="M2 16c2 0 2-2 4-2s2 2 4 2 2-2 4-2 2 2 4 2 2-2 4-2"/></symbol>
+  <symbol id="i-stretch" viewBox="0 0 24 24"><circle cx="12" cy="4.5" r="2"/><path d="M12 8v5"/><path d="m5 11 7 2 7-2"/><path d="m7 21 5-8 5 8"/></symbol>
+  <symbol id="i-walk" viewBox="0 0 24 24"><circle cx="13.5" cy="4" r="2"/><path d="m8 21 3.5-7"/><path d="m11.5 14 3 2.5V21"/><path d="M9 11.5 12 9l3 1 2.5 3.5"/><path d="M12 9l-1.5 5"/><path d="M6 13l3-1.5"/></symbol>
+  <symbol id="i-bowl" viewBox="0 0 24 24"><path d="M3 12h18"/><path d="M4 12a8 8 0 0 0 16 0"/><path d="M8 20h8"/><path d="M9 9V5M15 9V6"/></symbol>
+  <symbol id="i-plus-circle" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 8v8M8 12h8"/></symbol>
+  <symbol id="i-star" viewBox="0 0 24 24"><path d="m12 3 2.8 5.7 6.2.9-4.5 4.4 1.1 6.2L12 17.3 6.4 20.2l1.1-6.2L3 9.6l6.2-.9z"/></symbol>
+  <symbol id="i-alert" viewBox="0 0 24 24"><path d="M12 3 2.5 20h19z"/><path d="M12 10v4M12 17.3v.4"/></symbol>
+  <symbol id="i-check" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="m8 12 3 3 5-6"/></symbol>
+  <symbol id="i-shield" viewBox="0 0 24 24"><path d="M12 3 4 6v6c0 4.5 3.4 7.8 8 9 4.6-1.2 8-4.5 8-9V6z"/><path d="m9 12 2 2 4-4"/></symbol>
+  <symbol id="i-bell" viewBox="0 0 24 24"><path d="M6 9a6 6 0 0 1 12 0c0 6 2.5 7.5 2.5 7.5h-17S6 15 6 9"/><path d="M10 20a2 2 0 0 0 4 0"/></symbol>
+  <symbol id="i-clock" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></symbol>
+  <symbol id="i-file" viewBox="0 0 24 24"><path d="M14 3H6a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"/><path d="M14 3v6h6"/></symbol>
+  <symbol id="i-link" viewBox="0 0 24 24"><path d="M10 14a4 4 0 0 0 5.7 0l3-3a4 4 0 0 0-5.7-5.7l-1 1"/><path d="M14 10a4 4 0 0 0-5.7 0l-3 3a4 4 0 0 0 5.7 5.7l1-1"/></symbol>
+  <symbol id="i-cpu" viewBox="0 0 24 24"><rect x="6" y="6" width="12" height="12" rx="2"/><rect x="10" y="10" width="4" height="4"/><path d="M9 2v4M15 2v4M9 18v4M15 18v4M2 9h4M2 15h4M18 9h4M18 15h4"/></symbol>
+  <symbol id="i-chat" viewBox="0 0 24 24"><path d="M4 5h16a1 1 0 0 1 1 1v9a1 1 0 0 1-1 1H9l-5 4V6a1 1 0 0 1 1-1z"/></symbol>
+  <symbol id="i-arrow-down" viewBox="0 0 24 24"><path d="M12 5v14"/><path d="m6 13 6 6 6-6"/></symbol>
+  <symbol id="i-arrow-up" viewBox="0 0 24 24"><path d="M12 19V5"/><path d="m6 11 6-6 6 6"/></symbol>
+  <symbol id="i-minus" viewBox="0 0 24 24"><path d="M6 12h12"/></symbol>
+  <symbol id="i-ruler" viewBox="0 0 24 24"><path d="M3 8h18v8H3z"/><path d="M7 8v3M11 8v4M15 8v3M19 8v4"/></symbol>
+  <symbol id="i-map" viewBox="0 0 24 24"><path d="M12 21s-6-5.6-6-11a6 6 0 0 1 12 0c0 5.4-6 11-6 11z"/><circle cx="12" cy="10" r="2.2"/></symbol>
+  <symbol id="i-target" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1"/></symbol>
+  <symbol id="i-list" viewBox="0 0 24 24"><path d="M8 6h13M8 12h13M8 18h13"/><path d="M3 6h.5M3 12h.5M3 18h.5"/></symbol>
+  <symbol id="i-back" viewBox="0 0 24 24"><path d="M19 12H5"/><path d="m11 18-6-6 6-6"/></symbol>
+  <symbol id="i-print" viewBox="0 0 24 24"><path d="M6 9V3h12v6"/><rect x="3" y="9" width="18" height="9" rx="2"/><path d="M6 14h12v7H6z"/></symbol>
+</svg>
+
+<header class="my-top">
+  <div class="my-top-in">
+    <div class="org">용인도시공사</div>
+    <a class="out" href="my.html">나가기</a>
+  </div>
+</header>
+<main class="my-wrap">
+  
+    
+  
+  
+
+<section class="my-card" id="advice">
+  <h2>오늘 먹은 양</h2>
+  <p class="my-when">하루 권장 2,150 kcal · 지금 체성분 유지</p>
+  <div class="my-key"><b class="num">1,890</b><span class="unit">kcal</span></div>
+  
+  <div class="my-bar" role="img" aria-label="권장량의 88%"><i class="" style="width:88%"></i></div>
+  
+  <p class="my-msg">오늘 세 끼를 모두 기록했습니다. 권장량까지 260 kcal 남았어요.</p>
+  
+  <p class="my-small">메뉴 열량은 참고값입니다.</p>
+</section>
+
+
+<section class="my-card">
+  <h2>식사 기록하기</h2>
+  <p class="my-when">사진을 올리면 음식과 열량을 찾아 드립니다</p>
+  <form method="post" action="/my/diet/photo" enctype="multipart/form-data">
+    <div class="my-picks">
+      <label class="my-btn"><svg class="ic lg" aria-hidden="true"><use href="#i-camera"/></svg><span>음식 사진 찍기</span><input type="file" name="photo" accept="image/*" capture="environment" onclick="return camClick(this, event)" onchange="sendPhoto(this)"></label>
+      <label class="my-btn ghost"><svg class="ic lg" aria-hidden="true"><use href="#i-file"/></svg><span>찍어 둔 사진 고르기</span><input type="file" name="photo" accept="image/*" onchange="sendPhoto(this)"></label>
+    </div>
+    <div class="my-cam" id="cam" hidden>
+      <video id="cam-v" autoplay playsinline muted></video>
+      <div class="my-picks"><button type="button" class="my-btn" onclick="camShot()"><svg class="ic lg" aria-hidden="true"><use href="#i-camera"/></svg><span>찍기</span></button><button type="button" class="my-btn ghost" onclick="camClose()"><span>닫기</span></button></div>
+    </div>
+    <div class="my-wait" id="photo-wait" role="status" hidden>사진을 살펴보는 중입니다…</div>
+    <input type="hidden" name="date" value="2026-10-26"><input type="hidden" name="meal" value="점심">
+  </form>
+  <p class="my-small">사진은 저장하지 않습니다.</p>
+  <details class="my-more" ><summary>직접 적기</summary>
+  <form method="post" action="/my/diet/add" class="my-form">
+    <input type="hidden" name="source" value="manual">
+    <div class="two">
+      <label>날짜<input type="date" name="date" value="2026-10-26"></label>
+      <label>끼니<select name="meal"><option >아침</option><option selected>점심</option><option >저녁</option><option >간식</option></select></label>
+    </div>
+    
+    
+    <div class="food"><input name="name" value="" placeholder="음식 이름" aria-label="음식 이름"><input name="kcal" type="number" min="0" step="1" value="" placeholder="kcal" aria-label="열량 kcal"></div>
+    
+    <div class="food"><input name="name" value="" placeholder="음식 이름" aria-label="음식 이름"><input name="kcal" type="number" min="0" step="1" value="" placeholder="kcal" aria-label="열량 kcal"></div>
+    
+    <div class="food"><input name="name" value="" placeholder="음식 이름" aria-label="음식 이름"><input name="kcal" type="number" min="0" step="1" value="" placeholder="kcal" aria-label="열량 kcal"></div>
+    
+    <button type="submit" class="my-btn">저장하기</button>
+  </form>
+  </details>
+</section>
+
+
+<section class="my-card">
+  <h2>지난 일주일</h2>
+  
+  <div class="my-key"><span class="lab">하루 평균</span><b class="num">1,720</b><span class="unit">kcal</span></div>
+  <p class="my-msg">권장량보다 430 kcal 적게 드셨어요</p>
+  
+  
+  
+  <div class="my-days" role="img" aria-label="최근 7일 하루 섭취 열량 막대그래프">
+    
+    <div class="d"><div class="col"><i class="" style="height:82%"></i></div><span>20일</span></div>
+    
+    <div class="d"><div class="col"><i class="" style="height:29%"></i></div><span>21일</span></div>
+    
+    <div class="d"><div class="col"><i class="" style="height:73%"></i></div><span>22일</span></div>
+    
+    <div class="d"><div class="col"><i class="" style="height:92%"></i></div><span>23일</span></div>
+    
+    <div class="d"><div class="col"><i class="" style="height:70%"></i></div><span>24일</span></div>
+    
+    <div class="d"><div class="col"><i class="" style="height:75%"></i></div><span>25일</span></div>
+    
+    <div class="d"><div class="col"><i class="" style="height:88%"></i></div><span>26일</span></div>
+    
+    <div class="line" style="bottom:118px"><em>권장 2,150</em></div>
+  </div>
+  <details class="my-more"><summary>자세히 보기</summary>
+    
+    <p class="my-p"><b>최근 7일</b></p>
+    <div class="my-rows" style="margin-top:8px">
+      <div><span class="k">기록한 날</span><span class="v num">6<small>일</small></span></div>
+      <div><span class="k">하루 평균</span><span class="v num">1,720<small>kcal</small></span></div>
+      <div><span class="k">식단으로 계산한 체지방 변화</span><span class="v num">-0.3 kg</span></div>
+      <div><span class="k">인바디로 잰 체지방 변화</span><span class="v num">—</span></div>
+      <div><span class="k">인바디로 잰 체중 변화</span><span class="v num">—</span></div>
+    </div>
+    
+    <p class="my-p"><b>최근 30일</b></p>
+    <div class="my-rows" style="margin-top:8px">
+      <div><span class="k">기록한 날</span><span class="v num">25<small>일</small></span></div>
+      <div><span class="k">하루 평균</span><span class="v num">1,800<small>kcal</small></span></div>
+      <div><span class="k">식단으로 계산한 체지방 변화</span><span class="v num">-1.1 kg</span></div>
+      <div><span class="k">인바디로 잰 체지방 변화</span><span class="v num">+0.2 kg</span></div>
+      <div><span class="k">인바디로 잰 체중 변화</span><span class="v num">-0.3 kg</span></div>
+    </div>
+    
+    <p class="my-small">하루 소비 열량은 2,153 kcal로 계산했습니다 (기초대사량 1,611, 인바디 측정 + 일상 활동 + 운동 58).</p>
+    <p class="my-small">기록한 날은 세 끼 중 두 끼 이상 적은 날입니다. 식단으로 계산한 값은 먹은 양과 쓴 양의 차이를 지방 1 kg = 7,700 kcal로 바꾼 것입니다.</p>
+  </details>
+</section>
+
+<section class="my-card">
+  <h2>내가 적은 식사</h2>
+  
+  
+  <div class="my-log">
+    <div class="e">
+      <div><b>10월 26일 저녁</b><span>불고기 백반</span></div>
+      <div class="k"><b class="num">780</b> <small>kcal</small><form method="post" action="/my/diet/seed-M032-2026-10-26-%EC%A0%80%EB%85%81/delete"><button type="submit" aria-label="10월 26일 저녁 기록 지우기">지우기</button></form></div>
+    </div>
+  
+    <div class="e">
+      <div><b>10월 26일 점심</b><span>김치찌개와 밥</span></div>
+      <div class="k"><b class="num">700</b> <small>kcal</small><form method="post" action="/my/diet/seed-M032-2026-10-26-%EC%A0%90%EC%8B%AC/delete"><button type="submit" aria-label="10월 26일 점심 기록 지우기">지우기</button></form></div>
+    </div>
+  
+    <div class="e">
+      <div><b>10월 26일 아침</b><span>토스트와 달걀</span></div>
+      <div class="k"><b class="num">410</b> <small>kcal</small><form method="post" action="/my/diet/seed-M032-2026-10-26-%EC%95%84%EC%B9%A8/delete"><button type="submit" aria-label="10월 26일 아침 기록 지우기">지우기</button></form></div>
+    </div>
+  
+    <div class="e">
+      <div><b>10월 25일 저녁</b><span>라면과 김밥</span></div>
+      <div class="k"><b class="num">870</b> <small>kcal</small><form method="post" action="/my/diet/seed-M032-2026-10-25-%EC%A0%80%EB%85%81/delete"><button type="submit" aria-label="10월 25일 저녁 기록 지우기">지우기</button></form></div>
+    </div>
+  </div>
+  
+  <details class="my-more"><summary>이전 기록 26개</summary>
+    <div class="my-log">
+    <div class="e">
+      <div><b>10월 25일 점심</b><span>제육덮밥</span></div>
+      <div class="k"><b class="num">750</b> <small>kcal</small><form method="post" action="/my/diet/seed-M032-2026-10-25-%EC%A0%90%EC%8B%AC/delete"><button type="submit" aria-label="10월 25일 점심 기록 지우기">지우기</button></form></div>
+    </div>
+  
+    <div class="e">
+      <div><b>10월 24일 간식</b><span>아메리카노와 쿠키</span></div>
+      <div class="k"><b class="num">220</b> <small>kcal</small><form method="post" action="/my/diet/seed-M032-2026-10-24-%EA%B0%84%EC%8B%9D/delete"><button type="submit" aria-label="10월 24일 간식 기록 지우기">지우기</button></form></div>
+    </div>
+  
+    <div class="e">
+      <div><b>10월 24일 저녁</b><span>닭가슴살 샐러드</span></div>
+      <div class="k"><b class="num">440</b> <small>kcal</small><form method="post" action="/my/diet/seed-M032-2026-10-24-%EC%A0%80%EB%85%81/delete"><button type="submit" aria-label="10월 24일 저녁 기록 지우기">지우기</button></form></div>
+    </div>
+  
+    <div class="e">
+      <div><b>10월 24일 점심</b><span>돈가스 정식</span></div>
+      <div class="k"><b class="num">840</b> <small>kcal</small><form method="post" action="/my/diet/seed-M032-2026-10-24-%EC%A0%90%EC%8B%AC/delete"><button type="submit" aria-label="10월 24일 점심 기록 지우기">지우기</button></form></div>
+    </div>
+  
+    <div class="e">
+      <div><b>10월 23일 저녁</b><span>불고기 백반</span></div>
+      <div class="k"><b class="num">730</b> <small>kcal</small><form method="post" action="/my/diet/seed-M032-2026-10-23-%EC%A0%80%EB%85%81/delete"><button type="submit" aria-label="10월 23일 저녁 기록 지우기">지우기</button></form></div>
+    </div>
+  
+    <div class="e">
+      <div><b>10월 23일 점심</b><span>김치찌개와 밥</span></div>
+      <div class="k"><b class="num">720</b> <small>kcal</small><form method="post" action="/my/diet/seed-M032-2026-10-23-%EC%A0%90%EC%8B%AC/delete"><button type="submit" aria-label="10월 23일 점심 기록 지우기">지우기</button></form></div>
+    </div>
+  
+    <div class="e">
+      <div><b>10월 23일 아침</b><span>샌드위치</span></div>
+      <div class="k"><b class="num">520</b> <small>kcal</small><form method="post" action="/my/diet/seed-M032-2026-10-23-%EC%95%84%EC%B9%A8/delete"><button type="submit" aria-label="10월 23일 아침 기록 지우기">지우기</button></form></div>
+    </div>
+  
+    <div class="e">
+      <div><b>10월 22일 저녁</b><span>잡곡밥과 생선구이</span></div>
+      <div class="k"><b class="num">630</b> <small>kcal</small><form method="post" action="/my/diet/seed-M032-2026-10-22-%EC%A0%80%EB%85%81/delete"><button type="submit" aria-label="10월 22일 저녁 기록 지우기">지우기</button></form></div>
+    </div>
+  
+    <div class="e">
+      <div><b>10월 22일 점심</b><span>비빔밥</span></div>
+      <div class="k"><b class="num">600</b> <small>kcal</small><form method="post" action="/my/diet/seed-M032-2026-10-22-%EC%A0%90%EC%8B%AC/delete"><button type="submit" aria-label="10월 22일 점심 기록 지우기">지우기</button></form></div>
+    </div>
+  
+    <div class="e">
+      <div><b>10월 22일 아침</b><span>시리얼과 우유</span></div>
+      <div class="k"><b class="num">350</b> <small>kcal</small><form method="post" action="/my/diet/seed-M032-2026-10-22-%EC%95%84%EC%B9%A8/delete"><button type="submit" aria-label="10월 22일 아침 기록 지우기">지우기</button></form></div>
+    </div>
+  
+    <div class="e">
+      <div><b>10월 21일 점심</b><span>비빔밥</span></div>
+      <div class="k"><b class="num">620</b> <small>kcal</small><form method="post" action="/my/diet/seed-M032-2026-10-21-%EC%A0%90%EC%8B%AC/delete"><button type="submit" aria-label="10월 21일 점심 기록 지우기">지우기</button></form></div>
+    </div>
+  
+    <div class="e">
+      <div><b>10월 20일 간식</b><span>바나나</span></div>
+      <div class="k"><b class="num">100</b> <small>kcal</small><form method="post" action="/my/diet/seed-M032-2026-10-20-%EA%B0%84%EC%8B%9D/delete"><button type="submit" aria-label="10월 20일 간식 기록 지우기">지우기</button></form></div>
+    </div>
+  
+    <div class="e">
+      <div><b>10월 20일 저녁</b><span>두부조림 백반</span></div>
+      <div class="k"><b class="num">660</b> <small>kcal</small><form method="post" action="/my/diet/seed-M032-2026-10-20-%EC%A0%80%EB%85%81/delete"><button type="submit" aria-label="10월 20일 저녁 기록 지우기">지우기</button></form></div>
+    </div>
+  
+    <div class="e">
+      <div><b>10월 20일 점심</b><span>돈가스 정식</span></div>
+      <div class="k"><b class="num">1000</b> <small>kcal</small><form method="post" action="/my/diet/seed-M032-2026-10-20-%EC%A0%90%EC%8B%AC/delete"><button type="submit" aria-label="10월 20일 점심 기록 지우기">지우기</button></form></div>
+    </div>
+  
+    <div class="e">
+      <div><b>10월 19일 간식</b><span>요거트</span></div>
+      <div class="k"><b class="num">160</b> <small>kcal</small><form method="post" action="/my/diet/seed-M032-2026-10-19-%EA%B0%84%EC%8B%9D/delete"><button type="submit" aria-label="10월 19일 간식 기록 지우기">지우기</button></form></div>
+    </div>
+  
+    <div class="e">
+      <div><b>10월 19일 저녁</b><span>라면과 김밥</span></div>
+      <div class="k"><b class="num">830</b> <small>kcal</small><form method="post" action="/my/diet/seed-M032-2026-10-19-%EC%A0%80%EB%85%81/delete"><button type="submit" aria-label="10월 19일 저녁 기록 지우기">지우기</button></form></div>
+    </div>
+  
+    <div class="e">
+      <div><b>10월 19일 점심</b><span>제육덮밥</span></div>
+      <div class="k"><b class="num">860</b> <small>kcal</small><form method="post" action="/my/diet/seed-M032-2026-10-19-%EC%A0%90%EC%8B%AC/delete"><button type="submit" aria-label="10월 19일 점심 기록 지우기">지우기</button></form></div>
+    </div>
+  
+    <div class="e">
+      <div><b>10월 19일 아침</b><span>토스트와 달걀</span></div>
+      <div class="k"><b class="num">410</b> <small>kcal</small><form method="post" action="/my/diet/seed-M032-2026-10-19-%EC%95%84%EC%B9%A8/delete"><button type="submit" aria-label="10월 19일 아침 기록 지우기">지우기</button></form></div>
+    </div>
+  
+    <div class="e">
+      <div><b>10월 17일 저녁</b><span>삼겹살과 쌈</span></div>
+      <div class="k"><b class="num">870</b> <small>kcal</small><form method="post" action="/my/diet/seed-M032-2026-10-17-%EC%A0%80%EB%85%81/delete"><button type="submit" aria-label="10월 17일 저녁 기록 지우기">지우기</button></form></div>
+    </div>
+  
+    <div class="e">
+      <div><b>10월 17일 점심</b><span>김치찌개와 밥</span></div>
+      <div class="k"><b class="num">630</b> <small>kcal</small><form method="post" action="/my/diet/seed-M032-2026-10-17-%EC%A0%90%EC%8B%AC/delete"><button type="submit" aria-label="10월 17일 점심 기록 지우기">지우기</button></form></div>
+    </div>
+  
+    <div class="e">
+      <div><b>10월 17일 아침</b><span>죽 한 그릇</span></div>
+      <div class="k"><b class="num">330</b> <small>kcal</small><form method="post" action="/my/diet/seed-M032-2026-10-17-%EC%95%84%EC%B9%A8/delete"><button type="submit" aria-label="10월 17일 아침 기록 지우기">지우기</button></form></div>
+    </div>
+  
+    <div class="e">
+      <div><b>10월 16일 간식</b><span>아메리카노와 쿠키</span></div>
+      <div class="k"><b class="num">200</b> <small>kcal</small><form method="post" action="/my/diet/seed-M032-2026-10-16-%EA%B0%84%EC%8B%9D/delete"><button type="submit" aria-label="10월 16일 간식 기록 지우기">지우기</button></form></div>
+    </div>
+  
+    <div class="e">
+      <div><b>10월 16일 점심</b><span>돈가스 정식</span></div>
+      <div class="k"><b class="num">950</b> <small>kcal</small><form method="post" action="/my/diet/seed-M032-2026-10-16-%EC%A0%90%EC%8B%AC/delete"><button type="submit" aria-label="10월 16일 점심 기록 지우기">지우기</button></form></div>
+    </div>
+  
+    <div class="e">
+      <div><b>10월 16일 아침</b><span>샌드위치</span></div>
+      <div class="k"><b class="num">440</b> <small>kcal</small><form method="post" action="/my/diet/seed-M032-2026-10-16-%EC%95%84%EC%B9%A8/delete"><button type="submit" aria-label="10월 16일 아침 기록 지우기">지우기</button></form></div>
+    </div>
+  
+    <div class="e">
+      <div><b>10월 15일 간식</b><span>과자 한 봉지</span></div>
+      <div class="k"><b class="num">300</b> <small>kcal</small><form method="post" action="/my/diet/seed-M032-2026-10-15-%EA%B0%84%EC%8B%9D/delete"><button type="submit" aria-label="10월 15일 간식 기록 지우기">지우기</button></form></div>
+    </div>
+  
+    <div class="e">
+      <div><b>10월 15일 저녁</b><span>잡곡밥과 생선구이</span></div>
+      <div class="k"><b class="num">580</b> <small>kcal</small><form method="post" action="/my/diet/seed-M032-2026-10-15-%EC%A0%80%EB%85%81/delete"><button type="submit" aria-label="10월 15일 저녁 기록 지우기">지우기</button></form></div>
+    </div>
+  </div>
+  </details>
+  
+  
+</section>
+<script>
+// 휴대폰은 카메라 앱이 바로 뜬다. 노트북·PC 는 웹캠을 연다 (브라우저 규칙상 localhost 나 https 에서만 됨, 아니면 파일 고르기)
+var camInput = null, camStream = null;
+function camClick(input, ev) {
+  if (/Android|iPhone|iPad|iPod/i.test(navigator.userAgent) || !navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) return true;
+  ev.preventDefault();
+  camInput = input;
+  navigator.mediaDevices.getUserMedia({video: {facingMode: 'environment', width: {ideal: 1280}}, audio: false}).then(function (s) {
+    camStream = s;
+    document.getElementById('cam-v').srcObject = s;
+    document.getElementById('cam').hidden = false;
+  }).catch(function () { camInput = null; input.removeAttribute('onclick'); input.click(); });
+  return false;
+}
+function camClose() {
+  if (camStream) camStream.getTracks().forEach(function (t) { t.stop(); });
+  camStream = null;
+  document.getElementById('cam').hidden = true;
+}
+function camShot() {
+  var v = document.getElementById('cam-v'), c = document.createElement('canvas');
+  if (!v.videoWidth) return;
+  c.width = v.videoWidth; c.height = v.videoHeight;
+  c.getContext('2d').drawImage(v, 0, 0);
+  c.toBlob(function (blob) {
+    var dt = new DataTransfer();
+    dt.items.add(new File([blob], 'meal.jpg', {type: 'image/jpeg'}));
+    camInput.files = dt.files;
+    camClose();
+    sendPhoto(camInput);
+  }, 'image/jpeg', 0.9);
+}
+// 사진이 커서 1280px 로 줄여 보낸다
+function sendPhoto(input) {
+  var form = input.form, file = input.files[0];
+  if (!file) return;
+  var h = new Date().getHours();
+  form.meal.value = h < 10 ? '아침' : h < 15 ? '점심' : h < 21 ? '저녁' : '간식';
+  document.getElementById('photo-wait').hidden = false;
+  var done = false;
+  function go() { if (!done) { done = true; form.submit(); } }
+  try {
+    var img = new Image();
+    img.onload = function () {
+      try {
+        var k = Math.min(1, 1280 / Math.max(img.width, img.height));
+        var c = document.createElement('canvas');
+        c.width = Math.round(img.width * k); c.height = Math.round(img.height * k);
+        c.getContext('2d').drawImage(img, 0, 0, c.width, c.height);
+        c.toBlob(function (blob) {
+          try {
+            var dt = new DataTransfer();
+            dt.items.add(new File([blob], 'meal.jpg', {type: 'image/jpeg'}));
+            input.files = dt.files;
+          } catch (e) {}
+          go();
+        }, 'image/jpeg', 0.85);
+      } catch (e) { go(); }
+    };
+    img.onerror = go;
+    img.src = URL.createObjectURL(file);
+    setTimeout(go, 4000);
+  } catch (e) { go(); }
+}
+</script>
+
+</main>
+
+<nav class="my-tabs" aria-label="메뉴">
+  
+  <a href="my-M032.html" class="" ><svg class="ic lg" aria-hidden="true"><use href="#i-bell"/></svg><span>알림</span><em id="alert-count"  aria-label="알림 2개">2</em></a>
+  <a href="my-M032-body.html" class="" ><svg class="ic lg" aria-hidden="true"><use href="#i-trend"/></svg><span>내 몸</span></a>
+  <a href="my-M032-health.html" class="" ><svg class="ic lg" aria-hidden="true"><use href="#i-shield"/></svg><span>건강</span></a>
+  <a href="my-M032-diet.html" class="on" aria-current="page"><svg class="ic lg" aria-hidden="true"><use href="#i-bowl"/></svg><span>식단</span></a>
+</nav>
+<script>
+(function () {
+  if ('serviceWorker' in navigator) { navigator.serviceWorker.register('/sw.js', {scope: '/'}).catch(function () {}); }
+  var seen = {};
+  try { seen = JSON.parse(localStorage.getItem('alerts-seen') || '{}'); } catch (e) {}
+  function notify(a) {
+    if (!('Notification' in window) || Notification.permission !== 'granted') return;
+    var opt = {body: a.text, tag: a.key, icon: '/static/icon-192.png'};
+    if (navigator.serviceWorker && navigator.serviceWorker.ready) {
+      navigator.serviceWorker.ready.then(function (reg) { reg.showNotification(a.title, opt); }).catch(function () {});
+    } else { try { new Notification(a.title, opt); } catch (e) {} }
+  }
+  function check() {
+    fetch('/my/alerts.json', {credentials: 'same-origin'}).then(function (r) { return r.ok ? r.json() : null; }).then(function (d) {
+      if (!d) return;
+      var el = document.getElementById('alert-count');
+      if (el) { el.textContent = d.count; el.hidden = !d.count; }
+      d.alerts.forEach(function (a) {
+        if (a.level === 'now' && !seen[a.key]) { seen[a.key] = 1; notify(a); }
+      });
+      try { localStorage.setItem('alerts-seen', JSON.stringify(seen)); } catch (e) {}
+    }).catch(function () {});
+  }
+  check(); setInterval(check, 60000);
+  document.addEventListener('visibilitychange', function () { if (!document.hidden) check(); });
+})();
+</script>
+
+</body>
+</html>
