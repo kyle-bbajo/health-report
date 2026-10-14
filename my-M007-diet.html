@@ -104,6 +104,10 @@
     <a class="out" href="my.html">나가기</a>
   </div>
 </header>
+<div id="inapp" class="inapp" role="status" aria-live="polite" hidden>
+  <img src="static/icon-192.png" alt="">
+  <div><div class="inapp-hd"><b>용인도시공사</b><span>지금</span></div><strong id="inapp-title"></strong><p id="inapp-text"></p></div>
+</div>
 <main class="my-wrap">
   
     
@@ -112,12 +116,12 @@
 
 <section class="my-card" id="advice">
   <h2>오늘 먹은 양</h2>
-  <p class="my-when">하루 권장 1,840 kcal · 지금 체성분 유지</p>
+  <p class="my-when">하루 권장 1,820 kcal · 지금 체성분 유지</p>
   <div class="my-key"><b class="num">1,330</b><span class="unit">kcal</span></div>
   
-  <div class="my-bar" role="img" aria-label="권장량의 72%"><i class="" style="width:72%"></i></div>
+  <div class="my-bar" role="img" aria-label="권장량의 73%"><i class="" style="width:73%"></i></div>
   
-  <p class="my-msg">오늘 세 끼를 모두 기록했습니다. 권장량까지 510 kcal 남았어요.</p>
+  <p class="my-msg">오늘 세 끼를 모두 기록했습니다. 권장량까지 490 kcal 남았어요.</p>
   
   <p class="my-small">메뉴 열량은 참고값입니다.</p>
 </section>
@@ -164,7 +168,7 @@
   <h2>지난 일주일</h2>
   
   <div class="my-key"><span class="lab">하루 평균</span><b class="num">1,590</b><span class="unit">kcal</span></div>
-  <p class="my-msg">권장량보다 250 kcal 적게 드셨어요</p>
+  <p class="my-msg">권장량보다 230 kcal 적게 드셨어요</p>
   
   
   
@@ -184,7 +188,7 @@
     
     <div class="d"><div class="col"><i class="" style="height:59%"></i></div><span>26일</span></div>
     
-    <div class="line" style="bottom:102px"><em>권장 1,840</em></div>
+    <div class="line" style="bottom:101px"><em>권장 1,820</em></div>
   </div>
   <details class="my-more"><summary>자세히 보기</summary>
     
@@ -201,12 +205,12 @@
     <div class="my-rows" style="margin-top:8px">
       <div><span class="k">기록한 날</span><span class="v num">29<small>일</small></span></div>
       <div><span class="k">하루 평균</span><span class="v num">1,410<small>kcal</small></span></div>
-      <div><span class="k">식단으로 계산한 체지방 변화</span><span class="v num">-1.6 kg</span></div>
+      <div><span class="k">식단으로 계산한 체지방 변화</span><span class="v num">-1.5 kg</span></div>
       <div><span class="k">인바디로 잰 체지방 변화</span><span class="v num">-0.3 kg</span></div>
       <div><span class="k">인바디로 잰 체중 변화</span><span class="v num">-0.2 kg</span></div>
     </div>
     
-    <p class="my-small">하루 소비 열량은 1,840 kcal로 계산했습니다 (기초대사량 1,361, 인바디 측정 + 일상 활동 + 운동 71).</p>
+    <p class="my-small">하루 소비 열량은 1,820 kcal로 계산했습니다 (기초대사량 1,361, 인바디 측정 + 일상 활동 + 운동 51).</p>
     <p class="my-small">기록한 날은 세 끼 중 두 끼 이상 적은 날입니다. 식단으로 계산한 값은 먹은 양과 쓴 양의 차이를 지방 1 kg = 7,700 kcal로 바꾼 것입니다.</p>
   </details>
 </section>
@@ -460,13 +464,22 @@ function sendPhoto(input) {
       navigator.serviceWorker.ready.then(function (reg) { reg.showNotification(a.title, opt); }).catch(function () {});
     } else { try { new Notification(a.title, opt); } catch (e) {} }
   }
+  // 앱 안 알림 배너: 앱을 보고 있을 때 새 알림이 오면 화면 위에서 내려온다. 누르면 그 알림으로 간다.
+  window.showInApp = function (a) {
+    var b = document.getElementById('inapp'); if (!b || !a) return;
+    document.getElementById('inapp-title').textContent = a.title;
+    document.getElementById('inapp-text').textContent = a.text;
+    b.hidden = false; b.classList.remove('show'); void b.offsetWidth; b.classList.add('show');
+    clearTimeout(b._h); b._h = setTimeout(function () { b.classList.remove('show'); }, 7000);
+    b.onclick = function () { b.classList.remove('show'); var c = document.querySelector('.my-alert.lv-now'); if (c) c.scrollIntoView({behavior: 'smooth', block: 'center'}); };
+  };
   function check() {
     fetch('/my/alerts.json', {credentials: 'same-origin'}).then(function (r) { return r.ok ? r.json() : null; }).then(function (d) {
       if (!d) return;
       var el = document.getElementById('alert-count');
       if (el) { el.textContent = d.count; el.hidden = !d.count; }
       d.alerts.forEach(function (a) {
-        if (a.level === 'now' && !seen[a.key]) { seen[a.key] = 1; notify(a); }
+        if (a.level === 'now' && !seen[a.key]) { seen[a.key] = 1; notify(a); window.showInApp(a); }
       });
       try { localStorage.setItem('alerts-seen', JSON.stringify(seen)); } catch (e) {}
     }).catch(function () {});

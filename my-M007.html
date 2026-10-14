@@ -104,6 +104,10 @@
     <a class="out" href="my.html">나가기</a>
   </div>
 </header>
+<div id="inapp" class="inapp" role="status" aria-live="polite" hidden>
+  <img src="static/icon-192.png" alt="">
+  <div><div class="inapp-hd"><b>용인도시공사</b><span>지금</span></div><strong id="inapp-title"></strong><p id="inapp-text"></p></div>
+</div>
 <main class="my-wrap">
   
     
@@ -173,6 +177,16 @@
 </section>
 
 <p class="my-note">알림에는 병명이나 검진 수치를 넣지 않습니다.</p>
+
+<div id="now-alert" data-title="오늘 수영 초급 시간이 지났어요" data-text="평소 월요일 오전 8시 50분쯤 오시는데 오늘은 아직 출석이 없습니다. 늦게라도 오세요." hidden></div>
+<script>
+// 들어오자마자, 또는 알림을 켠 직후에 지금 알림을 앱 안 배너로 보여 준다
+(function () {
+  var el = document.getElementById('now-alert'), a = el ? {title: el.dataset.title, text: el.dataset.text} : null;
+  window.nowAlert = a;
+  if (a) setTimeout(function () { window.showInApp(a); }, 1200);
+})();
+</script>
 <script>
 // 휴대폰 푸시: https 또는 localhost 에서만. 아이폰은 홈 화면에 추가한 뒤.
 (function () {
@@ -200,7 +214,7 @@
         if (p !== 'granted') { render(info); return; }
         return navigator.serviceWorker.ready.then(function (reg) {
           return reg.pushManager.subscribe({userVisibleOnly: true, applicationServerKey: b64(info.key)});
-        }).then(function (sub) { return post({subscription: sub.toJSON()}); }).then(function (r) { info.subscribed = !!r.subscribed; render(info); });
+        }).then(function (sub) { return post({subscription: sub.toJSON()}); }).then(function (r) { info.subscribed = !!r.subscribed; render(info); if (r.subscribed && window.nowAlert) setTimeout(function () { window.showInApp(window.nowAlert); }, 900); });
       }).catch(function () { say('알림을 켜지 못했습니다. 잠시 뒤 다시 눌러 주세요.'); });
     });
     off.addEventListener('click', function () {
@@ -234,13 +248,22 @@
       navigator.serviceWorker.ready.then(function (reg) { reg.showNotification(a.title, opt); }).catch(function () {});
     } else { try { new Notification(a.title, opt); } catch (e) {} }
   }
+  // 앱 안 알림 배너: 앱을 보고 있을 때 새 알림이 오면 화면 위에서 내려온다. 누르면 그 알림으로 간다.
+  window.showInApp = function (a) {
+    var b = document.getElementById('inapp'); if (!b || !a) return;
+    document.getElementById('inapp-title').textContent = a.title;
+    document.getElementById('inapp-text').textContent = a.text;
+    b.hidden = false; b.classList.remove('show'); void b.offsetWidth; b.classList.add('show');
+    clearTimeout(b._h); b._h = setTimeout(function () { b.classList.remove('show'); }, 7000);
+    b.onclick = function () { b.classList.remove('show'); var c = document.querySelector('.my-alert.lv-now'); if (c) c.scrollIntoView({behavior: 'smooth', block: 'center'}); };
+  };
   function check() {
     fetch('/my/alerts.json', {credentials: 'same-origin'}).then(function (r) { return r.ok ? r.json() : null; }).then(function (d) {
       if (!d) return;
       var el = document.getElementById('alert-count');
       if (el) { el.textContent = d.count; el.hidden = !d.count; }
       d.alerts.forEach(function (a) {
-        if (a.level === 'now' && !seen[a.key]) { seen[a.key] = 1; notify(a); }
+        if (a.level === 'now' && !seen[a.key]) { seen[a.key] = 1; notify(a); window.showInApp(a); }
       });
       try { localStorage.setItem('alerts-seen', JSON.stringify(seen)); } catch (e) {}
     }).catch(function () {});
