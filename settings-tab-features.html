@@ -5,8 +5,7 @@
 (function () {
   window.fetch = function () { return Promise.resolve(new Response(null, {status: 404})); };
   if (navigator.serviceWorker) navigator.serviceWorker.register = function () { return Promise.reject(); };
-  var MEMBERS = {"M001": "1952", "M002": "1963", "M003": "1968", "M004": "1974", "M005": "1987", "M006": "1980", "M007": "1972", "M008": "1968", "M009": "1955", "M010": "1982", "M011": "1999", "M012": "1979", "M013": "1952", "M014": "1981", "M015": "1952", "M016": "2002", "M017": "1974", "M018": "1987", "M019": "1952", "M020": "1986", "M021": "1954", "M022": "1955", "M023": "1956", "M024": "1965", "M025": "1953", "M026": "1956", "M027": "1979", "M028": "1964", "M029": "1964", "M030": "1969", "M031": "1981", "M032": "2001", "M033": "1972", "M034": "1984", "M035": "1974", "M036": "2000", "M037": "1974", "M038": "1983", "M039": "1978", "M040": "1997", "M041": "1953", "M042": "1981", "M043": "1999", "M044": "1977", "M045": "1996", "M046": "1958", "M047": "1967", "M048": "1986", "M049": "1999", "M050": "1982", "M051": "1956", "M052": "1965", "M053": "1976", "M054": "1992", "M055": "1953", "M056": "1973", "M057": "1999", "M058": "1954", "M059": "1998", "M060": "1988"};
-  var ALIAS = {"YUC": ["M007", "2011"]};      // 시연용 쉬운 로그인: yuc / 2011 → 용도공(M007)
+  var MEMBERS = {"M001": ["M001", "1952"], "M002": ["M002", "1963"], "M003": ["M003", "1968"], "M004": ["M004", "1974"], "M005": ["M005", "1987"], "M006": ["M006", "1980"], "M007": ["M007", "1972"], "M008": ["M008", "1968"], "M009": ["M009", "1955"], "M010": ["M010", "1982"], "M011": ["M011", "1999"], "M012": ["M012", "1979"], "M013": ["M013", "1952"], "M014": ["M014", "1981"], "M015": ["M015", "1952"], "M016": ["M016", "2002"], "M017": ["M017", "1974"], "M018": ["M018", "1987"], "M019": ["M019", "1952"], "M020": ["M020", "1986"], "M021": ["M021", "1954"], "M022": ["M022", "1955"], "M023": ["M023", "1956"], "M024": ["M024", "1965"], "M025": ["M025", "1953"], "M026": ["M026", "1956"], "M027": ["M027", "1979"], "M028": ["M028", "1964"], "M029": ["M029", "1964"], "M030": ["M030", "1969"], "M031": ["M031", "1981"], "M032": ["M032", "2001"], "M033": ["M033", "1972"], "M034": ["M034", "1984"], "M035": ["M035", "1974"], "M036": ["M036", "2000"], "M037": ["M037", "1974"], "M038": ["M038", "1983"], "M039": ["M039", "1978"], "M040": ["M040", "1997"], "M041": ["M041", "1953"], "M042": ["M042", "1981"], "M043": ["M043", "1999"], "M044": ["M044", "1977"], "M045": ["M045", "1996"], "M046": ["M046", "1958"], "M047": ["M047", "1967"], "M048": ["M048", "1986"], "M049": ["M049", "1999"], "M050": ["M050", "1982"], "M051": ["M051", "1956"], "M052": ["M052", "1965"], "M053": ["M053", "1976"], "M054": ["M054", "1992"], "M055": ["M055", "1953"], "M056": ["M056", "1973"], "M057": ["M057", "1999"], "M058": ["M058", "1954"], "M059": ["M059", "1998"], "M060": ["M060", "1988"], "YUC": ["yuc", "2011"]};                 // 대문자 회원번호 → [파일에 쓰인 회원번호, 태어난 해]
   function toast(msg) {
     var t = document.getElementById('demo-toast');
     if (!t) { t = document.createElement('div'); t.id = 'demo-toast'; t.setAttribute('role', 'status'); document.body.appendChild(t); }
@@ -22,10 +21,11 @@
   document.addEventListener('submit', function (e) {
     e.preventDefault();
     var f = e.target;
+    if (f.hasAttribute('data-demo-admin')) { location.href = 'admin.html'; return; }   // 시연: 비밀번호 없이 들어가기
     if (f.hasAttribute('data-demo-login')) {
       var id = (f.member_id.value || '').trim().toUpperCase(), by = (f.birth_year.value || '').trim();
-      if (ALIAS[id] && ALIAS[id][1] === by) { location.href = 'my-' + ALIAS[id][0] + '.html'; return; }
-      if (MEMBERS[id] && MEMBERS[id] === by) { location.href = 'my-' + id + '.html'; return; }
+      if (!id && !by) { id = 'YUC'; by = MEMBERS.YUC ? MEMBERS.YUC[1] : ''; }          // 시연: 비워 두고 누르면 yuc
+      if (MEMBERS[id] && MEMBERS[id][1] === by) { location.href = 'my-' + MEMBERS[id][0] + '.html'; return; }
       toast('회원번호나 태어난 해가 맞지 않습니다. 예: yuc / 2011'); return;
     }
     toast(SAVE);
@@ -129,19 +129,19 @@
   
   <form method="post" action="/settings/features" class="toggle">
     <input type="hidden" name="key" value="classops"><input type="hidden" name="on" value="1">
-    <div><b>강좌 공지</b> <span class="badge muted">꺼짐</span><div class="sub">휴강·시간 변경, 재등록·반 변경 접수 일정을 회원 앱 알림과 문자로 안내합니다. 켜면 관리자 메뉴에 &#39;강좌 공지&#39;가 생깁니다.</div></div>
+    <div><b>강좌 공지</b> <span class="badge muted">꺼짐</span><div class="sub">휴강·시간 변경, 재등록·반 변경 접수 일정을 회원 화면 알림과 문자로 안내합니다. 켜면 관리자 메뉴에 &#39;강좌 공지&#39;가 생깁니다.</div></div>
     <button class="btn sm primary" type="submit">켜기</button>
   </form>
   
   <form method="post" action="/settings/features" class="toggle">
     <input type="hidden" name="key" value="checkup"><input type="hidden" name="on" value="1">
-    <div><b>국가건강검진 대상 안내</b> <span class="badge muted">꺼짐</span><div class="sub">출생연도로 올해 국가건강검진 대상인 회원에게 회원 앱에서 안내합니다. 켜면 관리자 메뉴에 &#39;검진 안내&#39;(대상 회원 목록)가 생깁니다.</div></div>
+    <div><b>국가건강검진 대상 안내</b> <span class="badge muted">꺼짐</span><div class="sub">출생연도로 올해 국가건강검진 대상인 회원에게 회원 화면에서 안내합니다. 켜면 관리자 메뉴에 &#39;검진 안내&#39;(대상 회원 목록)가 생깁니다.</div></div>
     <button class="btn sm primary" type="submit">켜기</button>
   </form>
   
   <form method="post" action="/settings/features" class="toggle">
     <input type="hidden" name="key" value="public_notices"><input type="hidden" name="on" value="1">
-    <div><b>보건소·예방접종 안내</b> <span class="badge muted">꺼짐</span><div class="sub">독감 예방접종 시기, 혈압 상담 등 보건소 안내를 대상 회원 앱에 띄웁니다. 켜면 관리자 메뉴에 &#39;보건소 안내&#39;(문구와 대상 수)가 생깁니다.</div></div>
+    <div><b>보건소·예방접종 안내</b> <span class="badge muted">꺼짐</span><div class="sub">독감 예방접종 시기, 혈압 상담 등 보건소 안내를 대상 회원의 회원 화면에 띄웁니다. 켜면 관리자 메뉴에 &#39;보건소 안내&#39;(문구와 대상 수)가 생깁니다.</div></div>
     <button class="btn sm primary" type="submit">켜기</button>
   </form>
   

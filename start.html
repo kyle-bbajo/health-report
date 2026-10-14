@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>공공체육시설 출석 기반 고독사 위험 조기 발견 · 건강 리포트</title>
-<meta name="description" content="체육시설이 이미 가진 출석 기록으로 평소 시간에 안 온 날을 찾아 본인·보호자·주민센터 순으로 알리는 안부 확인 서비스. 가상 데이터 시연판.">
+<meta name="description" content="체육시설이 이미 가진 출석 기록으로 평소 시간에 안 온 날을 찾아 본인·보호자·주민센터 순으로 알리는 안부 확인 서비스.">
 <link rel="icon" href="static/icon-192.png">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
 <style>
@@ -163,7 +163,7 @@ footer a { color: var(--ink-2); }
     <a class="ghost" href="#how">어떻게 동작하나</a>
     <a class="ghost" href="#screens">화면</a>
     <a href="my.html">회원 화면</a>
-    <a class="primary" href="admin.html">관리자 화면</a>
+    <a class="primary" href="admin-login.html">관리자 화면</a>
   </nav>
 </header>
 
@@ -172,9 +172,9 @@ footer a { color: var(--ink-2); }
     <div>
       <h1>꾸준히 오시던&nbsp;분이 안&nbsp;보이면, 먼저 알아차립니다</h1>
       <p class="lead">공공체육시설에 이미 쌓이는 출석 기록으로 회원마다 평소 오는 요일과 시간을 찾고, 그 시간이 지나도 안 오면 본인, 보호자, 주민센터 순으로 알립니다. 새 장비도, 직원의 전화 당번도 필요 없습니다.</p>
-      <p class="who">2026 공공 AI 대전환 챌린지 세션 1 출품작. 가상 회원 60명으로 미리 그린 시연판입니다.</p>
+      <p class="who">2026 공공 AI 대전환 챌린지 세션 1 출품작. 회원관리 프로그램·인바디의 실제 자료 구조와 유사한 구조로 생성한 가상 회원 60명으로 동작합니다.</p>
       <div class="cta">
-        <a class="btn fill" href="admin.html"><svg viewBox="0 0 24 24"><circle cx="9" cy="8" r="3.5"/><path d="M2.5 20v-1.5a5 5 0 0 1 5-5h3a5 5 0 0 1 5 5V20"/><path d="M16 4.3a3.5 3.5 0 0 1 0 7.4"/></svg>관리자 화면 열기</a>
+        <a class="btn fill" href="admin-login.html"><svg viewBox="0 0 24 24"><circle cx="9" cy="8" r="3.5"/><path d="M2.5 20v-1.5a5 5 0 0 1 5-5h3a5 5 0 0 1 5 5V20"/><path d="M16 4.3a3.5 3.5 0 0 1 0 7.4"/></svg>관리자 화면 열기</a>
         <a class="btn line" href="my-M007.html"><svg viewBox="0 0 24 24"><path d="M6 9a6 6 0 0 1 12 0c0 6 2.5 7.5 2.5 7.5h-17S6 15 6 9"/><path d="M10 20a2 2 0 0 0 4 0"/></svg>회원 화면 열기</a>
       </div>
     </div>
@@ -193,9 +193,9 @@ footer a { color: var(--ink-2); }
       </table>
       <div class="key"><span><i style="background:var(--came-bg);border:1px solid var(--came)"></i>오신 날</span><span><i style="background:var(--missed-bg);border:1px solid var(--missed)"></i>평소 오는 날인데 안 옴</span><span><i style="background:#e4e7ec"></i>휴관</span></div>
       <div class="chain">
-        <div style="--i:0"><b>1번째</b>회원 앱에 알림: 오늘 수영 시간이 지났어요</div>
-        <div style="--i:1"><b>2번째</b>본인에게 안부 문자</div>
-        <div style="--i:2"><b>3번째</b>동의한 보호자에게 문자</div>
+        <div style="--i:0"><b>1번째</b>회원 화면에 알림: 오늘 수영 시간이 지났어요</div>
+        <div style="--i:1"><b>2번째</b>본인에게 안부 문자(또는 알림톡)</div>
+        <div style="--i:2"><b>3번째</b>동의한 보호자에게 문자(또는 알림톡)</div>
         <div class="now" style="--i:3"><b>오늘</b>보호자가 없거나 답이 없음. 주민센터 전달 명단에 오름</div>
       </div>
     </figure>
@@ -216,7 +216,7 @@ footer a { color: var(--ink-2); }
       <div class="steps">
         <div class="step"><h3>출석 기록을 읽습니다</h3><p>회원관리 프로그램의 입장 기록을 조회만 합니다. 휴회, 휴관, 수강 기간 밖은 세지 않습니다.<small>인바디 측정과 기상청 날씨, 천문연 공휴일도 함께</small></p></div>
         <div class="step"><h3>평소 오는 시간을 찾습니다</h3><p>최근 26주에서 요일마다 절반 넘게 온 요일, 최근 12번 도착 시각의 중앙값을 그 회원의 평소로 봅니다.<small>오는 시간이 바뀌면 따라갑니다</small></p></div>
-        <div class="step hot"><h3>안 오면 단계별로 알립니다</h3><p>평소 시간이 지나면 앱 알림, 2번 연속이면 본인 문자, 3번이면 보호자 문자. 폭염과 한파 예보일에는 하루 앞당깁니다.<small>몇 시에 알릴지는 날씨와 그날 시설 흐름을 본 예측 모델이 정합니다</small></p></div>
+        <div class="step hot"><h3>안 오면 단계별로 알립니다</h3><p>연락은 문자 또는 카카오 알림톡으로 합니다. 2번 연속이면 본인, 3번이면 보호자에게 보내고, 평소 시간이 지난 날은 회원 화면에 먼저 띄웁니다. 폭염과 한파 예보일에는 하루 앞당깁니다.<small>몇 시에 알릴지는 날씨와 그날 시설 흐름을 본 예측 모델이 정합니다</small></p></div>
         <div class="step"><h3>닿지 않으면 주민센터로</h3><p>보호자가 없거나 답이 없는 회원만 엑셀 명단으로 정리합니다. 직원이 할 일은 이 명단을 확인하는 것뿐입니다.<small>개인정보는 꼭 필요한 칸만</small></p></div>
       </div>
     </div>
@@ -225,10 +225,10 @@ footer a { color: var(--ink-2); }
   <section id="screens" style="padding-top:0">
     <div class="wrap">
       <h2>화면</h2>
-      <p class="sub">관리자는 PC에서, 회원은 휴대폰에서 봅니다. 눌러서 들어가 보세요.</p>
+      <p class="sub">둘 다 설치하는 앱이 아니라 웹페이지입니다. 관리자는 PC에서, 회원은 휴대폰 브라우저에서 봅니다. 눌러서 들어가 보세요.</p>
       <div class="shots">
-        <a class="shot" href="admin.html"><figure><img src="img/admin.png" alt="관리자 화면: 장기 미출석 회원 명단과 회원 목록"><figcaption><b>관리자: 장기 미출석 회원</b>보호자 없는 회원이 위로 오고, 주민센터 전달용 엑셀을 바로 내려받습니다.</figcaption></figure></a>
-        <a class="shot" href="my-M007.html"><figure><img src="img/phone-alerts.png" alt="회원 화면: 오늘 수영 초급 시간이 지났어요 알림"><figcaption><b>회원: 알림</b>평소 시간이 지나면 먼저 본인에게 알립니다.</figcaption></figure></a>
+        <a class="shot" href="admin-login.html"><figure><img src="img/admin.png" alt="관리자 화면: 장기 미출석 회원 명단과 회원 목록"><figcaption><b>관리자: 장기 미출석 회원</b>보호자 없는 회원이 위로 오고, 주민센터 전달용 엑셀을 바로 내려받습니다.</figcaption></figure></a>
+        <a class="shot" href="my-M007.html"><figure><img src="img/phone-alerts.png" alt="회원 화면: 오늘 수영 초급 시간이 지났어요 알림"><figcaption><b>회원: 알림</b>평소 시간이 지나면 회원 화면에 먼저 뜹니다.</figcaption></figure></a>
         <a class="shot" href="my-M004-body.html"><figure><img src="img/phone-body.png" alt="회원 화면: 내 몸 리포트, 체지방률과 출석"><figcaption><b>회원: 내 몸 리포트</b>인바디 결과, 30일 뒤 체지방률, 출석 달력, 강좌 추천.</figcaption></figure></a>
       </div>
     </div>
@@ -237,14 +237,14 @@ footer a { color: var(--ink-2); }
   <section style="padding-top:0">
     <div class="wrap">
       <h2>바로 들어가 보기</h2>
-      <p class="sub">회원 화면은 회원번호와 태어난 해로 들어갑니다. 시연판에서는 아래 회원으로 바로 열립니다.</p>
+      <p class="sub">회원 화면은 회원번호와 태어난 해로 들어갑니다. 아래 열기를 누르면 그 회원으로 바로 들어갑니다.</p>
       <div class="try"><table>
         <thead><tr><th>회원</th><th>번호 / 태어난 해</th><th>볼 것</th><th></th></tr></thead>
         <tbody>
           <tr><td>용도공</td><td><code>yuc / 2011</code></td><td>평소 월·수 아침 수영. 10월 14일 뒤로 못 나와 오늘 알림이 떠 있고, 보호자 안부 단계</td><td><a href="my-M007.html">열기</a></td></tr>
           <tr><td>최성호</td><td><code>M051 / 1956</code></td><td>평소 오던 날 여러 번 연속 미출석. 보호자 등록과 안부 단계</td><td><a href="my-M051.html">열기</a></td></tr>
           <tr><td>황광수</td><td><code>M004 / 1974</code></td><td>30일 뒤 체지방률 4가지 경우, 지난 측정, 출석 달력, 추천 강좌</td><td><a href="my-M004-body.html">열기</a></td></tr>
-          <tr><td>관리자</td><td>로그인 없음</td><td>장기 미출석 6명, 그중 보호자 없음 6명</td><td><a href="admin.html">열기</a></td></tr>
+          <tr><td>관리자</td><td>로그인 창에서 들어가기 (시연은 비밀번호 없음)</td><td>장기 미출석 7명, 그중 보호자 없음 7명</td><td><a href="admin-login.html">열기</a></td></tr>
         </tbody>
       </table></div>
     </div>
@@ -268,7 +268,7 @@ footer a { color: var(--ink-2); }
           <li>회원관리 DB를 못 읽으면 판정과 자동 문자를 멈추고, 다시 읽히면 재개합니다.</li>
           <li>문자를 보내다 꺼지거나 응답이 없으면 다시 보내지 않고 사람이 확인합니다.</li>
           <li>예측 모델은 지난 28일에서 규칙보다 나을 때만 씁니다. 결석을 놓치는 일은 모델이 있든 없든 없습니다.</li>
-          <li>안부 확인은 기본으로 켜져 있고, 회원이 앱이나 문자 링크에서 언제든 끌 수 있습니다.</li>
+          <li>안부 확인은 기본으로 켜져 있고, 회원이 회원 화면이나 문자 링크에서 언제든 끌 수 있습니다.</li>
           <li>문장 모델은 안내 문구와 사진 읽기에만 씁니다. 안부 문자는 정해진 문장으로만 나갑니다.</li>
         </ul>
       </div>
@@ -278,7 +278,7 @@ footer a { color: var(--ink-2); }
 
 <footer>
   <div class="wrap">
-    <p>이 페이지는 설치 없이 둘러보는 시연판입니다. 가상 회원 60명, 2026년 10월 26일 낮 12시 기준으로 화면을 미리 그려 두었고, 저장·문자 발송·사진 읽기·엑셀 내려받기는 설치판에서 동작합니다.</p>
+    <p>모든 자료는 실제 자료 구조와 유사한 구조로 생성한 가상 데이터입니다. 가상 회원 60명, 2026년 10월 26일 기준으로 동작하며 실제 회원 정보는 없습니다.</p>
     <p>용인도시공사 · 2026 공공 AI 대전환 챌린지 세션 1</p>
   </div>
 </footer>
