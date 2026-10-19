@@ -5,7 +5,7 @@
 (function () {
   window.fetch = function () { return Promise.resolve(new Response(null, {status: 404})); };
   if (navigator.serviceWorker) navigator.serviceWorker.register = function () { return Promise.reject(); };
-  var MEMBERS = {"M001": ["M001", "1952"], "M002": ["M002", "1963"], "M003": ["M003", "1968"], "M004": ["M004", "1974"], "M005": ["M005", "1987"], "M006": ["M006", "1980"], "M007": ["M007", "1972"], "M008": ["M008", "1968"], "M009": ["M009", "1955"], "M010": ["M010", "1982"], "M011": ["M011", "1999"], "M012": ["M012", "1979"], "M013": ["M013", "1952"], "M014": ["M014", "1981"], "M015": ["M015", "1952"], "M016": ["M016", "2002"], "M017": ["M017", "1974"], "M018": ["M018", "1987"], "M019": ["M019", "1952"], "M020": ["M020", "1986"], "M021": ["M021", "1954"], "M022": ["M022", "1955"], "M023": ["M023", "1956"], "M024": ["M024", "1965"], "M025": ["M025", "1953"], "M026": ["M026", "1956"], "M027": ["M027", "1979"], "M028": ["M028", "1964"], "M029": ["M029", "1964"], "M030": ["M030", "1969"], "M031": ["M031", "1981"], "M032": ["M032", "2001"], "M033": ["M033", "1972"], "M034": ["M034", "1984"], "M035": ["M035", "1974"], "M036": ["M036", "2000"], "M037": ["M037", "1974"], "M038": ["M038", "1983"], "M039": ["M039", "1978"], "M040": ["M040", "1997"], "M041": ["M041", "1953"], "M042": ["M042", "1981"], "M043": ["M043", "1999"], "M044": ["M044", "1977"], "M045": ["M045", "1996"], "M046": ["M046", "1958"], "M047": ["M047", "1967"], "M048": ["M048", "1986"], "M049": ["M049", "1999"], "M050": ["M050", "1982"], "M051": ["M051", "1956"], "M052": ["M052", "1965"], "M053": ["M053", "1976"], "M054": ["M054", "1992"], "M055": ["M055", "1953"], "M056": ["M056", "1973"], "M057": ["M057", "1999"], "M058": ["M058", "1954"], "M059": ["M059", "1998"], "M060": ["M060", "1988"], "YUC": ["yuc", "2011"]};                 // 대문자 회원번호 → [파일에 쓰인 회원번호, 태어난 해]
+  var MEMBERS = {"M001": ["M001", "1952"], "M002": ["M002", "1963"], "M003": ["M003", "1968"], "M004": ["M004", "1974"], "M005": ["M005", "1987"], "M006": ["M006", "1980"], "YUC": ["yuc", "1952"], "M008": ["M008", "1968"], "M009": ["M009", "1955"], "M010": ["M010", "1982"], "M011": ["M011", "1999"], "M012": ["M012", "1979"], "M013": ["M013", "1952"], "M014": ["M014", "1981"], "M015": ["M015", "1952"], "M016": ["M016", "2002"], "M017": ["M017", "1974"], "M018": ["M018", "1987"], "M019": ["M019", "1952"], "M020": ["M020", "1986"], "M021": ["M021", "1954"], "M022": ["M022", "1955"], "M023": ["M023", "1956"], "M024": ["M024", "1965"], "M025": ["M025", "1953"], "M026": ["M026", "1956"], "M027": ["M027", "1979"], "M028": ["M028", "1964"], "M029": ["M029", "1964"], "M030": ["M030", "1969"], "M031": ["M031", "1981"], "M032": ["M032", "2001"], "M033": ["M033", "1972"], "M034": ["M034", "1984"], "M035": ["M035", "1974"], "M036": ["M036", "2000"], "M037": ["M037", "1974"], "M038": ["M038", "1983"], "M039": ["M039", "1978"], "M040": ["M040", "1997"], "M041": ["M041", "1953"], "M042": ["M042", "1981"], "M043": ["M043", "1999"], "M044": ["M044", "1977"], "M045": ["M045", "1996"], "M046": ["M046", "1958"], "M047": ["M047", "1967"], "M048": ["M048", "1986"], "M049": ["M049", "1999"], "M050": ["M050", "1982"], "M051": ["M051", "1956"], "M052": ["M052", "1965"], "M053": ["M053", "1976"], "M054": ["M054", "1992"], "M055": ["M055", "1953"], "M056": ["M056", "1973"], "M057": ["M057", "1999"], "M058": ["M058", "1954"], "M059": ["M059", "1998"], "M060": ["M060", "1988"]};                 // 대문자 회원번호 → [파일에 쓰인 회원번호, 태어난 해]
   function toast(msg) {
     var t = document.getElementById('demo-toast');
     if (!t) { t = document.createElement('div'); t.id = 'demo-toast'; t.setAttribute('role', 'status'); document.body.appendChild(t); }
@@ -13,7 +13,7 @@
     clearTimeout(t._h); t._h = setTimeout(function () { t.className = ''; }, 2800);
   }
   var SAVE = '시연판이라 저장·문자 발송·엑셀은 되지 않습니다. 설치판에서 동작합니다.';
-  var PAGE = '시연판에는 이 화면이 없습니다. 회원 상세 탭과 지난 달 달력은 M004·M007·M051과 장기 미출석 회원만 있습니다.';
+  var PAGE = '시연판에는 이 화면이 없습니다. 회원 상세 탭과 지난 달 달력은 M004·yuc·M051과 장기 미출석 회원만 있습니다.';
   document.addEventListener('click', function (e) {
     var a = e.target.closest && e.target.closest('a[href="#demo"], a[href="#demo-page"]');
     if (a) { e.preventDefault(); toast(a.getAttribute('href') === '#demo' ? SAVE : PAGE); }
@@ -24,7 +24,7 @@
     if (f.hasAttribute('data-demo-admin')) { location.href = 'admin.html'; return; }   // 시연: 비밀번호 없이 들어가기
     if (f.hasAttribute('data-demo-login')) {
       var id = (f.member_id.value || '').trim().toUpperCase(), by = (f.birth_year.value || '').trim();
-      if (!id && !by) { id = 'YUC'; by = MEMBERS.YUC ? MEMBERS.YUC[1] : ''; }          // 시연: 비워 두고 누르면 yuc
+      if ((!id && !by) || (id === 'YUC' && by === '2011')) { id = 'YUC'; by = MEMBERS.YUC ? MEMBERS.YUC[1] : ''; }  // 시연: 비워 두거나 yuc / 2011
       if (MEMBERS[id] && MEMBERS[id][1] === by) { location.href = 'my-' + MEMBERS[id][0] + '.html'; return; }
       toast('회원번호나 태어난 해가 맞지 않습니다. 예: yuc / 2011'); return;
     }
@@ -124,8 +124,8 @@
   <div>
     <h1>용도공</h1>
     <div class="chips">
-      <span class="chip">여 · 15세</span>
-      <span class="chip"><svg class="ic "><use href="#i-ruler"/></svg> 162 cm</span>
+      <span class="chip">남 · 74세</span>
+      <span class="chip"><svg class="ic "><use href="#i-ruler"/></svg> 174 cm</span>
       <span class="chip"><svg class="ic "><use href="#i-wave"/></svg> 수영 초급 <span class="sub">월·수·금 09:00~09:50</span></span>
       
       <span class="chip"><svg class="ic "><use href="#i-calendar"/></svg> 수강 10/01~10/31</span>
@@ -147,20 +147,20 @@
   <div class="panel c-8">
     <div class="hd"><svg class="ic "><use href="#i-scale"/></svg> 최근 측정<span class="meta">2026-10-23 · 3일 전 · 총 30회</span></div>
     <div class="bd kpi">
-      <div><div class="k">체지방률</div><div class="v num">21.1<small>%</small> <span class="badge lean">낮음</span></div>
+      <div><div class="k">체지방률</div><div class="v num">13.1<small>%</small> <span class="badge lean">낮음</span></div>
         <div class="delta down"><svg class="ic "><use href="#i-arrow-down"/></svg>7.6%p <span class="sub">2024-10 이후</span></div></div>
-      <div><div class="k">체중</div><div class="v num">58.1<small> kg</small></div>
+      <div><div class="k">체중</div><div class="v num">68.0<small> kg</small></div>
         <div class="delta down"><svg class="ic "><use href="#i-arrow-down"/></svg>6.2 kg</div></div>
-      <div><div class="k">골격근량</div><div class="v num">27.5<small> kg</small></div>
-        <div class="delta">체중의 47%</div></div>
-      <div><div class="k">BMI</div><div class="v num">22.1</div><div class="delta">체지방량 12.3 kg</div></div>
+      <div><div class="k">골격근량</div><div class="v num">35.5<small> kg</small></div>
+        <div class="delta">체중의 52%</div></div>
+      <div><div class="k">BMI</div><div class="v num">22.4</div><div class="delta">체지방량 8.9 kg</div></div>
     </div>
     
     <div class="bd chips" style="padding-top:0">
-      <span class="chip"><svg class="ic "><use href="#i-heart"/></svg> 혈압 <b class="num">117/69</b> mmHg · 맥박 64 <span class="sub">10/23</span></span>
-      <span class="chip">최근 3회 평균 <b class="num">114/71</b> <span class="lvl ok">정상</span></span>
-      <span class="chip">기초대사량 <b class="num">1,361</b> kcal</span>
-      <span class="chip">내장지방단면적 <b class="num">68</b> cm²</span>
+      <span class="chip"><svg class="ic "><use href="#i-heart"/></svg> 혈압 <b class="num">111/65</b> mmHg · 맥박 64 <span class="sub">10/23</span></span>
+      <span class="chip">최근 3회 평균 <b class="num">108/68</b> <span class="lvl ok">정상</span></span>
+      <span class="chip">기초대사량 <b class="num">1,647</b> kcal</span>
+      <span class="chip">내장지방단면적 <b class="num">41</b> cm²</span>
     </div>
     
   </div>
@@ -182,7 +182,7 @@
 </div>
 
 <div class="panel" style="margin-bottom:14px">
-  <div class="hd"><svg class="ic "><use href="#i-trend"/></svg> 30일 후 체지방률<span class="meta">실제 출석 기준 · 생리학 공식 · 출석 1회 ≈ 305 kcal</span></div>
+  <div class="hd"><svg class="ic "><use href="#i-trend"/></svg> 30일 후 체지방률<span class="meta">실제 출석 기준 · 생리학 공식 · 출석 1회 ≈ 357 kcal</span></div>
   <div class="bd">
     <div class="scen">
       
@@ -190,48 +190,42 @@
       <div class="s">
         <div class="ico" style="background:#8a94a6"><svg class="ic lg"><use href="#i-walk"/></svg></div>
         <div class="t">지금처럼 다니면</div>
-        <div class="n num" style="color:#8a94a6">20.8<small>%</small> <span class="delta down">-0.3%p</span></div>
+        <div class="n num" style="color:#8a94a6">12.8<small>%</small> <span class="delta down">-0.3%p</span></div>
         <div class="d">최근 30일 기준 월 5회 · 생리학 공식</div>
       </div>
       
       <div class="s">
         <div class="ico" style="background:#e08a1e"><svg class="ic lg"><use href="#i-bowl"/></svg></div>
         <div class="t">식단만 조절하면</div>
-        <div class="n num" style="color:#e08a1e">19.2<small>%</small> <span class="delta down">-1.9%p</span></div>
+        <div class="n num" style="color:#e08a1e">11.3<small>%</small> <span class="delta down">-1.8%p</span></div>
         <div class="d">월 5회 출석 · 하루 300 kcal 줄이면</div>
       </div>
       
       <div class="s">
         <div class="ico" style="background:#2f6fdd"><svg class="ic lg"><use href="#i-plus-circle"/></svg></div>
         <div class="t">주 1회 더 나오면</div>
-        <div class="n num" style="color:#2f6fdd">20.5<small>%</small> <span class="delta down">-0.6%p</span></div>
+        <div class="n num" style="color:#2f6fdd">12.5<small>%</small> <span class="delta down">-0.6%p</span></div>
         <div class="d">월 9회 출석</div>
       </div>
       
       <div class="s">
         <div class="ico" style="background:#15936d"><svg class="ic lg"><use href="#i-star"/></svg></div>
         <div class="t">주 1회 더 + 식단 조절</div>
-        <div class="n num" style="color:#15936d">19.1<small>%</small> <span class="delta down">-2.0%p</span></div>
+        <div class="n num" style="color:#15936d">11.1<small>%</small> <span class="delta down">-2.0%p</span></div>
         <div class="d">월 9회 출석 · 하루 300 kcal 줄이면</div>
       </div>
       
     </div>
-    <img class="chart-img" style="margin-top:12px" src="data:image/svg+xml;base64,PHN2ZyB2aWV3Qm94PSIwIDAgNzYwIDMwMCIgd2lkdGg9IjEwMCUiIHJvbGU9ImltZyIgYXJpYS1sYWJlbD0i7LK07KeA67Cp66WgIOuzgO2ZlOyZgCDsi5zrgpjrpqzsmKQiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgZm9udC1mYW1pbHk9IlByZXRlbmRhcmQsIEFwcGxlIFNEIEdvdGhpYyBOZW8sIE1hbGd1biBHb3RoaWMsIE5vdG8gU2FucyBLUiwgc2Fucy1zZXJpZiIgZm9udC1zaXplPSIxMSI+PGxpbmUgeDE9IjQ0IiB5MT0iMjY0LjAiIHgyPSI3NDQiIHkyPSIyNjQuMCIgc3Ryb2tlPSIjZTNlOGVmIiBzdHJva2Utd2lkdGg9IjEiLz48dGV4dCB4PSIzOCIgeT0iMjY4LjAiIHRleHQtYW5jaG9yPSJlbmQiIGZpbGw9IiM2YjcyODAiPjE2JTwvdGV4dD48bGluZSB4MT0iNDQiIHkxPSIyMzIuOSIgeDI9Ijc0NCIgeTI9IjIzMi45IiBzdHJva2U9IiNlM2U4ZWYiIHN0cm9rZS13aWR0aD0iMSIvPjx0ZXh0IHg9IjM4IiB5PSIyMzYuOSIgdGV4dC1hbmNob3I9ImVuZCIgZmlsbD0iIzZiNzI4MCI+MTglPC90ZXh0PjxsaW5lIHgxPSI0NCIgeTE9IjIwMS43IiB4Mj0iNzQ0IiB5Mj0iMjAxLjciIHN0cm9rZT0iI2UzZThlZiIgc3Ryb2tlLXdpZHRoPSIxIi8+PHRleHQgeD0iMzgiIHk9IjIwNS43IiB0ZXh0LWFuY2hvcj0iZW5kIiBmaWxsPSIjNmI3MjgwIj4yMCU8L3RleHQ+PGxpbmUgeDE9IjQ0IiB5MT0iMTcwLjYiIHgyPSI3NDQiIHkyPSIxNzAuNiIgc3Ryb2tlPSIjZTNlOGVmIiBzdHJva2Utd2lkdGg9IjEiLz48dGV4dCB4PSIzOCIgeT0iMTc0LjYiIHRleHQtYW5jaG9yPSJlbmQiIGZpbGw9IiM2YjcyODAiPjIyJTwvdGV4dD48bGluZSB4MT0iNDQiIHkxPSIxMzkuNCIgeDI9Ijc0NCIgeTI9IjEzOS40IiBzdHJva2U9IiNlM2U4ZWYiIHN0cm9rZS13aWR0aD0iMSIvPjx0ZXh0IHg9IjM4IiB5PSIxNDMuNCIgdGV4dC1hbmNob3I9ImVuZCIgZmlsbD0iIzZiNzI4MCI+MjQlPC90ZXh0PjxsaW5lIHgxPSI0NCIgeTE9IjEwOC4zIiB4Mj0iNzQ0IiB5Mj0iMTA4LjMiIHN0cm9rZT0iI2UzZThlZiIgc3Ryb2tlLXdpZHRoPSIxIi8+PHRleHQgeD0iMzgiIHk9IjExMi4zIiB0ZXh0LWFuY2hvcj0iZW5kIiBmaWxsPSIjNmI3MjgwIj4yNiU8L3RleHQ+PGxpbmUgeDE9IjQ0IiB5MT0iNzcuMSIgeDI9Ijc0NCIgeTI9Ijc3LjEiIHN0cm9rZT0iI2UzZThlZiIgc3Ryb2tlLXdpZHRoPSIxIi8+PHRleHQgeD0iMzgiIHk9IjgxLjEiIHRleHQtYW5jaG9yPSJlbmQiIGZpbGw9IiM2YjcyODAiPjI4JTwvdGV4dD48bGluZSB4MT0iNDQiIHkxPSI0Ni4wIiB4Mj0iNzQ0IiB5Mj0iNDYuMCIgc3Ryb2tlPSIjZTNlOGVmIiBzdHJva2Utd2lkdGg9IjEiLz48dGV4dCB4PSIzOCIgeT0iNTAuMCIgdGV4dC1hbmNob3I9ImVuZCIgZmlsbD0iIzZiNzI4MCI+MzAlPC90ZXh0PjxsaW5lIHgxPSI0NC4wIiB5MT0iNDYiIHgyPSI0NC4wIiB5Mj0iMjY0IiBzdHJva2U9IiNlZWYxZjUiIHN0cm9rZS13aWR0aD0iMSIvPjx0ZXh0IHg9IjQ0LjAiIHk9IjI4MCIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZmlsbD0iIzZiNzI4MCI+MTAvMzA8L3RleHQ+PGxpbmUgeDE9IjE4NC40IiB5MT0iNDYiIHgyPSIxODQuNCIgeTI9IjI2NCIgc3Ryb2tlPSIjZWVmMWY1IiBzdHJva2Utd2lkdGg9IjEiLz48dGV4dCB4PSIxODQuNCIgeT0iMjgwIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmaWxsPSIjNmI3MjgwIj4wNC8wNTwvdGV4dD48bGluZSB4MT0iMzIzLjgiIHkxPSI0NiIgeDI9IjMyMy44IiB5Mj0iMjY0IiBzdHJva2U9IiNlZWYxZjUiIHN0cm9rZS13aWR0aD0iMSIvPjx0ZXh0IHg9IjMyMy44IiB5PSIyODAiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGZpbGw9IiM2YjcyODAiPjA5LzA4PC90ZXh0PjxsaW5lIHgxPSI0NjQuMiIgeTE9IjQ2IiB4Mj0iNDY0LjIiIHkyPSIyNjQiIHN0cm9rZT0iI2VlZjFmNSIgc3Ryb2tlLXdpZHRoPSIxIi8+PHRleHQgeD0iNDY0LjIiIHk9IjI4MCIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZmlsbD0iIzZiNzI4MCI+MDIvMTI8L3RleHQ+PGxpbmUgeDE9IjYwMy42IiB5MT0iNDYiIHgyPSI2MDMuNiIgeTI9IjI2NCIgc3Ryb2tlPSIjZWVmMWY1IiBzdHJva2Utd2lkdGg9IjEiLz48dGV4dCB4PSI2MDMuNiIgeT0iMjgwIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmaWxsPSIjNmI3MjgwIj4wNy8xODwvdGV4dD48bGluZSB4MT0iNzQ0LjAiIHkxPSI0NiIgeDI9Ijc0NC4wIiB5Mj0iMjY0IiBzdHJva2U9IiNlZWYxZjUiIHN0cm9rZS13aWR0aD0iMSIvPjx0ZXh0IHg9Ijc0NC4wIiB5PSIyODAiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGZpbGw9IiM2YjcyODAiPjEyLzIyPC90ZXh0PjxsaW5lIHgxPSI2OTAuNCIgeTE9IjQ2IiB4Mj0iNjkwLjQiIHkyPSIyNjQiIHN0cm9rZT0iIzlhYTNiMiIgc3Ryb2tlLWRhc2hhcnJheT0iMyAzIi8+PHRleHQgeD0iNjk0LjQiIHk9IjU4IiBmaWxsPSIjNmI3MjgwIj7stZzqt7wg7Lih7KCVPC90ZXh0PjxsaW5lIHgxPSI0NCIgeTE9IjE0IiB4Mj0iNjIiIHkyPSIxNCIgc3Ryb2tlPSIjMWYyOTM3IiBzdHJva2Utd2lkdGg9IjIuNSIvPjx0ZXh0IHg9IjY3IiB5PSIxOCIgZmlsbD0iIzM3NDE1MSI+7Iuk7KCcIOy4oeyglTwvdGV4dD48bGluZSB4MT0iMTI2LjUiIHkxPSIxNCIgeDI9IjE0NC41IiB5Mj0iMTQiIHN0cm9rZT0iIzhhOTRhNiIgc3Ryb2tlLXdpZHRoPSIyLjUiIHN0cm9rZS1kYXNoYXJyYXk9IjYgNCIvPjx0ZXh0IHg9IjE0OS41IiB5PSIxOCIgZmlsbD0iIzM3NDE1MSI+7KeA6riI7LKY65+8IOuLpOuLiOuptDwvdGV4dD48bGluZSB4MT0iMjMxLjUiIHkxPSIxNCIgeDI9IjI0OS41IiB5Mj0iMTQiIHN0cm9rZT0iI2UwOGExZSIgc3Ryb2tlLXdpZHRoPSIyLjUiLz48dGV4dCB4PSIyNTQuNSIgeT0iMTgiIGZpbGw9IiMzNzQxNTEiPuyLneuLqOunjCDsobDsoIjtlZjrqbQ8L3RleHQ+PGxpbmUgeDE9IjMzNi41IiB5MT0iMTQiIHgyPSIzNTQuNSIgeTI9IjE0IiBzdHJva2U9IiMyZjZmZGQiIHN0cm9rZS13aWR0aD0iMi41Ii8+PHRleHQgeD0iMzU5LjUiIHk9IjE4IiBmaWxsPSIjMzc0MTUxIj7so7wgMe2ajCDrjZQg64KY7Jik66m0PC90ZXh0PjxsaW5lIHgxPSI0NTYuNSIgeTE9IjE0IiB4Mj0iNDc0LjUiIHkyPSIxNCIgc3Ryb2tlPSIjMTU5MzZkIiBzdHJva2Utd2lkdGg9IjIuNSIvPjx0ZXh0IHg9IjQ3OS41IiB5PSIxOCIgZmlsbD0iIzM3NDE1MSI+7KO8IDHtmowg642UICsg7Iud64uoIOyhsOygiDwvdGV4dD48cG9seWxpbmUgcG9pbnRzPSI2OTAuNCwxODQuNiA2OTEuMywxODQuNyA2OTIuMSwxODQuOSA2OTMuMCwxODUuMCA2OTMuOSwxODUuMiA2OTQuOCwxODUuMyA2OTUuNywxODUuNSA2OTYuNiwxODUuNyA2OTcuNSwxODUuOCA2OTguNCwxODYuMCA2OTkuMywxODYuMSA3MDAuMiwxODYuMyA3MDEuMSwxODYuNCA3MDIuMCwxODYuNiA3MDIuOSwxODYuNyA3MDMuOCwxODYuOSA3MDQuNywxODcuMCA3MDUuNiwxODcuMiA3MDYuNSwxODcuMyA3MDcuMywxODcuNSA3MDguMiwxODcuNiA3MDkuMSwxODcuOCA3MTAuMCwxODcuOSA3MTAuOSwxODguMSA3MTEuOCwxODguMiA3MTIuNywxODguNCA3MTMuNiwxODguNiA3MTQuNSwxODguNyA3MTUuNCwxODguOSA3MTYuMywxODkuMCA3MTcuMiwxODkuMiA3MTguMSwxODkuMyA3MTkuMCwxODkuNSA3MTkuOSwxODkuNiA3MjAuOCwxODkuOCA3MjEuNywxODkuOSA3MjIuNSwxOTAuMSA3MjMuNCwxOTAuMiA3MjQuMywxOTAuNCA3MjUuMiwxOTAuNSA3MjYuMSwxOTAuNyA3MjcuMCwxOTAuOCA3MjcuOSwxOTEuMCA3MjguOCwxOTEuMSA3MjkuNywxOTEuMyA3MzAuNiwxOTEuNCA3MzEuNSwxOTEuNiA3MzIuNCwxOTEuOCA3MzMuMywxOTEuOSA3MzQuMiwxOTIuMSA3MzUuMSwxOTIuMiA3MzYuMCwxOTIuNCA3MzYuOCwxOTIuNSA3MzcuNywxOTIuNyA3MzguNiwxOTIuOCA3MzkuNSwxOTMuMCA3NDAuNCwxOTMuMSA3NDEuMywxOTMuMyA3NDIuMiwxOTMuNCA3NDMuMSwxOTMuNiA3NDQuMCwxOTMuNyIgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjOGE5NGE2IiBzdHJva2Utd2lkdGg9IjIuMiIgc3Ryb2tlLWRhc2hhcnJheT0iNiA0Ii8+PGNpcmNsZSBjeD0iNzQ0LjAiIGN5PSIxOTMuNyIgcj0iMyIgZmlsbD0iIzhhOTRhNiIvPjxwb2x5bGluZSBwb2ludHM9IjY5MC40LDE4NC42IDY5MS4zLDE4NS42IDY5Mi4xLDE4Ni41IDY5My4wLDE4Ny41IDY5My45LDE4OC41IDY5NC44LDE4OS41IDY5NS43LDE5MC41IDY5Ni42LDE5MS41IDY5Ny41LDE5Mi40IDY5OC40LDE5My40IDY5OS4zLDE5NC40IDcwMC4yLDE5NS40IDcwMS4xLDE5Ni40IDcwMi4wLDE5Ny40IDcwMi45LDE5OC40IDcwMy44LDE5OS40IDcwNC43LDIwMC40IDcwNS42LDIwMS40IDcwNi41LDIwMi40IDcwNy4zLDIwMy40IDcwOC4yLDIwNC40IDcwOS4xLDIwNS40IDcxMC4wLDIwNi40IDcxMC45LDIwNy40IDcxMS44LDIwOC40IDcxMi43LDIwOS40IDcxMy42LDIxMC40IDcxNC41LDIxMS40IDcxNS40LDIxMi40IDcxNi4zLDIxMy41IDcxNy4yLDIxNC41IDcxOC4xLDIxNS41IDcxOS4wLDIxNi41IDcxOS45LDIxNy41IDcyMC44LDIxOC42IDcyMS43LDIxOS42IDcyMi41LDIyMC42IDcyMy40LDIyMS42IDcyNC4zLDIyMi43IDcyNS4yLDIyMy43IDcyNi4xLDIyNC43IDcyNy4wLDIyNS43IDcyNy45LDIyNi44IDcyOC44LDIyNy44IDcyOS43LDIyOC45IDczMC42LDIyOS45IDczMS41LDIzMC45IDczMi40LDIzMi4wIDczMy4zLDIzMy4wIDczNC4yLDIzNC4xIDczNS4xLDIzNS4xIDczNi4wLDIzNi4xIDczNi44LDIzNy4yIDczNy43LDIzOC4yIDczOC42LDIzOS4zIDczOS41LDI0MC4zIDc0MC40LDI0MS40IDc0MS4zLDI0Mi41IDc0Mi4yLDI0My41IDc0My4xLDI0NC42IDc0NC4wLDI0NS42IiBmaWxsPSJub25lIiBzdHJva2U9IiNlMDhhMWUiIHN0cm9rZS13aWR0aD0iMi4yIi8+PGNpcmNsZSBjeD0iNzQ0LjAiIGN5PSIyNDUuNiIgcj0iMyIgZmlsbD0iI2UwOGExZSIvPjxwb2x5bGluZSBwb2ludHM9IjY5MC40LDE4NC42IDY5MS4zLDE4NC45IDY5Mi4xLDE4NS4yIDY5My4wLDE4NS41IDY5My45LDE4NS43IDY5NC44LDE4Ni4wIDY5NS43LDE4Ni4zIDY5Ni42LDE4Ni42IDY5Ny41LDE4Ni45IDY5OC40LDE4Ny4yIDY5OS4zLDE4Ny41IDcwMC4yLDE4Ny44IDcwMS4xLDE4OC4xIDcwMi4wLDE4OC40IDcwMi45LDE4OC42IDcwMy44LDE4OC45IDcwNC43LDE4OS4yIDcwNS42LDE4OS41IDcwNi41LDE4OS44IDcwNy4zLDE5MC4xIDcwOC4yLDE5MC40IDcwOS4xLDE5MC43IDcxMC4wLDE5MS4wIDcxMC45LDE5MS4zIDcxMS44LDE5MS41IDcxMi43LDE5MS44IDcxMy42LDE5Mi4xIDcxNC41LDE5Mi40IDcxNS40LDE5Mi43IDcxNi4zLDE5My4wIDcxNy4yLDE5My4zIDcxOC4xLDE5My42IDcxOS4wLDE5My45IDcxOS45LDE5NC4xIDcyMC44LDE5NC40IDcyMS43LDE5NC43IDcyMi41LDE5NS4wIDcyMy40LDE5NS4zIDcyNC4zLDE5NS42IDcyNS4yLDE5NS45IDcyNi4xLDE5Ni4yIDcyNy4wLDE5Ni41IDcyNy45LDE5Ni44IDcyOC44LDE5Ny4wIDcyOS43LDE5Ny4zIDczMC42LDE5Ny42IDczMS41LDE5Ny45IDczMi40LDE5OC4yIDczMy4zLDE5OC41IDczNC4yLDE5OC44IDczNS4xLDE5OS4xIDczNi4wLDE5OS40IDczNi44LDE5OS43IDczNy43LDE5OS45IDczOC42LDIwMC4yIDczOS41LDIwMC41IDc0MC40LDIwMC44IDc0MS4zLDIwMS4xIDc0Mi4yLDIwMS40IDc0My4xLDIwMS43IDc0NC4wLDIwMi4wIiBmaWxsPSJub25lIiBzdHJva2U9IiMyZjZmZGQiIHN0cm9rZS13aWR0aD0iMi4yIi8+PGNpcmNsZSBjeD0iNzQ0LjAiIGN5PSIyMDIuMCIgcj0iMyIgZmlsbD0iIzJmNmZkZCIvPjxwb2x5bGluZSBwb2ludHM9IjY5MC40LDE4NC42IDY5MS4zLDE4NS42IDY5Mi4xLDE4Ni43IDY5My4wLDE4Ny43IDY5My45LDE4OC43IDY5NC44LDE4OS44IDY5NS43LDE5MC44IDY5Ni42LDE5MS45IDY5Ny41LDE5Mi45IDY5OC40LDE5My45IDY5OS4zLDE5NS4wIDcwMC4yLDE5Ni4wIDcwMS4xLDE5Ny4wIDcwMi4wLDE5OC4xIDcwMi45LDE5OS4xIDcwMy44LDIwMC4yIDcwNC43LDIwMS4yIDcwNS42LDIwMi4yIDcwNi41LDIwMy4zIDcwNy4zLDIwNC4zIDcwOC4yLDIwNS4zIDcwOS4xLDIwNi40IDcxMC4wLDIwNy40IDcxMC45LDIwOC41IDcxMS44LDIwOS41IDcxMi43LDIxMC41IDcxMy42LDIxMS42IDcxNC41LDIxMi42IDcxNS40LDIxMy43IDcxNi4zLDIxNC43IDcxNy4yLDIxNS43IDcxOC4xLDIxNi44IDcxOS4wLDIxNy44IDcxOS45LDIxOC44IDcyMC44LDIxOS45IDcyMS43LDIyMC45IDcyMi41LDIyMi4wIDcyMy40LDIyMy4wIDcyNC4zLDIyNC4wIDcyNS4yLDIyNS4xIDcyNi4xLDIyNi4xIDcyNy4wLDIyNy4xIDcyNy45LDIyOC4yIDcyOC44LDIyOS4yIDcyOS43LDIzMC4zIDczMC42LDIzMS4zIDczMS41LDIzMi4zIDczMi40LDIzMy40IDczMy4zLDIzNC40IDczNC4yLDIzNS41IDczNS4xLDIzNi41IDczNi4wLDIzNy41IDczNi44LDIzOC42IDczNy43LDIzOS42IDczOC42LDI0MC42IDczOS41LDI0MS43IDc0MC40LDI0Mi43IDc0MS4zLDI0My44IDc0Mi4yLDI0NC44IDc0My4xLDI0NS44IDc0NC4wLDI0Ni45IiBmaWxsPSJub25lIiBzdHJva2U9IiMxNTkzNmQiIHN0cm9rZS13aWR0aD0iMi4yIi8+PGNpcmNsZSBjeD0iNzQ0LjAiIGN5PSIyNDYuOSIgcj0iMyIgZmlsbD0iIzE1OTM2ZCIvPjxwb2x5bGluZSBwb2ludHM9IjQ0LjAsNjYuMiA1OC4zLDcwLjkgNzcuMSw3Mi41IDEwNy41LDcyLjUgMTM3LjksNjkuNCAxNTkuMyw3MC45IDE4NS4zLDc3LjEgMjA5LjQsODMuNCAyMjguMiw4NC45IDI0MS42LDg5LjYgMjY2LjYsMTE3LjYgMjgyLjcsMTE0LjUgMzA2LjgsMTIwLjcgMzIyLjAsMTE3LjYgMzUzLjMsMTE5LjIgMzc4LjQsMTIyLjMgNDAwLjcsMTIwLjcgNDI4LjQsMTI4LjUgNDQwLjksMTM0LjggNDY3LjgsMTMzLjIgNDg3LjQsMTM5LjQgNTA4LjAsMTUwLjMgNTMwLjMsMTUxLjkgNTQ5LjEsMTU1LjAgNTYzLjQsMTYxLjIgNTk0LjcsMTcyLjEgNjExLjcsMTcyLjEgNjQyLjEsMTczLjcgNjYzLjUsMTc4LjQgNjkwLjQsMTg0LjYiIGZpbGw9Im5vbmUiIHN0cm9rZT0iIzFmMjkzNyIgc3Ryb2tlLXdpZHRoPSIyIi8+PGNpcmNsZSBjeD0iNDQuMCIgY3k9IjY2LjIiIHI9IjQiIGZpbGw9IiMxZjI5MzciIHN0cm9rZT0iI2ZmZiIgc3Ryb2tlLXdpZHRoPSIxLjUiLz48Y2lyY2xlIGN4PSI1OC4zIiBjeT0iNzAuOSIgcj0iNCIgZmlsbD0iIzFmMjkzNyIgc3Ryb2tlPSIjZmZmIiBzdHJva2Utd2lkdGg9IjEuNSIvPjxjaXJjbGUgY3g9Ijc3LjEiIGN5PSI3Mi41IiByPSI0IiBmaWxsPSIjMWYyOTM3IiBzdHJva2U9IiNmZmYiIHN0cm9rZS13aWR0aD0iMS41Ii8+PGNpcmNsZSBjeD0iMTA3LjUiIGN5PSI3Mi41IiByPSI0IiBmaWxsPSIjMWYyOTM3IiBzdHJva2U9IiNmZmYiIHN0cm9rZS13aWR0aD0iMS41Ii8+PGNpcmNsZSBjeD0iMTM3LjkiIGN5PSI2OS40IiByPSI0IiBmaWxsPSIjMWYyOTM3IiBzdHJva2U9IiNmZmYiIHN0cm9rZS13aWR0aD0iMS41Ii8+PGNpcmNsZSBjeD0iMTU5LjMiIGN5PSI3MC45IiByPSI0IiBmaWxsPSIjMWYyOTM3IiBzdHJva2U9IiNmZmYiIHN0cm9rZS13aWR0aD0iMS41Ii8+PGNpcmNsZSBjeD0iMTg1LjMiIGN5PSI3Ny4xIiByPSI0IiBmaWxsPSIjMWYyOTM3IiBzdHJva2U9IiNmZmYiIHN0cm9rZS13aWR0aD0iMS41Ii8+PGNpcmNsZSBjeD0iMjA5LjQiIGN5PSI4My40IiByPSI0IiBmaWxsPSIjMWYyOTM3IiBzdHJva2U9IiNmZmYiIHN0cm9rZS13aWR0aD0iMS41Ii8+PGNpcmNsZSBjeD0iMjI4LjIiIGN5PSI4NC45IiByPSI0IiBmaWxsPSIjMWYyOTM3IiBzdHJva2U9IiNmZmYiIHN0cm9rZS13aWR0aD0iMS41Ii8+PGNpcmNsZSBjeD0iMjQxLjYiIGN5PSI4OS42IiByPSI0IiBmaWxsPSIjMWYyOTM3IiBzdHJva2U9IiNmZmYiIHN0cm9rZS13aWR0aD0iMS41Ii8+PGNpcmNsZSBjeD0iMjY2LjYiIGN5PSIxMTcuNiIgcj0iNCIgZmlsbD0iIzFmMjkzNyIgc3Ryb2tlPSIjZmZmIiBzdHJva2Utd2lkdGg9IjEuNSIvPjxjaXJjbGUgY3g9IjI4Mi43IiBjeT0iMTE0LjUiIHI9IjQiIGZpbGw9IiMxZjI5MzciIHN0cm9rZT0iI2ZmZiIgc3Ryb2tlLXdpZHRoPSIxLjUiLz48Y2lyY2xlIGN4PSIzMDYuOCIgY3k9IjEyMC43IiByPSI0IiBmaWxsPSIjMWYyOTM3IiBzdHJva2U9IiNmZmYiIHN0cm9rZS13aWR0aD0iMS41Ii8+PGNpcmNsZSBjeD0iMzIyLjAiIGN5PSIxMTcuNiIgcj0iNCIgZmlsbD0iIzFmMjkzNyIgc3Ryb2tlPSIjZmZmIiBzdHJva2Utd2lkdGg9IjEuNSIvPjxjaXJjbGUgY3g9IjM1My4zIiBjeT0iMTE5LjIiIHI9IjQiIGZpbGw9IiMxZjI5MzciIHN0cm9rZT0iI2ZmZiIgc3Ryb2tlLXdpZHRoPSIxLjUiLz48Y2lyY2xlIGN4PSIzNzguNCIgY3k9IjEyMi4zIiByPSI0IiBmaWxsPSIjMWYyOTM3IiBzdHJva2U9IiNmZmYiIHN0cm9rZS13aWR0aD0iMS41Ii8+PGNpcmNsZSBjeD0iNDAwLjciIGN5PSIxMjAuNyIgcj0iNCIgZmlsbD0iIzFmMjkzNyIgc3Ryb2tlPSIjZmZmIiBzdHJva2Utd2lkdGg9IjEuNSIvPjxjaXJjbGUgY3g9IjQyOC40IiBjeT0iMTI4LjUiIHI9IjQiIGZpbGw9IiMxZjI5MzciIHN0cm9rZT0iI2ZmZiIgc3Ryb2tlLXdpZHRoPSIxLjUiLz48Y2lyY2xlIGN4PSI0NDAuOSIgY3k9IjEzNC44IiByPSI0IiBmaWxsPSIjMWYyOTM3IiBzdHJva2U9IiNmZmYiIHN0cm9rZS13aWR0aD0iMS41Ii8+PGNpcmNsZSBjeD0iNDY3LjgiIGN5PSIxMzMuMiIgcj0iNCIgZmlsbD0iIzFmMjkzNyIgc3Ryb2tlPSIjZmZmIiBzdHJva2Utd2lkdGg9IjEuNSIvPjxjaXJjbGUgY3g9IjQ4Ny40IiBjeT0iMTM5LjQiIHI9IjQiIGZpbGw9IiMxZjI5MzciIHN0cm9rZT0iI2ZmZiIgc3Ryb2tlLXdpZHRoPSIxLjUiLz48Y2lyY2xlIGN4PSI1MDguMCIgY3k9IjE1MC4zIiByPSI0IiBmaWxsPSIjMWYyOTM3IiBzdHJva2U9IiNmZmYiIHN0cm9rZS13aWR0aD0iMS41Ii8+PGNpcmNsZSBjeD0iNTMwLjMiIGN5PSIxNTEuOSIgcj0iNCIgZmlsbD0iIzFmMjkzNyIgc3Ryb2tlPSIjZmZmIiBzdHJva2Utd2lkdGg9IjEuNSIvPjxjaXJjbGUgY3g9IjU0OS4xIiBjeT0iMTU1LjAiIHI9IjQiIGZpbGw9IiMxZjI5MzciIHN0cm9rZT0iI2ZmZiIgc3Ryb2tlLXdpZHRoPSIxLjUiLz48Y2lyY2xlIGN4PSI1NjMuNCIgY3k9IjE2MS4yIiByPSI0IiBmaWxsPSIjMWYyOTM3IiBzdHJva2U9IiNmZmYiIHN0cm9rZS13aWR0aD0iMS41Ii8+PGNpcmNsZSBjeD0iNTk0LjciIGN5PSIxNzIuMSIgcj0iNCIgZmlsbD0iIzFmMjkzNyIgc3Ryb2tlPSIjZmZmIiBzdHJva2Utd2lkdGg9IjEuNSIvPjxjaXJjbGUgY3g9IjYxMS43IiBjeT0iMTcyLjEiIHI9IjQiIGZpbGw9IiMxZjI5MzciIHN0cm9rZT0iI2ZmZiIgc3Ryb2tlLXdpZHRoPSIxLjUiLz48Y2lyY2xlIGN4PSI2NDIuMSIgY3k9IjE3My43IiByPSI0IiBmaWxsPSIjMWYyOTM3IiBzdHJva2U9IiNmZmYiIHN0cm9rZS13aWR0aD0iMS41Ii8+PGNpcmNsZSBjeD0iNjYzLjUiIGN5PSIxNzguNCIgcj0iNCIgZmlsbD0iIzFmMjkzNyIgc3Ryb2tlPSIjZmZmIiBzdHJva2Utd2lkdGg9IjEuNSIvPjxjaXJjbGUgY3g9IjY5MC40IiBjeT0iMTg0LjYiIHI9IjQiIGZpbGw9IiMxZjI5MzciIHN0cm9rZT0iI2ZmZiIgc3Ryb2tlLXdpZHRoPSIxLjUiLz48Y2lyY2xlIGN4PSI2OTAuNCIgY3k9IjE4NC42IiByPSI3IiBmaWxsPSIjMTExODI3IiBzdHJva2U9IiNmZmYiIHN0cm9rZS13aWR0aD0iMiIvPjwvc3ZnPg==" alt="체지방률 변화와 30일 뒤 예측">
+    <img class="chart-img" style="margin-top:12px" src="data:image/svg+xml;base64,PHN2ZyB2aWV3Qm94PSIwIDAgNzYwIDMwMCIgd2lkdGg9IjEwMCUiIHJvbGU9ImltZyIgYXJpYS1sYWJlbD0i7LK07KeA67Cp66WgIOuzgO2ZlOyZgCDsi5zrgpjrpqzsmKQiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgZm9udC1mYW1pbHk9IlByZXRlbmRhcmQsIEFwcGxlIFNEIEdvdGhpYyBOZW8sIE1hbGd1biBHb3RoaWMsIE5vdG8gU2FucyBLUiwgc2Fucy1zZXJpZiIgZm9udC1zaXplPSIxMSI+PGxpbmUgeDE9IjQ0IiB5MT0iMjY0LjAiIHgyPSI3NDQiIHkyPSIyNjQuMCIgc3Ryb2tlPSIjZTNlOGVmIiBzdHJva2Utd2lkdGg9IjEiLz48dGV4dCB4PSIzOCIgeT0iMjY4LjAiIHRleHQtYW5jaG9yPSJlbmQiIGZpbGw9IiM2YjcyODAiPjglPC90ZXh0PjxsaW5lIHgxPSI0NCIgeTE9IjIzMi45IiB4Mj0iNzQ0IiB5Mj0iMjMyLjkiIHN0cm9rZT0iI2UzZThlZiIgc3Ryb2tlLXdpZHRoPSIxIi8+PHRleHQgeD0iMzgiIHk9IjIzNi45IiB0ZXh0LWFuY2hvcj0iZW5kIiBmaWxsPSIjNmI3MjgwIj4xMCU8L3RleHQ+PGxpbmUgeDE9IjQ0IiB5MT0iMjAxLjciIHgyPSI3NDQiIHkyPSIyMDEuNyIgc3Ryb2tlPSIjZTNlOGVmIiBzdHJva2Utd2lkdGg9IjEiLz48dGV4dCB4PSIzOCIgeT0iMjA1LjciIHRleHQtYW5jaG9yPSJlbmQiIGZpbGw9IiM2YjcyODAiPjEyJTwvdGV4dD48bGluZSB4MT0iNDQiIHkxPSIxNzAuNiIgeDI9Ijc0NCIgeTI9IjE3MC42IiBzdHJva2U9IiNlM2U4ZWYiIHN0cm9rZS13aWR0aD0iMSIvPjx0ZXh0IHg9IjM4IiB5PSIxNzQuNiIgdGV4dC1hbmNob3I9ImVuZCIgZmlsbD0iIzZiNzI4MCI+MTQlPC90ZXh0PjxsaW5lIHgxPSI0NCIgeTE9IjEzOS40IiB4Mj0iNzQ0IiB5Mj0iMTM5LjQiIHN0cm9rZT0iI2UzZThlZiIgc3Ryb2tlLXdpZHRoPSIxIi8+PHRleHQgeD0iMzgiIHk9IjE0My40IiB0ZXh0LWFuY2hvcj0iZW5kIiBmaWxsPSIjNmI3MjgwIj4xNiU8L3RleHQ+PGxpbmUgeDE9IjQ0IiB5MT0iMTA4LjMiIHgyPSI3NDQiIHkyPSIxMDguMyIgc3Ryb2tlPSIjZTNlOGVmIiBzdHJva2Utd2lkdGg9IjEiLz48dGV4dCB4PSIzOCIgeT0iMTEyLjMiIHRleHQtYW5jaG9yPSJlbmQiIGZpbGw9IiM2YjcyODAiPjE4JTwvdGV4dD48bGluZSB4MT0iNDQiIHkxPSI3Ny4xIiB4Mj0iNzQ0IiB5Mj0iNzcuMSIgc3Ryb2tlPSIjZTNlOGVmIiBzdHJva2Utd2lkdGg9IjEiLz48dGV4dCB4PSIzOCIgeT0iODEuMSIgdGV4dC1hbmNob3I9ImVuZCIgZmlsbD0iIzZiNzI4MCI+MjAlPC90ZXh0PjxsaW5lIHgxPSI0NCIgeTE9IjQ2LjAiIHgyPSI3NDQiIHkyPSI0Ni4wIiBzdHJva2U9IiNlM2U4ZWYiIHN0cm9rZS13aWR0aD0iMSIvPjx0ZXh0IHg9IjM4IiB5PSI1MC4wIiB0ZXh0LWFuY2hvcj0iZW5kIiBmaWxsPSIjNmI3MjgwIj4yMiU8L3RleHQ+PGxpbmUgeDE9IjQ0LjAiIHkxPSI0NiIgeDI9IjQ0LjAiIHkyPSIyNjQiIHN0cm9rZT0iI2VlZjFmNSIgc3Ryb2tlLXdpZHRoPSIxIi8+PHRleHQgeD0iNDQuMCIgeT0iMjgwIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmaWxsPSIjNmI3MjgwIj4xMC8zMDwvdGV4dD48bGluZSB4MT0iMTg0LjQiIHkxPSI0NiIgeDI9IjE4NC40IiB5Mj0iMjY0IiBzdHJva2U9IiNlZWYxZjUiIHN0cm9rZS13aWR0aD0iMSIvPjx0ZXh0IHg9IjE4NC40IiB5PSIyODAiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGZpbGw9IiM2YjcyODAiPjA0LzA1PC90ZXh0PjxsaW5lIHgxPSIzMjMuOCIgeTE9IjQ2IiB4Mj0iMzIzLjgiIHkyPSIyNjQiIHN0cm9rZT0iI2VlZjFmNSIgc3Ryb2tlLXdpZHRoPSIxIi8+PHRleHQgeD0iMzIzLjgiIHk9IjI4MCIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZmlsbD0iIzZiNzI4MCI+MDkvMDg8L3RleHQ+PGxpbmUgeDE9IjQ2NC4yIiB5MT0iNDYiIHgyPSI0NjQuMiIgeTI9IjI2NCIgc3Ryb2tlPSIjZWVmMWY1IiBzdHJva2Utd2lkdGg9IjEiLz48dGV4dCB4PSI0NjQuMiIgeT0iMjgwIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmaWxsPSIjNmI3MjgwIj4wMi8xMjwvdGV4dD48bGluZSB4MT0iNjAzLjYiIHkxPSI0NiIgeDI9IjYwMy42IiB5Mj0iMjY0IiBzdHJva2U9IiNlZWYxZjUiIHN0cm9rZS13aWR0aD0iMSIvPjx0ZXh0IHg9IjYwMy42IiB5PSIyODAiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGZpbGw9IiM2YjcyODAiPjA3LzE4PC90ZXh0PjxsaW5lIHgxPSI3NDQuMCIgeTE9IjQ2IiB4Mj0iNzQ0LjAiIHkyPSIyNjQiIHN0cm9rZT0iI2VlZjFmNSIgc3Ryb2tlLXdpZHRoPSIxIi8+PHRleHQgeD0iNzQ0LjAiIHk9IjI4MCIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZmlsbD0iIzZiNzI4MCI+MTIvMjI8L3RleHQ+PGxpbmUgeDE9IjY5MC40IiB5MT0iNDYiIHgyPSI2OTAuNCIgeTI9IjI2NCIgc3Ryb2tlPSIjOWFhM2IyIiBzdHJva2UtZGFzaGFycmF5PSIzIDMiLz48dGV4dCB4PSI2OTQuNCIgeT0iNTgiIGZpbGw9IiM2YjcyODAiPuy1nOq3vCDsuKHsoJU8L3RleHQ+PGxpbmUgeDE9IjQ0IiB5MT0iMTQiIHgyPSI2MiIgeTI9IjE0IiBzdHJva2U9IiMxZjI5MzciIHN0cm9rZS13aWR0aD0iMi41Ii8+PHRleHQgeD0iNjciIHk9IjE4IiBmaWxsPSIjMzc0MTUxIj7si6TsoJwg7Lih7KCVPC90ZXh0PjxsaW5lIHgxPSIxMjYuNSIgeTE9IjE0IiB4Mj0iMTQ0LjUiIHkyPSIxNCIgc3Ryb2tlPSIjOGE5NGE2IiBzdHJva2Utd2lkdGg9IjIuNSIgc3Ryb2tlLWRhc2hhcnJheT0iNiA0Ii8+PHRleHQgeD0iMTQ5LjUiIHk9IjE4IiBmaWxsPSIjMzc0MTUxIj7sp4DquIjsspjrn7wg64uk64uI66m0PC90ZXh0PjxsaW5lIHgxPSIyMzEuNSIgeTE9IjE0IiB4Mj0iMjQ5LjUiIHkyPSIxNCIgc3Ryb2tlPSIjZTA4YTFlIiBzdHJva2Utd2lkdGg9IjIuNSIvPjx0ZXh0IHg9IjI1NC41IiB5PSIxOCIgZmlsbD0iIzM3NDE1MSI+7Iud64uo66eMIOyhsOygiO2VmOuptDwvdGV4dD48bGluZSB4MT0iMzM2LjUiIHkxPSIxNCIgeDI9IjM1NC41IiB5Mj0iMTQiIHN0cm9rZT0iIzJmNmZkZCIgc3Ryb2tlLXdpZHRoPSIyLjUiLz48dGV4dCB4PSIzNTkuNSIgeT0iMTgiIGZpbGw9IiMzNzQxNTEiPuyjvCAx7ZqMIOuNlCDrgpjsmKTrqbQ8L3RleHQ+PGxpbmUgeDE9IjQ1Ni41IiB5MT0iMTQiIHgyPSI0NzQuNSIgeTI9IjE0IiBzdHJva2U9IiMxNTkzNmQiIHN0cm9rZS13aWR0aD0iMi41Ii8+PHRleHQgeD0iNDc5LjUiIHk9IjE4IiBmaWxsPSIjMzc0MTUxIj7so7wgMe2ajCDrjZQgKyDsi53ri6gg7KGw7KCIPC90ZXh0Pjxwb2x5bGluZSBwb2ludHM9IjY5MC40LDE4NC42IDY5MS4zLDE4NC43IDY5Mi4xLDE4NC45IDY5My4wLDE4NS4xIDY5My45LDE4NS4yIDY5NC44LDE4NS40IDY5NS43LDE4NS42IDY5Ni42LDE4NS43IDY5Ny41LDE4NS45IDY5OC40LDE4Ni4wIDY5OS4zLDE4Ni4yIDcwMC4yLDE4Ni40IDcwMS4xLDE4Ni41IDcwMi4wLDE4Ni43IDcwMi45LDE4Ni44IDcwMy44LDE4Ny4wIDcwNC43LDE4Ny4yIDcwNS42LDE4Ny4zIDcwNi41LDE4Ny41IDcwNy4zLDE4Ny42IDcwOC4yLDE4Ny44IDcwOS4xLDE4OC4wIDcxMC4wLDE4OC4xIDcxMC45LDE4OC4zIDcxMS44LDE4OC40IDcxMi43LDE4OC42IDcxMy42LDE4OC44IDcxNC41LDE4OC45IDcxNS40LDE4OS4xIDcxNi4zLDE4OS4yIDcxNy4yLDE4OS40IDcxOC4xLDE4OS42IDcxOS4wLDE4OS43IDcxOS45LDE4OS45IDcyMC44LDE5MC4xIDcyMS43LDE5MC4yIDcyMi41LDE5MC40IDcyMy40LDE5MC41IDcyNC4zLDE5MC43IDcyNS4yLDE5MC45IDcyNi4xLDE5MS4wIDcyNy4wLDE5MS4yIDcyNy45LDE5MS4zIDcyOC44LDE5MS41IDcyOS43LDE5MS43IDczMC42LDE5MS44IDczMS41LDE5Mi4wIDczMi40LDE5Mi4xIDczMy4zLDE5Mi4zIDczNC4yLDE5Mi41IDczNS4xLDE5Mi42IDczNi4wLDE5Mi44IDczNi44LDE5Mi45IDczNy43LDE5My4xIDczOC42LDE5My4zIDczOS41LDE5My40IDc0MC40LDE5My42IDc0MS4zLDE5My44IDc0Mi4yLDE5My45IDc0My4xLDE5NC4xIDc0NC4wLDE5NC4yIiBmaWxsPSJub25lIiBzdHJva2U9IiM4YTk0YTYiIHN0cm9rZS13aWR0aD0iMi4yIiBzdHJva2UtZGFzaGFycmF5PSI2IDQiLz48Y2lyY2xlIGN4PSI3NDQuMCIgY3k9IjE5NC4yIiByPSIzIiBmaWxsPSIjOGE5NGE2Ii8+PHBvbHlsaW5lIHBvaW50cz0iNjkwLjQsMTg0LjYgNjkxLjMsMTg1LjUgNjkyLjEsMTg2LjUgNjkzLjAsMTg3LjQgNjkzLjksMTg4LjMgNjk0LjgsMTg5LjMgNjk1LjcsMTkwLjIgNjk2LjYsMTkxLjIgNjk3LjUsMTkyLjEgNjk4LjQsMTkzLjEgNjk5LjMsMTk0LjAgNzAwLjIsMTk0LjkgNzAxLjEsMTk1LjkgNzAyLjAsMTk2LjggNzAyLjksMTk3LjggNzAzLjgsMTk4LjcgNzA0LjcsMTk5LjcgNzA1LjYsMjAwLjcgNzA2LjUsMjAxLjYgNzA3LjMsMjAyLjYgNzA4LjIsMjAzLjUgNzA5LjEsMjA0LjUgNzEwLjAsMjA1LjQgNzEwLjksMjA2LjQgNzExLjgsMjA3LjQgNzEyLjcsMjA4LjMgNzEzLjYsMjA5LjMgNzE0LjUsMjEwLjMgNzE1LjQsMjExLjIgNzE2LjMsMjEyLjIgNzE3LjIsMjEzLjIgNzE4LjEsMjE0LjEgNzE5LjAsMjE1LjEgNzE5LjksMjE2LjEgNzIwLjgsMjE3LjAgNzIxLjcsMjE4LjAgNzIyLjUsMjE5LjAgNzIzLjQsMjIwLjAgNzI0LjMsMjIxLjAgNzI1LjIsMjIxLjkgNzI2LjEsMjIyLjkgNzI3LjAsMjIzLjkgNzI3LjksMjI0LjkgNzI4LjgsMjI1LjkgNzI5LjcsMjI2LjggNzMwLjYsMjI3LjggNzMxLjUsMjI4LjggNzMyLjQsMjI5LjggNzMzLjMsMjMwLjggNzM0LjIsMjMxLjggNzM1LjEsMjMyLjggNzM2LjAsMjMzLjggNzM2LjgsMjM0LjggNzM3LjcsMjM1LjggNzM4LjYsMjM2LjggNzM5LjUsMjM3LjcgNzQwLjQsMjM4LjcgNzQxLjMsMjM5LjcgNzQyLjIsMjQwLjcgNzQzLjEsMjQxLjcgNzQ0LjAsMjQyLjgiIGZpbGw9Im5vbmUiIHN0cm9rZT0iI2UwOGExZSIgc3Ryb2tlLXdpZHRoPSIyLjIiLz48Y2lyY2xlIGN4PSI3NDQuMCIgY3k9IjI0Mi44IiByPSIzIiBmaWxsPSIjZTA4YTFlIi8+PHBvbHlsaW5lIHBvaW50cz0iNjkwLjQsMTg0LjYgNjkxLjMsMTg0LjkgNjkyLjEsMTg1LjIgNjkzLjAsMTg1LjUgNjkzLjksMTg1LjggNjk0LjgsMTg2LjEgNjk1LjcsMTg2LjQgNjk2LjYsMTg2LjcgNjk3LjUsMTg3LjAgNjk4LjQsMTg3LjMgNjk5LjMsMTg3LjYgNzAwLjIsMTg3LjkgNzAxLjEsMTg4LjIgNzAyLjAsMTg4LjUgNzAyLjksMTg4LjggNzAzLjgsMTg5LjEgNzA0LjcsMTg5LjMgNzA1LjYsMTg5LjYgNzA2LjUsMTg5LjkgNzA3LjMsMTkwLjIgNzA4LjIsMTkwLjUgNzA5LjEsMTkwLjggNzEwLjAsMTkxLjEgNzEwLjksMTkxLjQgNzExLjgsMTkxLjcgNzEyLjcsMTkyLjAgNzEzLjYsMTkyLjMgNzE0LjUsMTkyLjYgNzE1LjQsMTkyLjkgNzE2LjMsMTkzLjIgNzE3LjIsMTkzLjUgNzE4LjEsMTkzLjggNzE5LjAsMTk0LjEgNzE5LjksMTk0LjQgNzIwLjgsMTk0LjcgNzIxLjcsMTk1LjAgNzIyLjUsMTk1LjMgNzIzLjQsMTk1LjYgNzI0LjMsMTk1LjkgNzI1LjIsMTk2LjIgNzI2LjEsMTk2LjUgNzI3LjAsMTk2LjggNzI3LjksMTk3LjEgNzI4LjgsMTk3LjQgNzI5LjcsMTk3LjcgNzMwLjYsMTk4LjAgNzMxLjUsMTk4LjMgNzMyLjQsMTk4LjYgNzMzLjMsMTk4LjkgNzM0LjIsMTk5LjIgNzM1LjEsMTk5LjUgNzM2LjAsMTk5LjggNzM2LjgsMjAwLjEgNzM3LjcsMjAwLjQgNzM4LjYsMjAwLjcgNzM5LjUsMjAxLjAgNzQwLjQsMjAxLjMgNzQxLjMsMjAxLjYgNzQyLjIsMjAxLjkgNzQzLjEsMjAyLjIgNzQ0LjAsMjAyLjQiIGZpbGw9Im5vbmUiIHN0cm9rZT0iIzJmNmZkZCIgc3Ryb2tlLXdpZHRoPSIyLjIiLz48Y2lyY2xlIGN4PSI3NDQuMCIgY3k9IjIwMi40IiByPSIzIiBmaWxsPSIjMmY2ZmRkIi8+PHBvbHlsaW5lIHBvaW50cz0iNjkwLjQsMTg0LjYgNjkxLjMsMTg1LjYgNjkyLjEsMTg2LjcgNjkzLjAsMTg3LjcgNjkzLjksMTg4LjcgNjk0LjgsMTg5LjggNjk1LjcsMTkwLjggNjk2LjYsMTkxLjkgNjk3LjUsMTkyLjkgNjk4LjQsMTkzLjkgNjk5LjMsMTk1LjAgNzAwLjIsMTk2LjAgNzAxLjEsMTk3LjAgNzAyLjAsMTk4LjEgNzAyLjksMTk5LjEgNzAzLjgsMjAwLjIgNzA0LjcsMjAxLjIgNzA1LjYsMjAyLjIgNzA2LjUsMjAzLjMgNzA3LjMsMjA0LjMgNzA4LjIsMjA1LjMgNzA5LjEsMjA2LjQgNzEwLjAsMjA3LjQgNzEwLjksMjA4LjUgNzExLjgsMjA5LjUgNzEyLjcsMjEwLjUgNzEzLjYsMjExLjYgNzE0LjUsMjEyLjYgNzE1LjQsMjEzLjcgNzE2LjMsMjE0LjcgNzE3LjIsMjE1LjcgNzE4LjEsMjE2LjggNzE5LjAsMjE3LjggNzE5LjksMjE4LjggNzIwLjgsMjE5LjkgNzIxLjcsMjIwLjkgNzIyLjUsMjIyLjAgNzIzLjQsMjIzLjAgNzI0LjMsMjI0LjAgNzI1LjIsMjI1LjEgNzI2LjEsMjI2LjEgNzI3LjAsMjI3LjEgNzI3LjksMjI4LjIgNzI4LjgsMjI5LjIgNzI5LjcsMjMwLjMgNzMwLjYsMjMxLjMgNzMxLjUsMjMyLjMgNzMyLjQsMjMzLjQgNzMzLjMsMjM0LjQgNzM0LjIsMjM1LjUgNzM1LjEsMjM2LjUgNzM2LjAsMjM3LjUgNzM2LjgsMjM4LjYgNzM3LjcsMjM5LjYgNzM4LjYsMjQwLjYgNzM5LjUsMjQxLjcgNzQwLjQsMjQyLjcgNzQxLjMsMjQzLjggNzQyLjIsMjQ0LjggNzQzLjEsMjQ1LjggNzQ0LjAsMjQ2LjkiIGZpbGw9Im5vbmUiIHN0cm9rZT0iIzE1OTM2ZCIgc3Ryb2tlLXdpZHRoPSIyLjIiLz48Y2lyY2xlIGN4PSI3NDQuMCIgY3k9IjI0Ni45IiByPSIzIiBmaWxsPSIjMTU5MzZkIi8+PHBvbHlsaW5lIHBvaW50cz0iNDQuMCw2Ni4yIDU4LjMsNzAuOSA3Ny4xLDcyLjUgMTA3LjUsNzIuNSAxMzcuOSw2OS40IDE1OS4zLDcwLjkgMTg1LjMsNzcuMSAyMDkuNCw4My40IDIyOC4yLDg0LjkgMjQxLjYsODkuNiAyNjYuNiwxMTcuNiAyODIuNywxMTQuNSAzMDYuOCwxMjAuNyAzMjIuMCwxMTcuNiAzNTMuMywxMTkuMiAzNzguNCwxMjIuMyA0MDAuNywxMjAuNyA0MjguNCwxMjguNSA0NDAuOSwxMzQuOCA0NjcuOCwxMzMuMiA0ODcuNCwxMzkuNCA1MDguMCwxNTAuMyA1MzAuMywxNTEuOSA1NDkuMSwxNTUuMCA1NjMuNCwxNjEuMiA1OTQuNywxNzIuMSA2MTEuNywxNzIuMSA2NDIuMSwxNzMuNyA2NjMuNSwxNzguNCA2OTAuNCwxODQuNiIgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjMWYyOTM3IiBzdHJva2Utd2lkdGg9IjIiLz48Y2lyY2xlIGN4PSI0NC4wIiBjeT0iNjYuMiIgcj0iNCIgZmlsbD0iIzFmMjkzNyIgc3Ryb2tlPSIjZmZmIiBzdHJva2Utd2lkdGg9IjEuNSIvPjxjaXJjbGUgY3g9IjU4LjMiIGN5PSI3MC45IiByPSI0IiBmaWxsPSIjMWYyOTM3IiBzdHJva2U9IiNmZmYiIHN0cm9rZS13aWR0aD0iMS41Ii8+PGNpcmNsZSBjeD0iNzcuMSIgY3k9IjcyLjUiIHI9IjQiIGZpbGw9IiMxZjI5MzciIHN0cm9rZT0iI2ZmZiIgc3Ryb2tlLXdpZHRoPSIxLjUiLz48Y2lyY2xlIGN4PSIxMDcuNSIgY3k9IjcyLjUiIHI9IjQiIGZpbGw9IiMxZjI5MzciIHN0cm9rZT0iI2ZmZiIgc3Ryb2tlLXdpZHRoPSIxLjUiLz48Y2lyY2xlIGN4PSIxMzcuOSIgY3k9IjY5LjQiIHI9IjQiIGZpbGw9IiMxZjI5MzciIHN0cm9rZT0iI2ZmZiIgc3Ryb2tlLXdpZHRoPSIxLjUiLz48Y2lyY2xlIGN4PSIxNTkuMyIgY3k9IjcwLjkiIHI9IjQiIGZpbGw9IiMxZjI5MzciIHN0cm9rZT0iI2ZmZiIgc3Ryb2tlLXdpZHRoPSIxLjUiLz48Y2lyY2xlIGN4PSIxODUuMyIgY3k9Ijc3LjEiIHI9IjQiIGZpbGw9IiMxZjI5MzciIHN0cm9rZT0iI2ZmZiIgc3Ryb2tlLXdpZHRoPSIxLjUiLz48Y2lyY2xlIGN4PSIyMDkuNCIgY3k9IjgzLjQiIHI9IjQiIGZpbGw9IiMxZjI5MzciIHN0cm9rZT0iI2ZmZiIgc3Ryb2tlLXdpZHRoPSIxLjUiLz48Y2lyY2xlIGN4PSIyMjguMiIgY3k9Ijg0LjkiIHI9IjQiIGZpbGw9IiMxZjI5MzciIHN0cm9rZT0iI2ZmZiIgc3Ryb2tlLXdpZHRoPSIxLjUiLz48Y2lyY2xlIGN4PSIyNDEuNiIgY3k9Ijg5LjYiIHI9IjQiIGZpbGw9IiMxZjI5MzciIHN0cm9rZT0iI2ZmZiIgc3Ryb2tlLXdpZHRoPSIxLjUiLz48Y2lyY2xlIGN4PSIyNjYuNiIgY3k9IjExNy42IiByPSI0IiBmaWxsPSIjMWYyOTM3IiBzdHJva2U9IiNmZmYiIHN0cm9rZS13aWR0aD0iMS41Ii8+PGNpcmNsZSBjeD0iMjgyLjciIGN5PSIxMTQuNSIgcj0iNCIgZmlsbD0iIzFmMjkzNyIgc3Ryb2tlPSIjZmZmIiBzdHJva2Utd2lkdGg9IjEuNSIvPjxjaXJjbGUgY3g9IjMwNi44IiBjeT0iMTIwLjciIHI9IjQiIGZpbGw9IiMxZjI5MzciIHN0cm9rZT0iI2ZmZiIgc3Ryb2tlLXdpZHRoPSIxLjUiLz48Y2lyY2xlIGN4PSIzMjIuMCIgY3k9IjExNy42IiByPSI0IiBmaWxsPSIjMWYyOTM3IiBzdHJva2U9IiNmZmYiIHN0cm9rZS13aWR0aD0iMS41Ii8+PGNpcmNsZSBjeD0iMzUzLjMiIGN5PSIxMTkuMiIgcj0iNCIgZmlsbD0iIzFmMjkzNyIgc3Ryb2tlPSIjZmZmIiBzdHJva2Utd2lkdGg9IjEuNSIvPjxjaXJjbGUgY3g9IjM3OC40IiBjeT0iMTIyLjMiIHI9IjQiIGZpbGw9IiMxZjI5MzciIHN0cm9rZT0iI2ZmZiIgc3Ryb2tlLXdpZHRoPSIxLjUiLz48Y2lyY2xlIGN4PSI0MDAuNyIgY3k9IjEyMC43IiByPSI0IiBmaWxsPSIjMWYyOTM3IiBzdHJva2U9IiNmZmYiIHN0cm9rZS13aWR0aD0iMS41Ii8+PGNpcmNsZSBjeD0iNDI4LjQiIGN5PSIxMjguNSIgcj0iNCIgZmlsbD0iIzFmMjkzNyIgc3Ryb2tlPSIjZmZmIiBzdHJva2Utd2lkdGg9IjEuNSIvPjxjaXJjbGUgY3g9IjQ0MC45IiBjeT0iMTM0LjgiIHI9IjQiIGZpbGw9IiMxZjI5MzciIHN0cm9rZT0iI2ZmZiIgc3Ryb2tlLXdpZHRoPSIxLjUiLz48Y2lyY2xlIGN4PSI0NjcuOCIgY3k9IjEzMy4yIiByPSI0IiBmaWxsPSIjMWYyOTM3IiBzdHJva2U9IiNmZmYiIHN0cm9rZS13aWR0aD0iMS41Ii8+PGNpcmNsZSBjeD0iNDg3LjQiIGN5PSIxMzkuNCIgcj0iNCIgZmlsbD0iIzFmMjkzNyIgc3Ryb2tlPSIjZmZmIiBzdHJva2Utd2lkdGg9IjEuNSIvPjxjaXJjbGUgY3g9IjUwOC4wIiBjeT0iMTUwLjMiIHI9IjQiIGZpbGw9IiMxZjI5MzciIHN0cm9rZT0iI2ZmZiIgc3Ryb2tlLXdpZHRoPSIxLjUiLz48Y2lyY2xlIGN4PSI1MzAuMyIgY3k9IjE1MS45IiByPSI0IiBmaWxsPSIjMWYyOTM3IiBzdHJva2U9IiNmZmYiIHN0cm9rZS13aWR0aD0iMS41Ii8+PGNpcmNsZSBjeD0iNTQ5LjEiIGN5PSIxNTUuMCIgcj0iNCIgZmlsbD0iIzFmMjkzNyIgc3Ryb2tlPSIjZmZmIiBzdHJva2Utd2lkdGg9IjEuNSIvPjxjaXJjbGUgY3g9IjU2My40IiBjeT0iMTYxLjIiIHI9IjQiIGZpbGw9IiMxZjI5MzciIHN0cm9rZT0iI2ZmZiIgc3Ryb2tlLXdpZHRoPSIxLjUiLz48Y2lyY2xlIGN4PSI1OTQuNyIgY3k9IjE3Mi4xIiByPSI0IiBmaWxsPSIjMWYyOTM3IiBzdHJva2U9IiNmZmYiIHN0cm9rZS13aWR0aD0iMS41Ii8+PGNpcmNsZSBjeD0iNjExLjciIGN5PSIxNzIuMSIgcj0iNCIgZmlsbD0iIzFmMjkzNyIgc3Ryb2tlPSIjZmZmIiBzdHJva2Utd2lkdGg9IjEuNSIvPjxjaXJjbGUgY3g9IjY0Mi4xIiBjeT0iMTczLjciIHI9IjQiIGZpbGw9IiMxZjI5MzciIHN0cm9rZT0iI2ZmZiIgc3Ryb2tlLXdpZHRoPSIxLjUiLz48Y2lyY2xlIGN4PSI2NjMuNSIgY3k9IjE3OC40IiByPSI0IiBmaWxsPSIjMWYyOTM3IiBzdHJva2U9IiNmZmYiIHN0cm9rZS13aWR0aD0iMS41Ii8+PGNpcmNsZSBjeD0iNjkwLjQiIGN5PSIxODQuNiIgcj0iNCIgZmlsbD0iIzFmMjkzNyIgc3Ryb2tlPSIjZmZmIiBzdHJva2Utd2lkdGg9IjEuNSIvPjxjaXJjbGUgY3g9IjY5MC40IiBjeT0iMTg0LjYiIHI9IjciIGZpbGw9IiMxMTE4MjciIHN0cm9rZT0iI2ZmZiIgc3Ryb2tlLXdpZHRoPSIyIi8+PC9zdmc+" alt="체지방률 변화와 30일 뒤 예측">
   </div>
 </div>
 
 <div class="grid g-12" style="margin-bottom:14px">
   <div class="panel c-7">
-    <div class="hd"><svg class="ic "><use href="#i-dumbbell"/></svg> 운동 프로그램 추천<span class="meta">중점 복합</span></div>
+    <div class="hd"><svg class="ic "><use href="#i-dumbbell"/></svg> 운동 프로그램 추천<span class="meta">중점 근력</span></div>
     <div class="bd">
       <div class="target"><svg class="ic lg"><use href="#i-target"/></svg><div><div class="n num">주 3<small>회</small></div><div class="k">목표 출석 · 현재 주 1.2회</div></div></div>
       <div class="progs">
-        
-        <div class="prog">
-          <div class="ico strength"><svg class="ic lg"><use href="#i-dumbbell"/></svg></div>
-          <div><b>헬스(자유이용)</b> <span class="badge info">평소 오시는 월·수요일에 있음</span><div class="meta">근력 · 중충격 · 중강도 · 60분</div></div>
-          <div class="goal"><b>월·화·수·목·금</b><div class="meta">06:00~07:00</div></div>
-        </div>
         
         <div class="prog">
           <div class="ico "><svg class="ic lg"><use href="#i-wave"/></svg></div>
@@ -239,12 +233,18 @@
           <div class="goal"><b>월·수</b><div class="meta">19:00~20:00</div></div>
         </div>
         
+        <div class="prog">
+          <div class="ico strength"><svg class="ic lg"><use href="#i-dumbbell"/></svg></div>
+          <div><b>헬스(자유이용)</b> <span class="badge info">평소 오시는 월·수요일에 있음</span><div class="meta">근력 · 중충격 · 중강도 · 60분</div></div>
+          <div class="goal"><b>월·화·수·목·금</b><div class="meta">06:00~07:00</div></div>
+        </div>
+        
       </div>
       <ul class="why">
-        <li><svg class="ic "><use href="#i-check"/></svg><span>체지방률 21.1% (낮음) → 근육량 유지·증가 위주</span></li><li><svg class="ic "><use href="#i-check"/></svg><span>검진 콜레스테롤·중성지방 경계 이상 → 유산소 운동 비중 확대</span></li><li><svg class="ic "><use href="#i-check"/></svg><span>최근 한 달 출석 5회 → 주 3회로 늘리기</span></li><li><svg class="ic "><use href="#i-check"/></svg><span>건강 체크 고혈압 → 중강도 유산소 우선, 고강도·숨 참는 운동 제외</span></li><li><svg class="ic "><use href="#i-check"/></svg><span>평소 오시는 시간(월수요일) → 그 시간에 맞는 반을 먼저 고름</span></li>
-        <li class="caution"><svg class="ic "><use href="#i-alert"/></svg><span>건강 체크에 따라 제외: 그룹 근력 운동(고혈압)</span></li>
+        <li><svg class="ic "><use href="#i-check"/></svg><span>체지방률 13.1% (낮음) → 근육량 유지·증가 위주</span></li><li><svg class="ic "><use href="#i-check"/></svg><span>최근 한 달 출석 5회 → 주 3회로 늘리기</span></li><li><svg class="ic "><use href="#i-check"/></svg><span>건강 체크 고혈압 → 중강도 유산소 우선, 고강도·숨 참는 운동 제외</span></li><li><svg class="ic "><use href="#i-check"/></svg><span>평소 오시는 시간(월수요일) → 그 시간에 맞는 반을 먼저 고름</span></li>
+        <li class="caution"><svg class="ic "><use href="#i-alert"/></svg><span>65세 이상 → 저·중강도 프로그램 우선</span></li><li class="caution"><svg class="ic "><use href="#i-alert"/></svg><span>건강 체크에 따라 제외: 그룹 근력 운동(고혈압)</span></li>
       </ul>
-      <div class="memo"><svg class="ic "><use href="#i-chat"/></svg><div>최근 측정 체지방률은 21.1%(낮음)이고, 최근 30일 동안 5회 출석하셨습니다. 지금처럼 다니시면 30일 뒤 20.8%, 주 1회 더 나오시면 20.5%로 예상됩니다. 복합 위주로 헬스(자유이용), 아쿠아로빅 프로그램을 주 3회 목표로 권해 드립니다. 콜레스테롤·중성지방이 정상 구간을 벗어났습니다. 주 3회 이상 유산소 운동을 꾸준히 하는 것이 도움이 됩니다. 주의 사항을 확인하고 무리하지 않는 범위에서 시작하세요.<div class="from">규칙 기반 문장</div></div></div>
+      <div class="memo"><svg class="ic "><use href="#i-chat"/></svg><div>최근 측정 체지방률은 13.1%(낮음)이고, 최근 30일 동안 5회 출석하셨습니다. 지금처럼 다니시면 30일 뒤 12.8%, 주 1회 더 나오시면 12.5%로 예상됩니다. 근력 위주로 아쿠아로빅, 헬스(자유이용) 프로그램을 주 3회 목표로 권해 드립니다. 검진 항목이 모두 정상 구간입니다. 지금의 운동 습관을 유지하세요. 주의 사항을 확인하고 무리하지 않는 범위에서 시작하세요.<div class="from">규칙 기반 문장</div></div></div>
     </div>
   </div>
 
@@ -254,24 +254,24 @@
     
       <div class="scr-grid">
         
-        <div class="it ok"><div class="k">수축기 혈압</div><div class="v num">106<small> mmHg</small></div><div class="lvl ok">정상</div></div>
+        <div class="it ok"><div class="k">수축기 혈압</div><div class="v num">101<small> mmHg</small></div><div class="lvl ok">정상</div></div>
         
-        <div class="it ok"><div class="k">이완기 혈압</div><div class="v num">71<small> mmHg</small></div><div class="lvl ok">정상</div></div>
+        <div class="it ok"><div class="k">이완기 혈압</div><div class="v num">68<small> mmHg</small></div><div class="lvl ok">정상</div></div>
         
-        <div class="it ok"><div class="k">공복혈당</div><div class="v num">86<small> mg/dL</small></div><div class="lvl ok">정상</div></div>
+        <div class="it ok"><div class="k">공복혈당</div><div class="v num">79<small> mg/dL</small></div><div class="lvl ok">정상</div></div>
         
-        <div class="it ok"><div class="k">총콜레스테롤</div><div class="v num">147<small> mg/dL</small></div><div class="lvl ok">정상</div></div>
+        <div class="it ok"><div class="k">총콜레스테롤</div><div class="v num">137<small> mg/dL</small></div><div class="lvl ok">정상</div></div>
         
-        <div class="it info"><div class="k">LDL 콜레스테롤</div><div class="v num">132<small> mg/dL</small></div><div class="lvl info">경계</div></div>
+        <div class="it ok"><div class="k">LDL 콜레스테롤</div><div class="v num">124<small> mg/dL</small></div><div class="lvl ok">정상</div></div>
         
-        <div class="it ok"><div class="k">HDL 콜레스테롤</div><div class="v num">62<small> mg/dL</small></div><div class="lvl ok">정상</div></div>
+        <div class="it ok"><div class="k">HDL 콜레스테롤</div><div class="v num">63<small> mg/dL</small></div><div class="lvl ok">정상</div></div>
         
-        <div class="it ok"><div class="k">중성지방</div><div class="v num">129<small> mg/dL</small></div><div class="lvl ok">정상</div></div>
+        <div class="it ok"><div class="k">중성지방</div><div class="v num">109<small> mg/dL</small></div><div class="lvl ok">정상</div></div>
         
-        <div class="it ok"><div class="k">허리둘레</div><div class="v num">82.9<small> cm</small></div><div class="lvl ok">정상</div></div>
+        <div class="it ok"><div class="k">허리둘레</div><div class="v num">81.7<small> cm</small></div><div class="lvl ok">정상</div></div>
         
       </div>
-      <ul class="tips"><li><svg class="ic "><use href="#i-check"/></svg><span>콜레스테롤·중성지방이 정상 구간을 벗어났습니다. 주 3회 이상 유산소 운동을 꾸준히 하는 것이 도움이 됩니다.</span></li></ul>
+      <ul class="tips"><li><svg class="ic "><use href="#i-check"/></svg><span>검진 항목이 모두 정상 구간입니다. 지금의 운동 습관을 유지하세요.</span></li></ul>
       <div class="sub" style="margin-top:8px">검진일 2025-06-04 · 동의 회원관리프로그램 · 판정 구간은 국가건강검진 기준과 같으며 운동 추천에만 사용합니다.</div>
       <form method="post" action="/member/yuc/consent" style="margin-top:8px"><input type="hidden" name="action" value="revoke"><button type="submit" class="btn sm">동의 철회</button></form>
     
@@ -328,10 +328,10 @@
 <div class="panel" style="margin-bottom:14px">
   <div class="hd"><svg class="ic "><use href="#i-bowl"/></svg> 식단<span class="meta">최근 7일 · 7일 기록</span></div>
   <div class="bd kpi">
-    <div><div class="k">평균 섭취</div><div class="v num">1,589<small> kcal</small></div></div>
+    <div><div class="k">평균 섭취</div><div class="v num">1,864<small> kcal</small></div></div>
     
-    <div><div class="k">추정 소비</div><div class="v num">1,820<small> kcal</small></div><div class="delta">기초대사 1,361 + 운동 51</div></div>
-    <div><div class="k">하루 수지</div><div class="v num ">-231<small> kcal</small></div></div>
+    <div><div class="k">추정 소비</div><div class="v num">2,201<small> kcal</small></div><div class="delta">기초대사 1,647 + 운동 60</div></div>
+    <div><div class="k">하루 수지</div><div class="v num ">-337<small> kcal</small></div></div>
     
     <div><div class="k">기록</div><div class="v num">101<small> 건</small></div><a class="sub" href="member-yuc-diet.html">식단 기록 열기 →</a></div>
   </div>
@@ -340,9 +340,9 @@
   <thead><tr><th></th><th>최근 7일</th><th>최근 30일</th></tr></thead>
   <tbody>
     <tr><td>기록한 날</td><td><b class="num">7</b>일</td><td><b class="num">29</b>일</td></tr>
-    <tr><td>하루 평균 섭취</td><td><b class="num">1,590</b> kcal</td><td><b class="num">1,410</b> kcal</td></tr>
-    <tr><td>권장량 대비</td><td><b class="num down">-230</b> kcal</td><td><b class="num down">-410</b> kcal</td></tr>
-    <tr class="sep"><td>식단으로 계산한 체지방</td><td><b class="num down">-0.2</b> kg</td><td><b class="num down">-1.5</b> kg</td></tr>
+    <tr><td>하루 평균 섭취</td><td><b class="num">1,860</b> kcal</td><td><b class="num">1,660</b> kcal</td></tr>
+    <tr><td>권장량 대비</td><td><b class="num down">-340</b> kcal</td><td><b class="num down">-540</b> kcal</td></tr>
+    <tr class="sep"><td>식단으로 계산한 체지방</td><td><b class="num down">-0.3</b> kg</td><td><b class="num down">-2.0</b> kg</td></tr>
     <tr><td>인바디 실제 체지방</td><td>—</td><td><b class="num down">-0.3</b> kg</td></tr>
     <tr><td>인바디 실제 체중</td><td>—</td><td><b class="num down">-0.2</b> kg<small>09/23→10/23</small></td></tr>
   </tbody>
@@ -357,7 +357,7 @@
 <div class="panel" style="margin-bottom:14px">
   <div class="hd"><svg class="ic "><use href="#i-heart"/></svg> 혈압 측정 이력<span class="meta">인바디 혈압계 · 총 28회 · 판정은 최근 3회 평균</span></div>
   <table><thead><tr><th>측정일</th><th class="r">수축기</th><th class="r">이완기</th><th class="r">맥박</th></tr></thead>
-  <tbody><tr style="font-weight:600"><td>2026-10-23</td><td class="r num">117</td><td class="r num">69</td><td class="r num">64</td></tr><tr><td>2026-09-23</td><td class="r num">115</td><td class="r num">74</td><td class="r num">64</td></tr><tr><td>2026-08-30</td><td class="r num">111</td><td class="r num">71</td><td class="r num">73</td></tr><tr><td>2026-07-27</td><td class="r num">130</td><td class="r num">87</td><td class="r num">73</td></tr><tr><td>2026-07-08</td><td class="r num">120</td><td class="r num">78</td><td class="r num">72</td></tr><tr><td>2026-06-03</td><td class="r num">113</td><td class="r num">74</td><td class="r num">68</td></tr><tr><td>2026-05-18</td><td class="r num">119</td><td class="r num">80</td><td class="r num">69</td></tr><tr><td>2026-04-27</td><td class="r num">97</td><td class="r num">69</td><td class="r num">75</td></tr></tbody></table>
+  <tbody><tr style="font-weight:600"><td>2026-10-23</td><td class="r num">111</td><td class="r num">65</td><td class="r num">64</td></tr><tr><td>2026-09-23</td><td class="r num">109</td><td class="r num">70</td><td class="r num">64</td></tr><tr><td>2026-08-30</td><td class="r num">105</td><td class="r num">68</td><td class="r num">73</td></tr><tr><td>2026-07-27</td><td class="r num">124</td><td class="r num">83</td><td class="r num">73</td></tr><tr><td>2026-07-08</td><td class="r num">114</td><td class="r num">74</td><td class="r num">72</td></tr><tr><td>2026-06-03</td><td class="r num">107</td><td class="r num">70</td><td class="r num">68</td></tr><tr><td>2026-05-18</td><td class="r num">113</td><td class="r num">76</td><td class="r num">69</td></tr><tr><td>2026-04-27</td><td class="r num">91</td><td class="r num">65</td><td class="r num">75</td></tr></tbody></table>
 </div>
 
 <div class="panel">
@@ -368,242 +368,242 @@
     
       <tr style="font-weight:600">
         <td>2026-10-23</td>
-        <td class="r num">58.1</td>
-        <td class="r num">21.1%</td>
-        <td class="r num">27.5</td>
-        <td class="r num">22.1</td>
-      </tr>
-    
-      <tr>
-        <td>2026-09-23</td>
-        <td class="r num">58.3</td>
-        <td class="r num">21.5%</td>
-        <td class="r num">27.4</td>
-        <td class="r num">22.2</td>
-      </tr>
-    
-      <tr>
-        <td>2026-08-30</td>
-        <td class="r num">58.9</td>
-        <td class="r num">21.8%</td>
-        <td class="r num">27.6</td>
+        <td class="r num">68.0</td>
+        <td class="r num">13.1%</td>
+        <td class="r num">35.5</td>
         <td class="r num">22.4</td>
       </tr>
     
       <tr>
-        <td>2026-07-27</td>
-        <td class="r num">59.5</td>
-        <td class="r num">21.9%</td>
-        <td class="r num">27.8</td>
-        <td class="r num">22.6</td>
+        <td>2026-09-23</td>
+        <td class="r num">68.2</td>
+        <td class="r num">13.5%</td>
+        <td class="r num">35.4</td>
+        <td class="r num">22.5</td>
       </tr>
     
       <tr>
-        <td>2026-07-08</td>
-        <td class="r num">59.5</td>
-        <td class="r num">21.9%</td>
-        <td class="r num">27.8</td>
-        <td class="r num">22.6</td>
-      </tr>
-    
-      <tr>
-        <td>2026-06-03</td>
-        <td class="r num">59.8</td>
-        <td class="r num">22.6%</td>
-        <td class="r num">27.5</td>
+        <td>2026-08-30</td>
+        <td class="r num">68.8</td>
+        <td class="r num">13.8%</td>
+        <td class="r num">35.6</td>
         <td class="r num">22.7</td>
       </tr>
     
       <tr>
+        <td>2026-07-27</td>
+        <td class="r num">69.4</td>
+        <td class="r num">13.9%</td>
+        <td class="r num">35.9</td>
+        <td class="r num">22.9</td>
+      </tr>
+    
+      <tr>
+        <td>2026-07-08</td>
+        <td class="r num">69.4</td>
+        <td class="r num">13.9%</td>
+        <td class="r num">35.8</td>
+        <td class="r num">22.9</td>
+      </tr>
+    
+      <tr>
+        <td>2026-06-03</td>
+        <td class="r num">69.7</td>
+        <td class="r num">14.6%</td>
+        <td class="r num">35.7</td>
+        <td class="r num">23.0</td>
+      </tr>
+    
+      <tr>
         <td>2026-05-18</td>
-        <td class="r num">60.1</td>
-        <td class="r num">23.0%</td>
-        <td class="r num">27.3</td>
-        <td class="r num">22.8</td>
+        <td class="r num">70.0</td>
+        <td class="r num">15.0%</td>
+        <td class="r num">35.7</td>
+        <td class="r num">23.1</td>
       </tr>
     
       <tr>
         <td>2026-04-27</td>
-        <td class="r num">60.7</td>
-        <td class="r num">23.2%</td>
-        <td class="r num">27.5</td>
-        <td class="r num">23.1</td>
+        <td class="r num">70.6</td>
+        <td class="r num">15.2%</td>
+        <td class="r num">35.9</td>
+        <td class="r num">23.3</td>
       </tr>
     
       <tr>
         <td>2026-04-02</td>
-        <td class="r num">60.9</td>
-        <td class="r num">23.3%</td>
-        <td class="r num">27.4</td>
-        <td class="r num">23.1</td>
+        <td class="r num">70.8</td>
+        <td class="r num">15.3%</td>
+        <td class="r num">36.0</td>
+        <td class="r num">23.3</td>
       </tr>
     
       <tr>
         <td>2026-03-10</td>
-        <td class="r num">61.0</td>
-        <td class="r num">24.0%</td>
-        <td class="r num">27.2</td>
-        <td class="r num">23.2</td>
-      </tr>
-    
-      <tr>
-        <td>2026-02-16</td>
-        <td class="r num">61.2</td>
-        <td class="r num">24.4%</td>
-        <td class="r num">27.2</td>
-        <td class="r num">23.3</td>
-      </tr>
-    
-      <tr>
-        <td>2026-01-17</td>
-        <td class="r num">60.9</td>
-        <td class="r num">24.3%</td>
-        <td class="r num">27.0</td>
-        <td class="r num">23.1</td>
-      </tr>
-    
-      <tr>
-        <td>2026-01-03</td>
-        <td class="r num">61.0</td>
-        <td class="r num">24.7%</td>
-        <td class="r num">26.8</td>
-        <td class="r num">23.2</td>
-      </tr>
-    
-      <tr>
-        <td>2025-12-03</td>
-        <td class="r num">61.2</td>
-        <td class="r num">25.2%</td>
-        <td class="r num">26.5</td>
-        <td class="r num">23.3</td>
-      </tr>
-    
-      <tr>
-        <td>2025-11-08</td>
-        <td class="r num">61.1</td>
-        <td class="r num">25.1%</td>
-        <td class="r num">26.4</td>
-        <td class="r num">23.2</td>
-      </tr>
-    
-      <tr>
-        <td>2025-10-11</td>
-        <td class="r num">61.5</td>
-        <td class="r num">25.3%</td>
-        <td class="r num">26.4</td>
+        <td class="r num">70.9</td>
+        <td class="r num">16.0%</td>
+        <td class="r num">35.7</td>
         <td class="r num">23.4</td>
       </tr>
     
       <tr>
-        <td>2025-09-06</td>
-        <td class="r num">61.7</td>
-        <td class="r num">25.4%</td>
-        <td class="r num">26.2</td>
+        <td>2026-02-16</td>
+        <td class="r num">71.1</td>
+        <td class="r num">16.4%</td>
+        <td class="r num">35.7</td>
+        <td class="r num">23.4</td>
+      </tr>
+    
+      <tr>
+        <td>2026-01-17</td>
+        <td class="r num">70.8</td>
+        <td class="r num">16.3%</td>
+        <td class="r num">35.6</td>
+        <td class="r num">23.3</td>
+      </tr>
+    
+      <tr>
+        <td>2026-01-03</td>
+        <td class="r num">70.9</td>
+        <td class="r num">16.7%</td>
+        <td class="r num">35.4</td>
+        <td class="r num">23.4</td>
+      </tr>
+    
+      <tr>
+        <td>2025-12-03</td>
+        <td class="r num">71.1</td>
+        <td class="r num">17.2%</td>
+        <td class="r num">35.3</td>
+        <td class="r num">23.4</td>
+      </tr>
+    
+      <tr>
+        <td>2025-11-08</td>
+        <td class="r num">71.0</td>
+        <td class="r num">17.1%</td>
+        <td class="r num">35.3</td>
+        <td class="r num">23.4</td>
+      </tr>
+    
+      <tr>
+        <td>2025-10-11</td>
+        <td class="r num">71.4</td>
+        <td class="r num">17.3%</td>
+        <td class="r num">35.5</td>
         <td class="r num">23.5</td>
       </tr>
     
       <tr>
+        <td>2025-09-06</td>
+        <td class="r num">71.6</td>
+        <td class="r num">17.4%</td>
+        <td class="r num">35.5</td>
+        <td class="r num">23.6</td>
+      </tr>
+    
+      <tr>
         <td>2025-08-20</td>
-        <td class="r num">62.4</td>
-        <td class="r num">25.2%</td>
-        <td class="r num">26.5</td>
-        <td class="r num">23.7</td>
+        <td class="r num">72.3</td>
+        <td class="r num">17.2%</td>
+        <td class="r num">35.8</td>
+        <td class="r num">23.8</td>
       </tr>
     
       <tr>
         <td>2025-07-24</td>
-        <td class="r num">62.4</td>
-        <td class="r num">25.6%</td>
-        <td class="r num">26.3</td>
-        <td class="r num">23.7</td>
+        <td class="r num">72.3</td>
+        <td class="r num">17.6%</td>
+        <td class="r num">35.5</td>
+        <td class="r num">23.8</td>
       </tr>
     
       <tr>
         <td>2025-07-06</td>
-        <td class="r num">62.8</td>
-        <td class="r num">25.4%</td>
-        <td class="r num">26.4</td>
-        <td class="r num">23.9</td>
-      </tr>
-    
-      <tr>
-        <td>2025-06-08</td>
-        <td class="r num">63.2</td>
-        <td class="r num">27.2%</td>
-        <td class="r num">25.8</td>
+        <td class="r num">72.7</td>
+        <td class="r num">17.4%</td>
+        <td class="r num">35.7</td>
         <td class="r num">24.0</td>
       </tr>
     
       <tr>
-        <td>2025-05-24</td>
-        <td class="r num">63.5</td>
-        <td class="r num">27.5%</td>
-        <td class="r num">25.7</td>
+        <td>2025-06-08</td>
+        <td class="r num">73.1</td>
+        <td class="r num">19.2%</td>
+        <td class="r num">34.9</td>
         <td class="r num">24.1</td>
       </tr>
     
       <tr>
+        <td>2025-05-24</td>
+        <td class="r num">73.4</td>
+        <td class="r num">19.5%</td>
+        <td class="r num">34.8</td>
+        <td class="r num">24.2</td>
+      </tr>
+    
+      <tr>
         <td>2025-05-03</td>
-        <td class="r num">63.3</td>
-        <td class="r num">27.6%</td>
-        <td class="r num">25.6</td>
+        <td class="r num">73.2</td>
+        <td class="r num">19.6%</td>
+        <td class="r num">34.6</td>
         <td class="r num">24.1</td>
       </tr>
     
       <tr>
         <td>2025-04-06</td>
-        <td class="r num">63.4</td>
-        <td class="r num">28.0%</td>
-        <td class="r num">25.3</td>
+        <td class="r num">73.3</td>
+        <td class="r num">20.0%</td>
+        <td class="r num">34.3</td>
         <td class="r num">24.1</td>
       </tr>
     
       <tr>
         <td>2025-03-08</td>
-        <td class="r num">63.9</td>
-        <td class="r num">28.4%</td>
-        <td class="r num">25.3</td>
+        <td class="r num">73.8</td>
+        <td class="r num">20.4%</td>
+        <td class="r num">34.3</td>
         <td class="r num">24.3</td>
       </tr>
     
       <tr>
         <td>2025-02-12</td>
-        <td class="r num">65.1</td>
-        <td class="r num">28.5%</td>
-        <td class="r num">25.6</td>
+        <td class="r num">75.0</td>
+        <td class="r num">20.5%</td>
+        <td class="r num">34.6</td>
         <td class="r num">24.7</td>
       </tr>
     
       <tr>
         <td>2025-01-09</td>
-        <td class="r num">64.9</td>
-        <td class="r num">28.3%</td>
-        <td class="r num">25.5</td>
+        <td class="r num">74.8</td>
+        <td class="r num">20.3%</td>
+        <td class="r num">34.5</td>
         <td class="r num">24.7</td>
       </tr>
     
       <tr>
         <td>2024-12-06</td>
-        <td class="r num">64.6</td>
-        <td class="r num">28.3%</td>
-        <td class="r num">25.3</td>
+        <td class="r num">74.5</td>
+        <td class="r num">20.3%</td>
+        <td class="r num">34.2</td>
         <td class="r num">24.5</td>
       </tr>
     
       <tr>
         <td>2024-11-15</td>
-        <td class="r num">64.6</td>
-        <td class="r num">28.4%</td>
-        <td class="r num">25.2</td>
+        <td class="r num">74.5</td>
+        <td class="r num">20.4%</td>
+        <td class="r num">34.1</td>
         <td class="r num">24.6</td>
       </tr>
     
       <tr>
         <td>2024-10-30</td>
-        <td class="r num">64.3</td>
-        <td class="r num">28.7%</td>
-        <td class="r num">24.9</td>
-        <td class="r num">24.4</td>
+        <td class="r num">74.2</td>
+        <td class="r num">20.7%</td>
+        <td class="r num">33.7</td>
+        <td class="r num">24.5</td>
       </tr>
     
     </tbody>
@@ -612,7 +612,7 @@
 
 
 <div class="foot">
-  예측은 참고용 추정치입니다 — 생리학 공식 · 출석 1회 ≈ 305 kcal (MET × 체중 × 시간) · 식단: 하루 300 kcal 감량 · 지방 1 kg ≈ 7,700 kcal.
+  예측은 참고용 추정치입니다 — 생리학 공식 · 출석 1회 ≈ 357 kcal (MET × 체중 × 시간) · 식단: 하루 300 kcal 감량 · 지방 1 kg ≈ 7,700 kcal.
   실제 변화는 수분·수면·식사·개인차에 따라 다르며, 이 리포트는 운동 참여를 돕기 위한 자료로 의료적 판단에 사용할 수 없습니다.
 </div>
 

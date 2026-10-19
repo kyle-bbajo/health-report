@@ -5,7 +5,7 @@
 (function () {
   window.fetch = function () { return Promise.resolve(new Response(null, {status: 404})); };
   if (navigator.serviceWorker) navigator.serviceWorker.register = function () { return Promise.reject(); };
-  var MEMBERS = {"M001": ["M001", "1952"], "M002": ["M002", "1963"], "M003": ["M003", "1968"], "M004": ["M004", "1974"], "M005": ["M005", "1987"], "M006": ["M006", "1980"], "M007": ["M007", "1972"], "M008": ["M008", "1968"], "M009": ["M009", "1955"], "M010": ["M010", "1982"], "M011": ["M011", "1999"], "M012": ["M012", "1979"], "M013": ["M013", "1952"], "M014": ["M014", "1981"], "M015": ["M015", "1952"], "M016": ["M016", "2002"], "M017": ["M017", "1974"], "M018": ["M018", "1987"], "M019": ["M019", "1952"], "M020": ["M020", "1986"], "M021": ["M021", "1954"], "M022": ["M022", "1955"], "M023": ["M023", "1956"], "M024": ["M024", "1965"], "M025": ["M025", "1953"], "M026": ["M026", "1956"], "M027": ["M027", "1979"], "M028": ["M028", "1964"], "M029": ["M029", "1964"], "M030": ["M030", "1969"], "M031": ["M031", "1981"], "M032": ["M032", "2001"], "M033": ["M033", "1972"], "M034": ["M034", "1984"], "M035": ["M035", "1974"], "M036": ["M036", "2000"], "M037": ["M037", "1974"], "M038": ["M038", "1983"], "M039": ["M039", "1978"], "M040": ["M040", "1997"], "M041": ["M041", "1953"], "M042": ["M042", "1981"], "M043": ["M043", "1999"], "M044": ["M044", "1977"], "M045": ["M045", "1996"], "M046": ["M046", "1958"], "M047": ["M047", "1967"], "M048": ["M048", "1986"], "M049": ["M049", "1999"], "M050": ["M050", "1982"], "M051": ["M051", "1956"], "M052": ["M052", "1965"], "M053": ["M053", "1976"], "M054": ["M054", "1992"], "M055": ["M055", "1953"], "M056": ["M056", "1973"], "M057": ["M057", "1999"], "M058": ["M058", "1954"], "M059": ["M059", "1998"], "M060": ["M060", "1988"], "YUC": ["yuc", "2011"]};                 // 대문자 회원번호 → [파일에 쓰인 회원번호, 태어난 해]
+  var MEMBERS = {"M001": ["M001", "1952"], "M002": ["M002", "1963"], "M003": ["M003", "1968"], "M004": ["M004", "1974"], "M005": ["M005", "1987"], "M006": ["M006", "1980"], "YUC": ["yuc", "1952"], "M008": ["M008", "1968"], "M009": ["M009", "1955"], "M010": ["M010", "1982"], "M011": ["M011", "1999"], "M012": ["M012", "1979"], "M013": ["M013", "1952"], "M014": ["M014", "1981"], "M015": ["M015", "1952"], "M016": ["M016", "2002"], "M017": ["M017", "1974"], "M018": ["M018", "1987"], "M019": ["M019", "1952"], "M020": ["M020", "1986"], "M021": ["M021", "1954"], "M022": ["M022", "1955"], "M023": ["M023", "1956"], "M024": ["M024", "1965"], "M025": ["M025", "1953"], "M026": ["M026", "1956"], "M027": ["M027", "1979"], "M028": ["M028", "1964"], "M029": ["M029", "1964"], "M030": ["M030", "1969"], "M031": ["M031", "1981"], "M032": ["M032", "2001"], "M033": ["M033", "1972"], "M034": ["M034", "1984"], "M035": ["M035", "1974"], "M036": ["M036", "2000"], "M037": ["M037", "1974"], "M038": ["M038", "1983"], "M039": ["M039", "1978"], "M040": ["M040", "1997"], "M041": ["M041", "1953"], "M042": ["M042", "1981"], "M043": ["M043", "1999"], "M044": ["M044", "1977"], "M045": ["M045", "1996"], "M046": ["M046", "1958"], "M047": ["M047", "1967"], "M048": ["M048", "1986"], "M049": ["M049", "1999"], "M050": ["M050", "1982"], "M051": ["M051", "1956"], "M052": ["M052", "1965"], "M053": ["M053", "1976"], "M054": ["M054", "1992"], "M055": ["M055", "1953"], "M056": ["M056", "1973"], "M057": ["M057", "1999"], "M058": ["M058", "1954"], "M059": ["M059", "1998"], "M060": ["M060", "1988"]};                 // 대문자 회원번호 → [파일에 쓰인 회원번호, 태어난 해]
   function toast(msg) {
     var t = document.getElementById('demo-toast');
     if (!t) { t = document.createElement('div'); t.id = 'demo-toast'; t.setAttribute('role', 'status'); document.body.appendChild(t); }
@@ -13,7 +13,7 @@
     clearTimeout(t._h); t._h = setTimeout(function () { t.className = ''; }, 2800);
   }
   var SAVE = '시연판이라 저장·문자 발송·엑셀은 되지 않습니다. 설치판에서 동작합니다.';
-  var PAGE = '시연판에는 이 화면이 없습니다. 회원 상세 탭과 지난 달 달력은 M004·M007·M051과 장기 미출석 회원만 있습니다.';
+  var PAGE = '시연판에는 이 화면이 없습니다. 회원 상세 탭과 지난 달 달력은 M004·yuc·M051과 장기 미출석 회원만 있습니다.';
   document.addEventListener('click', function (e) {
     var a = e.target.closest && e.target.closest('a[href="#demo"], a[href="#demo-page"]');
     if (a) { e.preventDefault(); toast(a.getAttribute('href') === '#demo' ? SAVE : PAGE); }
@@ -24,7 +24,7 @@
     if (f.hasAttribute('data-demo-admin')) { location.href = 'admin.html'; return; }   // 시연: 비밀번호 없이 들어가기
     if (f.hasAttribute('data-demo-login')) {
       var id = (f.member_id.value || '').trim().toUpperCase(), by = (f.birth_year.value || '').trim();
-      if (!id && !by) { id = 'YUC'; by = MEMBERS.YUC ? MEMBERS.YUC[1] : ''; }          // 시연: 비워 두고 누르면 yuc
+      if ((!id && !by) || (id === 'YUC' && by === '2011')) { id = 'YUC'; by = MEMBERS.YUC ? MEMBERS.YUC[1] : ''; }  // 시연: 비워 두거나 yuc / 2011
       if (MEMBERS[id] && MEMBERS[id][1] === by) { location.href = 'my-' + MEMBERS[id][0] + '.html'; return; }
       toast('회원번호나 태어난 해가 맞지 않습니다. 예: yuc / 2011'); return;
     }
@@ -151,15 +151,15 @@
   <h2>혈압</h2>
   <p class="my-when">10월 23일에 시설에서 잰 결과</p>
   <div class="my-key">
-    <b class="num">117<small>/ 69</small></b>
+    <b class="num">111<small>/ 65</small></b>
     <span class="my-pill ok">정상</span>
   </div>
   
   <details class="my-more"><summary>지난 혈압 기록</summary>
-    <p class="my-p">최근 3번 평균 <b>114/71</b></p>
+    <p class="my-p">최근 3번 평균 <b>108/68</b></p>
     <table class="my-table">
       <thead><tr><th>날짜</th><th class="r">높은 혈압</th><th class="r">낮은 혈압</th><th class="r">맥박</th></tr></thead>
-      <tbody><tr><td>10월 23일</td><td class="r num">117</td><td class="r num">69</td><td class="r num">64</td></tr><tr><td>9월 23일</td><td class="r num">115</td><td class="r num">74</td><td class="r num">64</td></tr><tr><td>8월 30일</td><td class="r num">111</td><td class="r num">71</td><td class="r num">73</td></tr><tr><td>7월 27일</td><td class="r num">130</td><td class="r num">87</td><td class="r num">73</td></tr><tr><td>7월 8일</td><td class="r num">120</td><td class="r num">78</td><td class="r num">72</td></tr></tbody>
+      <tbody><tr><td>10월 23일</td><td class="r num">111</td><td class="r num">65</td><td class="r num">64</td></tr><tr><td>9월 23일</td><td class="r num">109</td><td class="r num">70</td><td class="r num">64</td></tr><tr><td>8월 30일</td><td class="r num">105</td><td class="r num">68</td><td class="r num">73</td></tr><tr><td>7월 27일</td><td class="r num">124</td><td class="r num">83</td><td class="r num">73</td></tr><tr><td>7월 8일</td><td class="r num">114</td><td class="r num">74</td><td class="r num">72</td></tr></tbody>
     </table>
   </details>
 </section>
@@ -171,24 +171,24 @@
     <p class="my-when">2025년 6월 4일 검진</p>
     <div class="my-rows">
       
-      <div><span class="k">수축기 혈압</span><span class="v num">106</span><span class="my-pill ok">정상</span></div>
+      <div><span class="k">수축기 혈압</span><span class="v num">101</span><span class="my-pill ok">정상</span></div>
       
-      <div><span class="k">이완기 혈압</span><span class="v num">71</span><span class="my-pill ok">정상</span></div>
+      <div><span class="k">이완기 혈압</span><span class="v num">68</span><span class="my-pill ok">정상</span></div>
       
-      <div><span class="k">공복혈당</span><span class="v num">86</span><span class="my-pill ok">정상</span></div>
+      <div><span class="k">공복혈당</span><span class="v num">79</span><span class="my-pill ok">정상</span></div>
       
-      <div><span class="k">총콜레스테롤</span><span class="v num">147</span><span class="my-pill ok">정상</span></div>
+      <div><span class="k">총콜레스테롤</span><span class="v num">137</span><span class="my-pill ok">정상</span></div>
       
-      <div><span class="k">LDL 콜레스테롤</span><span class="v num">132</span><span class="my-pill info">경계</span></div>
+      <div><span class="k">LDL 콜레스테롤</span><span class="v num">124</span><span class="my-pill ok">정상</span></div>
       
-      <div><span class="k">HDL 콜레스테롤</span><span class="v num">62</span><span class="my-pill ok">정상</span></div>
+      <div><span class="k">HDL 콜레스테롤</span><span class="v num">63</span><span class="my-pill ok">정상</span></div>
       
-      <div><span class="k">중성지방</span><span class="v num">129</span><span class="my-pill ok">정상</span></div>
+      <div><span class="k">중성지방</span><span class="v num">109</span><span class="my-pill ok">정상</span></div>
       
-      <div><span class="k">허리둘레</span><span class="v num">82.9</span><span class="my-pill ok">정상</span></div>
+      <div><span class="k">허리둘레</span><span class="v num">81.7</span><span class="my-pill ok">정상</span></div>
       
     </div>
-    <div class="my-box">콜레스테롤·중성지방이 정상 구간을 벗어났습니다. 주 3회 이상 유산소 운동을 꾸준히 하는 것이 도움이 됩니다.</div>
+    <div class="my-box">검진 항목이 모두 정상 구간입니다. 지금의 운동 습관을 유지하세요.</div>
     <p class="my-small">강좌 추천에만 사용하며 진단이 아닙니다.</p>
     <form method="post" action="/my/consent"><input type="hidden" name="action" value="revoke"><button type="submit" class="my-btn quiet">검진 결과 연결 끊기</button></form>
   

@@ -5,7 +5,7 @@
 (function () {
   window.fetch = function () { return Promise.resolve(new Response(null, {status: 404})); };
   if (navigator.serviceWorker) navigator.serviceWorker.register = function () { return Promise.reject(); };
-  var MEMBERS = {"M001": ["M001", "1952"], "M002": ["M002", "1963"], "M003": ["M003", "1968"], "M004": ["M004", "1974"], "M005": ["M005", "1987"], "M006": ["M006", "1980"], "M007": ["M007", "1972"], "M008": ["M008", "1968"], "M009": ["M009", "1955"], "M010": ["M010", "1982"], "M011": ["M011", "1999"], "M012": ["M012", "1979"], "M013": ["M013", "1952"], "M014": ["M014", "1981"], "M015": ["M015", "1952"], "M016": ["M016", "2002"], "M017": ["M017", "1974"], "M018": ["M018", "1987"], "M019": ["M019", "1952"], "M020": ["M020", "1986"], "M021": ["M021", "1954"], "M022": ["M022", "1955"], "M023": ["M023", "1956"], "M024": ["M024", "1965"], "M025": ["M025", "1953"], "M026": ["M026", "1956"], "M027": ["M027", "1979"], "M028": ["M028", "1964"], "M029": ["M029", "1964"], "M030": ["M030", "1969"], "M031": ["M031", "1981"], "M032": ["M032", "2001"], "M033": ["M033", "1972"], "M034": ["M034", "1984"], "M035": ["M035", "1974"], "M036": ["M036", "2000"], "M037": ["M037", "1974"], "M038": ["M038", "1983"], "M039": ["M039", "1978"], "M040": ["M040", "1997"], "M041": ["M041", "1953"], "M042": ["M042", "1981"], "M043": ["M043", "1999"], "M044": ["M044", "1977"], "M045": ["M045", "1996"], "M046": ["M046", "1958"], "M047": ["M047", "1967"], "M048": ["M048", "1986"], "M049": ["M049", "1999"], "M050": ["M050", "1982"], "M051": ["M051", "1956"], "M052": ["M052", "1965"], "M053": ["M053", "1976"], "M054": ["M054", "1992"], "M055": ["M055", "1953"], "M056": ["M056", "1973"], "M057": ["M057", "1999"], "M058": ["M058", "1954"], "M059": ["M059", "1998"], "M060": ["M060", "1988"], "YUC": ["yuc", "2011"]};                 // 대문자 회원번호 → [파일에 쓰인 회원번호, 태어난 해]
+  var MEMBERS = {"M001": ["M001", "1952"], "M002": ["M002", "1963"], "M003": ["M003", "1968"], "M004": ["M004", "1974"], "M005": ["M005", "1987"], "M006": ["M006", "1980"], "YUC": ["yuc", "1952"], "M008": ["M008", "1968"], "M009": ["M009", "1955"], "M010": ["M010", "1982"], "M011": ["M011", "1999"], "M012": ["M012", "1979"], "M013": ["M013", "1952"], "M014": ["M014", "1981"], "M015": ["M015", "1952"], "M016": ["M016", "2002"], "M017": ["M017", "1974"], "M018": ["M018", "1987"], "M019": ["M019", "1952"], "M020": ["M020", "1986"], "M021": ["M021", "1954"], "M022": ["M022", "1955"], "M023": ["M023", "1956"], "M024": ["M024", "1965"], "M025": ["M025", "1953"], "M026": ["M026", "1956"], "M027": ["M027", "1979"], "M028": ["M028", "1964"], "M029": ["M029", "1964"], "M030": ["M030", "1969"], "M031": ["M031", "1981"], "M032": ["M032", "2001"], "M033": ["M033", "1972"], "M034": ["M034", "1984"], "M035": ["M035", "1974"], "M036": ["M036", "2000"], "M037": ["M037", "1974"], "M038": ["M038", "1983"], "M039": ["M039", "1978"], "M040": ["M040", "1997"], "M041": ["M041", "1953"], "M042": ["M042", "1981"], "M043": ["M043", "1999"], "M044": ["M044", "1977"], "M045": ["M045", "1996"], "M046": ["M046", "1958"], "M047": ["M047", "1967"], "M048": ["M048", "1986"], "M049": ["M049", "1999"], "M050": ["M050", "1982"], "M051": ["M051", "1956"], "M052": ["M052", "1965"], "M053": ["M053", "1976"], "M054": ["M054", "1992"], "M055": ["M055", "1953"], "M056": ["M056", "1973"], "M057": ["M057", "1999"], "M058": ["M058", "1954"], "M059": ["M059", "1998"], "M060": ["M060", "1988"]};                 // 대문자 회원번호 → [파일에 쓰인 회원번호, 태어난 해]
   function toast(msg) {
     var t = document.getElementById('demo-toast');
     if (!t) { t = document.createElement('div'); t.id = 'demo-toast'; t.setAttribute('role', 'status'); document.body.appendChild(t); }
@@ -13,7 +13,7 @@
     clearTimeout(t._h); t._h = setTimeout(function () { t.className = ''; }, 2800);
   }
   var SAVE = '시연판이라 저장·문자 발송·엑셀은 되지 않습니다. 설치판에서 동작합니다.';
-  var PAGE = '시연판에는 이 화면이 없습니다. 회원 상세 탭과 지난 달 달력은 M004·M007·M051과 장기 미출석 회원만 있습니다.';
+  var PAGE = '시연판에는 이 화면이 없습니다. 회원 상세 탭과 지난 달 달력은 M004·yuc·M051과 장기 미출석 회원만 있습니다.';
   document.addEventListener('click', function (e) {
     var a = e.target.closest && e.target.closest('a[href="#demo"], a[href="#demo-page"]');
     if (a) { e.preventDefault(); toast(a.getAttribute('href') === '#demo' ? SAVE : PAGE); }
@@ -24,7 +24,7 @@
     if (f.hasAttribute('data-demo-admin')) { location.href = 'admin.html'; return; }   // 시연: 비밀번호 없이 들어가기
     if (f.hasAttribute('data-demo-login')) {
       var id = (f.member_id.value || '').trim().toUpperCase(), by = (f.birth_year.value || '').trim();
-      if (!id && !by) { id = 'YUC'; by = MEMBERS.YUC ? MEMBERS.YUC[1] : ''; }          // 시연: 비워 두고 누르면 yuc
+      if ((!id && !by) || (id === 'YUC' && by === '2011')) { id = 'YUC'; by = MEMBERS.YUC ? MEMBERS.YUC[1] : ''; }  // 시연: 비워 두거나 yuc / 2011
       if (MEMBERS[id] && MEMBERS[id][1] === by) { location.href = 'my-' + MEMBERS[id][0] + '.html'; return; }
       toast('회원번호나 태어난 해가 맞지 않습니다. 예: yuc / 2011'); return;
     }
@@ -116,12 +116,12 @@
 
 <section class="my-card" id="advice">
   <h2>오늘 먹은 양</h2>
-  <p class="my-when">하루 권장 1,820 kcal · 지금 체성분 유지</p>
-  <div class="my-key"><b class="num">1,330</b><span class="unit">kcal</span></div>
+  <p class="my-when">하루 권장 2,200 kcal · 지금 체성분 유지</p>
+  <div class="my-key"><b class="num">1,570</b><span class="unit">kcal</span></div>
   
-  <div class="my-bar" role="img" aria-label="권장량의 73%"><i class="" style="width:73%"></i></div>
+  <div class="my-bar" role="img" aria-label="권장량의 71%"><i class="" style="width:71%"></i></div>
   
-  <p class="my-msg">오늘 세 끼를 모두 기록했습니다. 권장량까지 490 kcal 남았어요.</p>
+  <p class="my-msg">오늘 세 끼를 모두 기록했습니다. 권장량까지 630 kcal 남았어요.</p>
   
   <p class="my-small">메뉴 열량은 참고값입니다.</p>
 </section>
@@ -167,8 +167,8 @@
 <section class="my-card">
   <h2>지난 일주일</h2>
   
-  <div class="my-key"><span class="lab">하루 평균</span><b class="num">1,590</b><span class="unit">kcal</span></div>
-  <p class="my-msg">권장량보다 230 kcal 적게 드셨어요</p>
+  <div class="my-key"><span class="lab">하루 평균</span><b class="num">1,860</b><span class="unit">kcal</span></div>
+  <p class="my-msg">권장량보다 340 kcal 적게 드셨어요</p>
   
   
   
@@ -184,19 +184,19 @@
     
     <div class="d"><div class="col"><i class="" style="height:65%"></i></div><span>24일</span></div>
     
-    <div class="d"><div class="col"><i class="" style="height:81%"></i></div><span>25일</span></div>
+    <div class="d"><div class="col"><i class="" style="height:80%"></i></div><span>25일</span></div>
     
     <div class="d"><div class="col"><i class="" style="height:59%"></i></div><span>26일</span></div>
     
-    <div class="line" style="bottom:101px"><em>권장 1,820</em></div>
+    <div class="line" style="bottom:103px"><em>권장 2,200</em></div>
   </div>
   <details class="my-more"><summary>자세히 보기</summary>
     
     <p class="my-p"><b>최근 7일</b></p>
     <div class="my-rows" style="margin-top:8px">
       <div><span class="k">기록한 날</span><span class="v num">7<small>일</small></span></div>
-      <div><span class="k">하루 평균</span><span class="v num">1,590<small>kcal</small></span></div>
-      <div><span class="k">식단으로 계산한 체지방 변화</span><span class="v num">-0.2 kg</span></div>
+      <div><span class="k">하루 평균</span><span class="v num">1,860<small>kcal</small></span></div>
+      <div><span class="k">식단으로 계산한 체지방 변화</span><span class="v num">-0.3 kg</span></div>
       <div><span class="k">인바디로 잰 체지방 변화</span><span class="v num">—</span></div>
       <div><span class="k">인바디로 잰 체중 변화</span><span class="v num">—</span></div>
     </div>
@@ -204,13 +204,13 @@
     <p class="my-p"><b>최근 30일</b></p>
     <div class="my-rows" style="margin-top:8px">
       <div><span class="k">기록한 날</span><span class="v num">29<small>일</small></span></div>
-      <div><span class="k">하루 평균</span><span class="v num">1,410<small>kcal</small></span></div>
-      <div><span class="k">식단으로 계산한 체지방 변화</span><span class="v num">-1.5 kg</span></div>
+      <div><span class="k">하루 평균</span><span class="v num">1,660<small>kcal</small></span></div>
+      <div><span class="k">식단으로 계산한 체지방 변화</span><span class="v num">-2.0 kg</span></div>
       <div><span class="k">인바디로 잰 체지방 변화</span><span class="v num">-0.3 kg</span></div>
       <div><span class="k">인바디로 잰 체중 변화</span><span class="v num">-0.2 kg</span></div>
     </div>
     
-    <p class="my-small">하루 소비 열량은 1,820 kcal로 계산했습니다 (기초대사량 1,361, 인바디 측정 + 일상 활동 + 운동 51).</p>
+    <p class="my-small">하루 소비 열량은 2,201 kcal로 계산했습니다 (기초대사량 1,647, 인바디 측정 + 일상 활동 + 운동 60).</p>
     <p class="my-small">기록한 날은 세 끼 중 두 끼 이상 적은 날입니다. 식단으로 계산한 값은 먹은 양과 쓴 양의 차이를 지방 1 kg = 7,700 kcal로 바꾼 것입니다.</p>
   </details>
 </section>
@@ -222,22 +222,22 @@
   <div class="my-log">
     <div class="e">
       <div><b>10월 26일 저녁</b><span>라면과 김밥</span></div>
-      <div class="k"><b class="num">760</b> <small>kcal</small><form method="post" action="/my/diet/seed-yuc-2026-10-26-%EC%A0%80%EB%85%81/delete"><button type="submit" aria-label="10월 26일 저녁 기록 지우기">지우기</button></form></div>
+      <div class="k"><b class="num">900</b> <small>kcal</small><form method="post" action="/my/diet/seed-yuc-2026-10-26-%EC%A0%80%EB%85%81/delete"><button type="submit" aria-label="10월 26일 저녁 기록 지우기">지우기</button></form></div>
     </div>
   
     <div class="e">
       <div><b>10월 26일 점심</b><span>김치찌개와 밥</span></div>
-      <div class="k"><b class="num">570</b> <small>kcal</small><form method="post" action="/my/diet/seed-yuc-2026-10-26-%EC%A0%90%EC%8B%AC/delete"><button type="submit" aria-label="10월 26일 점심 기록 지우기">지우기</button></form></div>
+      <div class="k"><b class="num">670</b> <small>kcal</small><form method="post" action="/my/diet/seed-yuc-2026-10-26-%EC%A0%90%EC%8B%AC/delete"><button type="submit" aria-label="10월 26일 점심 기록 지우기">지우기</button></form></div>
     </div>
   
     <div class="e">
       <div><b>10월 25일 간식</b><span>바나나</span></div>
-      <div class="k"><b class="num">90</b> <small>kcal</small><form method="post" action="/my/diet/seed-yuc-2026-10-25-%EA%B0%84%EC%8B%9D/delete"><button type="submit" aria-label="10월 25일 간식 기록 지우기">지우기</button></form></div>
+      <div class="k"><b class="num">100</b> <small>kcal</small><form method="post" action="/my/diet/seed-yuc-2026-10-25-%EA%B0%84%EC%8B%9D/delete"><button type="submit" aria-label="10월 25일 간식 기록 지우기">지우기</button></form></div>
     </div>
   
     <div class="e">
       <div><b>10월 25일 저녁</b><span>불고기 백반</span></div>
-      <div class="k"><b class="num">670</b> <small>kcal</small><form method="post" action="/my/diet/seed-yuc-2026-10-25-%EC%A0%80%EB%85%81/delete"><button type="submit" aria-label="10월 25일 저녁 기록 지우기">지우기</button></form></div>
+      <div class="k"><b class="num">780</b> <small>kcal</small><form method="post" action="/my/diet/seed-yuc-2026-10-25-%EC%A0%80%EB%85%81/delete"><button type="submit" aria-label="10월 25일 저녁 기록 지우기">지우기</button></form></div>
     </div>
   </div>
   
@@ -245,132 +245,132 @@
     <div class="my-log">
     <div class="e">
       <div><b>10월 25일 점심</b><span>돈가스 정식</span></div>
-      <div class="k"><b class="num">780</b> <small>kcal</small><form method="post" action="/my/diet/seed-yuc-2026-10-25-%EC%A0%90%EC%8B%AC/delete"><button type="submit" aria-label="10월 25일 점심 기록 지우기">지우기</button></form></div>
+      <div class="k"><b class="num">920</b> <small>kcal</small><form method="post" action="/my/diet/seed-yuc-2026-10-25-%EC%A0%90%EC%8B%AC/delete"><button type="submit" aria-label="10월 25일 점심 기록 지우기">지우기</button></form></div>
     </div>
   
     <div class="e">
       <div><b>10월 25일 아침</b><span>시리얼과 우유</span></div>
-      <div class="k"><b class="num">270</b> <small>kcal</small><form method="post" action="/my/diet/seed-yuc-2026-10-25-%EC%95%84%EC%B9%A8/delete"><button type="submit" aria-label="10월 25일 아침 기록 지우기">지우기</button></form></div>
+      <div class="k"><b class="num">310</b> <small>kcal</small><form method="post" action="/my/diet/seed-yuc-2026-10-25-%EC%95%84%EC%B9%A8/delete"><button type="submit" aria-label="10월 25일 아침 기록 지우기">지우기</button></form></div>
     </div>
   
     <div class="e">
       <div><b>10월 24일 간식</b><span>과자 한 봉지</span></div>
-      <div class="k"><b class="num">230</b> <small>kcal</small><form method="post" action="/my/diet/seed-yuc-2026-10-24-%EA%B0%84%EC%8B%9D/delete"><button type="submit" aria-label="10월 24일 간식 기록 지우기">지우기</button></form></div>
+      <div class="k"><b class="num">270</b> <small>kcal</small><form method="post" action="/my/diet/seed-yuc-2026-10-24-%EA%B0%84%EC%8B%9D/delete"><button type="submit" aria-label="10월 24일 간식 기록 지우기">지우기</button></form></div>
     </div>
   
     <div class="e">
       <div><b>10월 24일 저녁</b><span>두부조림 백반</span></div>
-      <div class="k"><b class="num">540</b> <small>kcal</small><form method="post" action="/my/diet/seed-yuc-2026-10-24-%EC%A0%80%EB%85%81/delete"><button type="submit" aria-label="10월 24일 저녁 기록 지우기">지우기</button></form></div>
+      <div class="k"><b class="num">630</b> <small>kcal</small><form method="post" action="/my/diet/seed-yuc-2026-10-24-%EC%A0%80%EB%85%81/delete"><button type="submit" aria-label="10월 24일 저녁 기록 지우기">지우기</button></form></div>
     </div>
   
     <div class="e">
       <div><b>10월 24일 점심</b><span>돈가스 정식</span></div>
-      <div class="k"><b class="num">690</b> <small>kcal</small><form method="post" action="/my/diet/seed-yuc-2026-10-24-%EC%A0%90%EC%8B%AC/delete"><button type="submit" aria-label="10월 24일 점심 기록 지우기">지우기</button></form></div>
+      <div class="k"><b class="num">810</b> <small>kcal</small><form method="post" action="/my/diet/seed-yuc-2026-10-24-%EC%A0%90%EC%8B%AC/delete"><button type="submit" aria-label="10월 24일 점심 기록 지우기">지우기</button></form></div>
     </div>
   
     <div class="e">
       <div><b>10월 23일 저녁</b><span>잡곡밥과 생선구이</span></div>
-      <div class="k"><b class="num">480</b> <small>kcal</small><form method="post" action="/my/diet/seed-yuc-2026-10-23-%EC%A0%80%EB%85%81/delete"><button type="submit" aria-label="10월 23일 저녁 기록 지우기">지우기</button></form></div>
+      <div class="k"><b class="num">560</b> <small>kcal</small><form method="post" action="/my/diet/seed-yuc-2026-10-23-%EC%A0%80%EB%85%81/delete"><button type="submit" aria-label="10월 23일 저녁 기록 지우기">지우기</button></form></div>
     </div>
   
     <div class="e">
       <div><b>10월 23일 점심</b><span>비빔밥</span></div>
-      <div class="k"><b class="num">560</b> <small>kcal</small><form method="post" action="/my/diet/seed-yuc-2026-10-23-%EC%A0%90%EC%8B%AC/delete"><button type="submit" aria-label="10월 23일 점심 기록 지우기">지우기</button></form></div>
+      <div class="k"><b class="num">660</b> <small>kcal</small><form method="post" action="/my/diet/seed-yuc-2026-10-23-%EC%A0%90%EC%8B%AC/delete"><button type="submit" aria-label="10월 23일 점심 기록 지우기">지우기</button></form></div>
     </div>
   
     <div class="e">
       <div><b>10월 23일 아침</b><span>죽 한 그릇</span></div>
-      <div class="k"><b class="num">270</b> <small>kcal</small><form method="post" action="/my/diet/seed-yuc-2026-10-23-%EC%95%84%EC%B9%A8/delete"><button type="submit" aria-label="10월 23일 아침 기록 지우기">지우기</button></form></div>
+      <div class="k"><b class="num">320</b> <small>kcal</small><form method="post" action="/my/diet/seed-yuc-2026-10-23-%EC%95%84%EC%B9%A8/delete"><button type="submit" aria-label="10월 23일 아침 기록 지우기">지우기</button></form></div>
     </div>
   
     <div class="e">
       <div><b>10월 22일 저녁</b><span>닭가슴살 샐러드</span></div>
-      <div class="k"><b class="num">320</b> <small>kcal</small><form method="post" action="/my/diet/seed-yuc-2026-10-22-%EC%A0%80%EB%85%81/delete"><button type="submit" aria-label="10월 22일 저녁 기록 지우기">지우기</button></form></div>
+      <div class="k"><b class="num">370</b> <small>kcal</small><form method="post" action="/my/diet/seed-yuc-2026-10-22-%EC%A0%80%EB%85%81/delete"><button type="submit" aria-label="10월 22일 저녁 기록 지우기">지우기</button></form></div>
     </div>
   
     <div class="e">
       <div><b>10월 22일 점심</b><span>된장찌개 백반</span></div>
-      <div class="k"><b class="num">560</b> <small>kcal</small><form method="post" action="/my/diet/seed-yuc-2026-10-22-%EC%A0%90%EC%8B%AC/delete"><button type="submit" aria-label="10월 22일 점심 기록 지우기">지우기</button></form></div>
+      <div class="k"><b class="num">660</b> <small>kcal</small><form method="post" action="/my/diet/seed-yuc-2026-10-22-%EC%A0%90%EC%8B%AC/delete"><button type="submit" aria-label="10월 22일 점심 기록 지우기">지우기</button></form></div>
     </div>
   
     <div class="e">
       <div><b>10월 22일 아침</b><span>죽 한 그릇</span></div>
-      <div class="k"><b class="num">290</b> <small>kcal</small><form method="post" action="/my/diet/seed-yuc-2026-10-22-%EC%95%84%EC%B9%A8/delete"><button type="submit" aria-label="10월 22일 아침 기록 지우기">지우기</button></form></div>
+      <div class="k"><b class="num">340</b> <small>kcal</small><form method="post" action="/my/diet/seed-yuc-2026-10-22-%EC%95%84%EC%B9%A8/delete"><button type="submit" aria-label="10월 22일 아침 기록 지우기">지우기</button></form></div>
     </div>
   
     <div class="e">
       <div><b>10월 21일 간식</b><span>빵 한 개</span></div>
-      <div class="k"><b class="num">230</b> <small>kcal</small><form method="post" action="/my/diet/seed-yuc-2026-10-21-%EA%B0%84%EC%8B%9D/delete"><button type="submit" aria-label="10월 21일 간식 기록 지우기">지우기</button></form></div>
+      <div class="k"><b class="num">270</b> <small>kcal</small><form method="post" action="/my/diet/seed-yuc-2026-10-21-%EA%B0%84%EC%8B%9D/delete"><button type="submit" aria-label="10월 21일 간식 기록 지우기">지우기</button></form></div>
     </div>
   
     <div class="e">
       <div><b>10월 21일 저녁</b><span>라면과 김밥</span></div>
-      <div class="k"><b class="num">800</b> <small>kcal</small><form method="post" action="/my/diet/seed-yuc-2026-10-21-%EC%A0%80%EB%85%81/delete"><button type="submit" aria-label="10월 21일 저녁 기록 지우기">지우기</button></form></div>
+      <div class="k"><b class="num">940</b> <small>kcal</small><form method="post" action="/my/diet/seed-yuc-2026-10-21-%EC%A0%80%EB%85%81/delete"><button type="submit" aria-label="10월 21일 저녁 기록 지우기">지우기</button></form></div>
     </div>
   
     <div class="e">
       <div><b>10월 21일 점심</b><span>돈가스 정식</span></div>
-      <div class="k"><b class="num">790</b> <small>kcal</small><form method="post" action="/my/diet/seed-yuc-2026-10-21-%EC%A0%90%EC%8B%AC/delete"><button type="submit" aria-label="10월 21일 점심 기록 지우기">지우기</button></form></div>
+      <div class="k"><b class="num">930</b> <small>kcal</small><form method="post" action="/my/diet/seed-yuc-2026-10-21-%EC%A0%90%EC%8B%AC/delete"><button type="submit" aria-label="10월 21일 점심 기록 지우기">지우기</button></form></div>
     </div>
   
     <div class="e">
       <div><b>10월 21일 아침</b><span>김밥 한 줄</span></div>
-      <div class="k"><b class="num">420</b> <small>kcal</small><form method="post" action="/my/diet/seed-yuc-2026-10-21-%EC%95%84%EC%B9%A8/delete"><button type="submit" aria-label="10월 21일 아침 기록 지우기">지우기</button></form></div>
+      <div class="k"><b class="num">500</b> <small>kcal</small><form method="post" action="/my/diet/seed-yuc-2026-10-21-%EC%95%84%EC%B9%A8/delete"><button type="submit" aria-label="10월 21일 아침 기록 지우기">지우기</button></form></div>
     </div>
   
     <div class="e">
       <div><b>10월 20일 저녁</b><span>불고기 백반</span></div>
-      <div class="k"><b class="num">680</b> <small>kcal</small><form method="post" action="/my/diet/seed-yuc-2026-10-20-%EC%A0%80%EB%85%81/delete"><button type="submit" aria-label="10월 20일 저녁 기록 지우기">지우기</button></form></div>
+      <div class="k"><b class="num">790</b> <small>kcal</small><form method="post" action="/my/diet/seed-yuc-2026-10-20-%EC%A0%80%EB%85%81/delete"><button type="submit" aria-label="10월 20일 저녁 기록 지우기">지우기</button></form></div>
     </div>
   
     <div class="e">
       <div><b>10월 20일 점심</b><span>제육덮밥</span></div>
-      <div class="k"><b class="num">690</b> <small>kcal</small><form method="post" action="/my/diet/seed-yuc-2026-10-20-%EC%A0%90%EC%8B%AC/delete"><button type="submit" aria-label="10월 20일 점심 기록 지우기">지우기</button></form></div>
+      <div class="k"><b class="num">810</b> <small>kcal</small><form method="post" action="/my/diet/seed-yuc-2026-10-20-%EC%A0%90%EC%8B%AC/delete"><button type="submit" aria-label="10월 20일 점심 기록 지우기">지우기</button></form></div>
     </div>
   
     <div class="e">
       <div><b>10월 20일 아침</b><span>김밥 한 줄</span></div>
-      <div class="k"><b class="num">430</b> <small>kcal</small><form method="post" action="/my/diet/seed-yuc-2026-10-20-%EC%95%84%EC%B9%A8/delete"><button type="submit" aria-label="10월 20일 아침 기록 지우기">지우기</button></form></div>
+      <div class="k"><b class="num">510</b> <small>kcal</small><form method="post" action="/my/diet/seed-yuc-2026-10-20-%EC%95%84%EC%B9%A8/delete"><button type="submit" aria-label="10월 20일 아침 기록 지우기">지우기</button></form></div>
     </div>
   
     <div class="e">
       <div><b>10월 19일 저녁</b><span>두부조림 백반</span></div>
-      <div class="k"><b class="num">480</b> <small>kcal</small><form method="post" action="/my/diet/seed-yuc-2026-10-19-%EC%A0%80%EB%85%81/delete"><button type="submit" aria-label="10월 19일 저녁 기록 지우기">지우기</button></form></div>
+      <div class="k"><b class="num">570</b> <small>kcal</small><form method="post" action="/my/diet/seed-yuc-2026-10-19-%EC%A0%80%EB%85%81/delete"><button type="submit" aria-label="10월 19일 저녁 기록 지우기">지우기</button></form></div>
     </div>
   
     <div class="e">
       <div><b>10월 19일 점심</b><span>김치찌개와 밥</span></div>
-      <div class="k"><b class="num">580</b> <small>kcal</small><form method="post" action="/my/diet/seed-yuc-2026-10-19-%EC%A0%90%EC%8B%AC/delete"><button type="submit" aria-label="10월 19일 점심 기록 지우기">지우기</button></form></div>
+      <div class="k"><b class="num">680</b> <small>kcal</small><form method="post" action="/my/diet/seed-yuc-2026-10-19-%EC%A0%90%EC%8B%AC/delete"><button type="submit" aria-label="10월 19일 점심 기록 지우기">지우기</button></form></div>
     </div>
   
     <div class="e">
       <div><b>10월 19일 아침</b><span>샌드위치</span></div>
-      <div class="k"><b class="num">370</b> <small>kcal</small><form method="post" action="/my/diet/seed-yuc-2026-10-19-%EC%95%84%EC%B9%A8/delete"><button type="submit" aria-label="10월 19일 아침 기록 지우기">지우기</button></form></div>
+      <div class="k"><b class="num">440</b> <small>kcal</small><form method="post" action="/my/diet/seed-yuc-2026-10-19-%EC%95%84%EC%B9%A8/delete"><button type="submit" aria-label="10월 19일 아침 기록 지우기">지우기</button></form></div>
     </div>
   
     <div class="e">
       <div><b>10월 18일 간식</b><span>아메리카노와 쿠키</span></div>
-      <div class="k"><b class="num">170</b> <small>kcal</small><form method="post" action="/my/diet/seed-yuc-2026-10-18-%EA%B0%84%EC%8B%9D/delete"><button type="submit" aria-label="10월 18일 간식 기록 지우기">지우기</button></form></div>
+      <div class="k"><b class="num">200</b> <small>kcal</small><form method="post" action="/my/diet/seed-yuc-2026-10-18-%EA%B0%84%EC%8B%9D/delete"><button type="submit" aria-label="10월 18일 간식 기록 지우기">지우기</button></form></div>
     </div>
   
     <div class="e">
       <div><b>10월 18일 저녁</b><span>삼겹살과 쌈</span></div>
-      <div class="k"><b class="num">710</b> <small>kcal</small><form method="post" action="/my/diet/seed-yuc-2026-10-18-%EC%A0%80%EB%85%81/delete"><button type="submit" aria-label="10월 18일 저녁 기록 지우기">지우기</button></form></div>
+      <div class="k"><b class="num">840</b> <small>kcal</small><form method="post" action="/my/diet/seed-yuc-2026-10-18-%EC%A0%80%EB%85%81/delete"><button type="submit" aria-label="10월 18일 저녁 기록 지우기">지우기</button></form></div>
     </div>
   
     <div class="e">
       <div><b>10월 18일 점심</b><span>비빔밥</span></div>
-      <div class="k"><b class="num">550</b> <small>kcal</small><form method="post" action="/my/diet/seed-yuc-2026-10-18-%EC%A0%90%EC%8B%AC/delete"><button type="submit" aria-label="10월 18일 점심 기록 지우기">지우기</button></form></div>
+      <div class="k"><b class="num">640</b> <small>kcal</small><form method="post" action="/my/diet/seed-yuc-2026-10-18-%EC%A0%90%EC%8B%AC/delete"><button type="submit" aria-label="10월 18일 점심 기록 지우기">지우기</button></form></div>
     </div>
   
     <div class="e">
       <div><b>10월 18일 아침</b><span>토스트와 달걀</span></div>
-      <div class="k"><b class="num">380</b> <small>kcal</small><form method="post" action="/my/diet/seed-yuc-2026-10-18-%EC%95%84%EC%B9%A8/delete"><button type="submit" aria-label="10월 18일 아침 기록 지우기">지우기</button></form></div>
+      <div class="k"><b class="num">440</b> <small>kcal</small><form method="post" action="/my/diet/seed-yuc-2026-10-18-%EC%95%84%EC%B9%A8/delete"><button type="submit" aria-label="10월 18일 아침 기록 지우기">지우기</button></form></div>
     </div>
   
     <div class="e">
       <div><b>10월 17일 저녁</b><span>닭가슴살 샐러드</span></div>
-      <div class="k"><b class="num">320</b> <small>kcal</small><form method="post" action="/my/diet/seed-yuc-2026-10-17-%EC%A0%80%EB%85%81/delete"><button type="submit" aria-label="10월 17일 저녁 기록 지우기">지우기</button></form></div>
+      <div class="k"><b class="num">380</b> <small>kcal</small><form method="post" action="/my/diet/seed-yuc-2026-10-17-%EC%A0%80%EB%85%81/delete"><button type="submit" aria-label="10월 17일 저녁 기록 지우기">지우기</button></form></div>
     </div>
   </div>
   </details>

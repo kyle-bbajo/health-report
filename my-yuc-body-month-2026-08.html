@@ -5,7 +5,7 @@
 (function () {
   window.fetch = function () { return Promise.resolve(new Response(null, {status: 404})); };
   if (navigator.serviceWorker) navigator.serviceWorker.register = function () { return Promise.reject(); };
-  var MEMBERS = {"M001": ["M001", "1952"], "M002": ["M002", "1963"], "M003": ["M003", "1968"], "M004": ["M004", "1974"], "M005": ["M005", "1987"], "M006": ["M006", "1980"], "M007": ["M007", "1972"], "M008": ["M008", "1968"], "M009": ["M009", "1955"], "M010": ["M010", "1982"], "M011": ["M011", "1999"], "M012": ["M012", "1979"], "M013": ["M013", "1952"], "M014": ["M014", "1981"], "M015": ["M015", "1952"], "M016": ["M016", "2002"], "M017": ["M017", "1974"], "M018": ["M018", "1987"], "M019": ["M019", "1952"], "M020": ["M020", "1986"], "M021": ["M021", "1954"], "M022": ["M022", "1955"], "M023": ["M023", "1956"], "M024": ["M024", "1965"], "M025": ["M025", "1953"], "M026": ["M026", "1956"], "M027": ["M027", "1979"], "M028": ["M028", "1964"], "M029": ["M029", "1964"], "M030": ["M030", "1969"], "M031": ["M031", "1981"], "M032": ["M032", "2001"], "M033": ["M033", "1972"], "M034": ["M034", "1984"], "M035": ["M035", "1974"], "M036": ["M036", "2000"], "M037": ["M037", "1974"], "M038": ["M038", "1983"], "M039": ["M039", "1978"], "M040": ["M040", "1997"], "M041": ["M041", "1953"], "M042": ["M042", "1981"], "M043": ["M043", "1999"], "M044": ["M044", "1977"], "M045": ["M045", "1996"], "M046": ["M046", "1958"], "M047": ["M047", "1967"], "M048": ["M048", "1986"], "M049": ["M049", "1999"], "M050": ["M050", "1982"], "M051": ["M051", "1956"], "M052": ["M052", "1965"], "M053": ["M053", "1976"], "M054": ["M054", "1992"], "M055": ["M055", "1953"], "M056": ["M056", "1973"], "M057": ["M057", "1999"], "M058": ["M058", "1954"], "M059": ["M059", "1998"], "M060": ["M060", "1988"], "YUC": ["yuc", "2011"]};                 // 대문자 회원번호 → [파일에 쓰인 회원번호, 태어난 해]
+  var MEMBERS = {"M001": ["M001", "1952"], "M002": ["M002", "1963"], "M003": ["M003", "1968"], "M004": ["M004", "1974"], "M005": ["M005", "1987"], "M006": ["M006", "1980"], "YUC": ["yuc", "1952"], "M008": ["M008", "1968"], "M009": ["M009", "1955"], "M010": ["M010", "1982"], "M011": ["M011", "1999"], "M012": ["M012", "1979"], "M013": ["M013", "1952"], "M014": ["M014", "1981"], "M015": ["M015", "1952"], "M016": ["M016", "2002"], "M017": ["M017", "1974"], "M018": ["M018", "1987"], "M019": ["M019", "1952"], "M020": ["M020", "1986"], "M021": ["M021", "1954"], "M022": ["M022", "1955"], "M023": ["M023", "1956"], "M024": ["M024", "1965"], "M025": ["M025", "1953"], "M026": ["M026", "1956"], "M027": ["M027", "1979"], "M028": ["M028", "1964"], "M029": ["M029", "1964"], "M030": ["M030", "1969"], "M031": ["M031", "1981"], "M032": ["M032", "2001"], "M033": ["M033", "1972"], "M034": ["M034", "1984"], "M035": ["M035", "1974"], "M036": ["M036", "2000"], "M037": ["M037", "1974"], "M038": ["M038", "1983"], "M039": ["M039", "1978"], "M040": ["M040", "1997"], "M041": ["M041", "1953"], "M042": ["M042", "1981"], "M043": ["M043", "1999"], "M044": ["M044", "1977"], "M045": ["M045", "1996"], "M046": ["M046", "1958"], "M047": ["M047", "1967"], "M048": ["M048", "1986"], "M049": ["M049", "1999"], "M050": ["M050", "1982"], "M051": ["M051", "1956"], "M052": ["M052", "1965"], "M053": ["M053", "1976"], "M054": ["M054", "1992"], "M055": ["M055", "1953"], "M056": ["M056", "1973"], "M057": ["M057", "1999"], "M058": ["M058", "1954"], "M059": ["M059", "1998"], "M060": ["M060", "1988"]};                 // 대문자 회원번호 → [파일에 쓰인 회원번호, 태어난 해]
   function toast(msg) {
     var t = document.getElementById('demo-toast');
     if (!t) { t = document.createElement('div'); t.id = 'demo-toast'; t.setAttribute('role', 'status'); document.body.appendChild(t); }
@@ -13,7 +13,7 @@
     clearTimeout(t._h); t._h = setTimeout(function () { t.className = ''; }, 2800);
   }
   var SAVE = '시연판이라 저장·문자 발송·엑셀은 되지 않습니다. 설치판에서 동작합니다.';
-  var PAGE = '시연판에는 이 화면이 없습니다. 회원 상세 탭과 지난 달 달력은 M004·M007·M051과 장기 미출석 회원만 있습니다.';
+  var PAGE = '시연판에는 이 화면이 없습니다. 회원 상세 탭과 지난 달 달력은 M004·yuc·M051과 장기 미출석 회원만 있습니다.';
   document.addEventListener('click', function (e) {
     var a = e.target.closest && e.target.closest('a[href="#demo"], a[href="#demo-page"]');
     if (a) { e.preventDefault(); toast(a.getAttribute('href') === '#demo' ? SAVE : PAGE); }
@@ -24,7 +24,7 @@
     if (f.hasAttribute('data-demo-admin')) { location.href = 'admin.html'; return; }   // 시연: 비밀번호 없이 들어가기
     if (f.hasAttribute('data-demo-login')) {
       var id = (f.member_id.value || '').trim().toUpperCase(), by = (f.birth_year.value || '').trim();
-      if (!id && !by) { id = 'YUC'; by = MEMBERS.YUC ? MEMBERS.YUC[1] : ''; }          // 시연: 비워 두고 누르면 yuc
+      if ((!id && !by) || (id === 'YUC' && by === '2011')) { id = 'YUC'; by = MEMBERS.YUC ? MEMBERS.YUC[1] : ''; }  // 시연: 비워 두거나 yuc / 2011
       if (MEMBERS[id] && MEMBERS[id][1] === by) { location.href = 'my-' + MEMBERS[id][0] + '.html'; return; }
       toast('회원번호나 태어난 해가 맞지 않습니다. 예: yuc / 2011'); return;
     }
@@ -133,90 +133,90 @@
   <p class="my-when">10월 23일에 잰 결과</p>
   <div class="my-key">
     <span class="lab">체지방률</span>
-    <b class="num">21.1<small>%</small></b>
+    <b class="num">13.1<small>%</small></b>
     <span class="my-pill lean">낮음</span>
   </div>
   <p class="my-msg down">처음보다 7.6%p 줄었어요</p>
   <div class="my-rows">
-    <div><span class="k">체중</span><span class="v num">58.1<small>kg</small></span></div>
-    <div><span class="k">근육량</span><span class="v num">27.5<small>kg</small></span></div>
-    <div><span class="k">혈압</span><span class="v num">117/69</span><span class="my-pill ok">정상</span></div>
+    <div><span class="k">체중</span><span class="v num">68.0<small>kg</small></span></div>
+    <div><span class="k">근육량</span><span class="v num">35.5<small>kg</small></span></div>
+    <div><span class="k">혈압</span><span class="v num">111/65</span><span class="my-pill ok">정상</span></div>
   </div>
   
   <details class="my-more my-hist"><summary>지난 측정 30번 보기</summary>
     <div class="my-rows">
       
-      <div><span class="k">10월 23일<small>체중 58.1kg · 근육 27.5kg</small></span>
-        <span class="v num">21.1<small>%</small><em class="down">-0.4</em></span></div>
+      <div><span class="k">10월 23일<small>체중 68.0kg · 근육 35.5kg</small></span>
+        <span class="v num">13.1<small>%</small><em class="down">-0.4</em></span></div>
       
-      <div><span class="k">9월 23일<small>체중 58.3kg · 근육 27.4kg</small></span>
-        <span class="v num">21.5<small>%</small><em class="down">-0.3</em></span></div>
+      <div><span class="k">9월 23일<small>체중 68.2kg · 근육 35.4kg</small></span>
+        <span class="v num">13.5<small>%</small><em class="down">-0.3</em></span></div>
       
-      <div><span class="k">8월 30일<small>체중 58.9kg · 근육 27.6kg</small></span>
-        <span class="v num">21.8<small>%</small><em class="down">-0.1</em></span></div>
+      <div><span class="k">8월 30일<small>체중 68.8kg · 근육 35.6kg</small></span>
+        <span class="v num">13.8<small>%</small><em class="down">-0.1</em></span></div>
       
-      <div><span class="k">7월 27일<small>체중 59.5kg · 근육 27.8kg</small></span>
-        <span class="v num">21.9<small>%</small><em class="">+0.0</em></span></div>
+      <div><span class="k">7월 27일<small>체중 69.4kg · 근육 35.9kg</small></span>
+        <span class="v num">13.9<small>%</small><em class="">+0.0</em></span></div>
       
-      <div><span class="k">7월 8일<small>체중 59.5kg · 근육 27.8kg</small></span>
-        <span class="v num">21.9<small>%</small><em class="down">-0.7</em></span></div>
+      <div><span class="k">7월 8일<small>체중 69.4kg · 근육 35.8kg</small></span>
+        <span class="v num">13.9<small>%</small><em class="down">-0.7</em></span></div>
       
-      <div><span class="k">6월 3일<small>체중 59.8kg · 근육 27.5kg</small></span>
-        <span class="v num">22.6<small>%</small><em class="down">-0.4</em></span></div>
+      <div><span class="k">6월 3일<small>체중 69.7kg · 근육 35.7kg</small></span>
+        <span class="v num">14.6<small>%</small><em class="down">-0.4</em></span></div>
       
-      <div><span class="k">5월 18일<small>체중 60.1kg · 근육 27.3kg</small></span>
-        <span class="v num">23.0<small>%</small><em class="down">-0.2</em></span></div>
+      <div><span class="k">5월 18일<small>체중 70.0kg · 근육 35.7kg</small></span>
+        <span class="v num">15.0<small>%</small><em class="down">-0.2</em></span></div>
       
-      <div><span class="k">4월 27일<small>체중 60.7kg · 근육 27.5kg</small></span>
-        <span class="v num">23.2<small>%</small><em class="down">-0.1</em></span></div>
+      <div><span class="k">4월 27일<small>체중 70.6kg · 근육 35.9kg</small></span>
+        <span class="v num">15.2<small>%</small><em class="down">-0.1</em></span></div>
       
-      <div><span class="k">4월 2일<small>체중 60.9kg · 근육 27.4kg</small></span>
-        <span class="v num">23.3<small>%</small><em class="down">-0.7</em></span></div>
+      <div><span class="k">4월 2일<small>체중 70.8kg · 근육 36.0kg</small></span>
+        <span class="v num">15.3<small>%</small><em class="down">-0.7</em></span></div>
       
-      <div><span class="k">3월 10일<small>체중 61.0kg · 근육 27.2kg</small></span>
-        <span class="v num">24.0<small>%</small><em class="down">-0.4</em></span></div>
+      <div><span class="k">3월 10일<small>체중 70.9kg · 근육 35.7kg</small></span>
+        <span class="v num">16.0<small>%</small><em class="down">-0.4</em></span></div>
       
-      <div><span class="k">2월 16일<small>체중 61.2kg · 근육 27.2kg</small></span>
-        <span class="v num">24.4<small>%</small><em class="up">+0.1</em></span></div>
+      <div><span class="k">2월 16일<small>체중 71.1kg · 근육 35.7kg</small></span>
+        <span class="v num">16.4<small>%</small><em class="up">+0.1</em></span></div>
       
-      <div><span class="k">1월 17일<small>체중 60.9kg · 근육 27.0kg</small></span>
-        <span class="v num">24.3<small>%</small><em class="down">-0.4</em></span></div>
+      <div><span class="k">1월 17일<small>체중 70.8kg · 근육 35.6kg</small></span>
+        <span class="v num">16.3<small>%</small><em class="down">-0.4</em></span></div>
       
-      <div><span class="k">1월 3일<small>체중 61.0kg · 근육 26.8kg</small></span>
-        <span class="v num">24.7<small>%</small><em class="down">-0.5</em></span></div>
+      <div><span class="k">1월 3일<small>체중 70.9kg · 근육 35.4kg</small></span>
+        <span class="v num">16.7<small>%</small><em class="down">-0.5</em></span></div>
       
-      <div><span class="k">2025년 12월 3일<small>체중 61.2kg · 근육 26.5kg</small></span>
-        <span class="v num">25.2<small>%</small><em class="up">+0.1</em></span></div>
+      <div><span class="k">2025년 12월 3일<small>체중 71.1kg · 근육 35.3kg</small></span>
+        <span class="v num">17.2<small>%</small><em class="up">+0.1</em></span></div>
       
-      <div><span class="k">2025년 11월 8일<small>체중 61.1kg · 근육 26.4kg</small></span>
-        <span class="v num">25.1<small>%</small><em class="down">-0.2</em></span></div>
+      <div><span class="k">2025년 11월 8일<small>체중 71.0kg · 근육 35.3kg</small></span>
+        <span class="v num">17.1<small>%</small><em class="down">-0.2</em></span></div>
       
-      <div><span class="k">2025년 10월 11일<small>체중 61.5kg · 근육 26.4kg</small></span>
-        <span class="v num">25.3<small>%</small><em class="down">-0.1</em></span></div>
+      <div><span class="k">2025년 10월 11일<small>체중 71.4kg · 근육 35.5kg</small></span>
+        <span class="v num">17.3<small>%</small><em class="down">-0.1</em></span></div>
       
-      <div><span class="k">2025년 9월 6일<small>체중 61.7kg · 근육 26.2kg</small></span>
-        <span class="v num">25.4<small>%</small><em class="up">+0.2</em></span></div>
+      <div><span class="k">2025년 9월 6일<small>체중 71.6kg · 근육 35.5kg</small></span>
+        <span class="v num">17.4<small>%</small><em class="up">+0.2</em></span></div>
       
-      <div><span class="k">2025년 8월 20일<small>체중 62.4kg · 근육 26.5kg</small></span>
-        <span class="v num">25.2<small>%</small><em class="down">-0.4</em></span></div>
+      <div><span class="k">2025년 8월 20일<small>체중 72.3kg · 근육 35.8kg</small></span>
+        <span class="v num">17.2<small>%</small><em class="down">-0.4</em></span></div>
       
-      <div><span class="k">2025년 7월 24일<small>체중 62.4kg · 근육 26.3kg</small></span>
-        <span class="v num">25.6<small>%</small><em class="up">+0.2</em></span></div>
+      <div><span class="k">2025년 7월 24일<small>체중 72.3kg · 근육 35.5kg</small></span>
+        <span class="v num">17.6<small>%</small><em class="up">+0.2</em></span></div>
       
-      <div><span class="k">2025년 7월 6일<small>체중 62.8kg · 근육 26.4kg</small></span>
-        <span class="v num">25.4<small>%</small><em class="down">-1.8</em></span></div>
+      <div><span class="k">2025년 7월 6일<small>체중 72.7kg · 근육 35.7kg</small></span>
+        <span class="v num">17.4<small>%</small><em class="down">-1.8</em></span></div>
       
-      <div><span class="k">2025년 6월 8일<small>체중 63.2kg · 근육 25.8kg</small></span>
-        <span class="v num">27.2<small>%</small><em class="down">-0.3</em></span></div>
+      <div><span class="k">2025년 6월 8일<small>체중 73.1kg · 근육 34.9kg</small></span>
+        <span class="v num">19.2<small>%</small><em class="down">-0.3</em></span></div>
       
-      <div><span class="k">2025년 5월 24일<small>체중 63.5kg · 근육 25.7kg</small></span>
-        <span class="v num">27.5<small>%</small><em class="down">-0.1</em></span></div>
+      <div><span class="k">2025년 5월 24일<small>체중 73.4kg · 근육 34.8kg</small></span>
+        <span class="v num">19.5<small>%</small><em class="down">-0.1</em></span></div>
       
-      <div><span class="k">2025년 5월 3일<small>체중 63.3kg · 근육 25.6kg</small></span>
-        <span class="v num">27.6<small>%</small><em class="down">-0.4</em></span></div>
+      <div><span class="k">2025년 5월 3일<small>체중 73.2kg · 근육 34.6kg</small></span>
+        <span class="v num">19.6<small>%</small><em class="down">-0.4</em></span></div>
       
-      <div><span class="k">2025년 4월 6일<small>체중 63.4kg · 근육 25.3kg</small></span>
-        <span class="v num">28.0<small>%</small><em class="down">-0.4</em></span></div>
+      <div><span class="k">2025년 4월 6일<small>체중 73.3kg · 근육 34.3kg</small></span>
+        <span class="v num">20.0<small>%</small><em class="down">-0.4</em></span></div>
       
     </div>
     <p class="my-small">최근 24번만 보여 드립니다.</p>
@@ -338,31 +338,31 @@
 
 <section class="my-card">
   <h2>30일 뒤 체지방률은?</h2>
-  <p class="my-when">지금은 21.1% · 운동량 공식으로 계산 (출석·체중·강좌 운동량)</p>
+  <p class="my-when">지금은 13.1% · 운동량 공식으로 계산 (출석·체중·강좌 운동량)</p>
   <div class="my-rows">
     
     <div class="">
       <span class="k">지금처럼 다니면
         <small>한 달 5번 출석</small></span>
-      <span class="v num">20.8<small>%</small></span>
+      <span class="v num">12.8<small>%</small></span>
     </div>
     
     <div class="">
       <span class="k">식단만 조절하면
         <small>하루 300 kcal 덜 먹기</small></span>
-      <span class="v num">19.2<small>%</small></span>
+      <span class="v num">11.3<small>%</small></span>
     </div>
     
     <div class="">
       <span class="k">주 1회 더 나오면
         <small>한 달 9번 출석</small></span>
-      <span class="v num">20.5<small>%</small></span>
+      <span class="v num">12.5<small>%</small></span>
     </div>
     
     <div class="best">
       <span class="k"><b>추천</b><br>주 1회 더 + 식단 조절
         <small>한 달 9번 + 하루 300 kcal 덜 먹기</small></span>
-      <span class="v num">19.1<small>%</small></span>
+      <span class="v num">11.1<small>%</small></span>
     </div>
     
   </div>
@@ -374,23 +374,23 @@
   <div class="my-list">
     
     <div class="item"><div>
-      <b>헬스(자유이용)</b>
-      <div class="t">월·화·수·목·금요일 06:00~07:00</div>
-      <div class="m">근력 운동 · 60분</div>
-      <div class="m">평소 오시는 월·수요일에 있음</div>
-    </div></div>
-    
-    <div class="item"><div>
       <b>배드민턴</b>
       <div class="t">월·수요일 19:00~20:00</div>
       <div class="m">유산소 운동 · 60분</div>
       <div class="m">건강 체크 반영 · 평소 오시는 월·수요일에 있음</div>
     </div></div>
     
+    <div class="item"><div>
+      <b>헬스(자유이용)</b>
+      <div class="t">월·화·수·목·금요일 06:00~07:00</div>
+      <div class="m">근력 운동 · 60분</div>
+      <div class="m">평소 오시는 월·수요일에 있음</div>
+    </div></div>
+    
   </div>
-  <div class="my-box caution">건강 체크에 따라 제외: 그룹 근력 운동(고혈압)</div>
+  <div class="my-box caution">65세 이상: 저·중강도 프로그램 우선</div><div class="my-box caution">건강 체크에 따라 제외: 그룹 근력 운동(고혈압)</div>
   
-  <details class="my-more"><summary>추천 이유</summary><p class="my-p">최근 측정 체지방률은 21.1%(낮음)이고, 최근 30일 동안 5회 출석하셨습니다. 지금처럼 다니시면 30일 뒤 20.8%, 주 1회 더 나오시면 20.5%로 예상됩니다. 복합 위주로 헬스(자유이용), 아쿠아로빅 프로그램을 주 3회 목표로 권해 드립니다. 콜레스테롤·중성지방이 정상 구간을 벗어났습니다. 주 3회 이상 유산소 운동을 꾸준히 하는 것이 도움이 됩니다. 주의 사항을 확인하고 무리하지 않는 범위에서 시작하세요.</p></details>
+  <details class="my-more"><summary>추천 이유</summary><p class="my-p">최근 측정 체지방률은 13.1%(낮음)이고, 최근 30일 동안 5회 출석하셨습니다. 지금처럼 다니시면 30일 뒤 12.8%, 주 1회 더 나오시면 12.5%로 예상됩니다. 근력 위주로 아쿠아로빅, 헬스(자유이용) 프로그램을 주 3회 목표로 권해 드립니다. 검진 항목이 모두 정상 구간입니다. 지금의 운동 습관을 유지하세요. 주의 사항을 확인하고 무리하지 않는 범위에서 시작하세요.</p></details>
   
 </section>
 
@@ -399,8 +399,8 @@
   
   
   <p class="my-when">최근 7일</p>
-  <div class="my-key"><span class="lab">하루 평균</span><b class="num">1,590</b><span class="unit">kcal</span></div>
-  <p class="my-msg">권장량보다 230 kcal 적게 드셨어요</p>
+  <div class="my-key"><span class="lab">하루 평균</span><b class="num">1,860</b><span class="unit">kcal</span></div>
+  <p class="my-msg">권장량보다 340 kcal 적게 드셨어요</p>
   
   <a class="my-btn ghost" href="my-yuc-diet.html">식사 기록하러 가기</a>
 </section>

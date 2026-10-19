@@ -5,7 +5,7 @@
 (function () {
   window.fetch = function () { return Promise.resolve(new Response(null, {status: 404})); };
   if (navigator.serviceWorker) navigator.serviceWorker.register = function () { return Promise.reject(); };
-  var MEMBERS = {"M001": ["M001", "1952"], "M002": ["M002", "1963"], "M003": ["M003", "1968"], "M004": ["M004", "1974"], "M005": ["M005", "1987"], "M006": ["M006", "1980"], "M007": ["M007", "1972"], "M008": ["M008", "1968"], "M009": ["M009", "1955"], "M010": ["M010", "1982"], "M011": ["M011", "1999"], "M012": ["M012", "1979"], "M013": ["M013", "1952"], "M014": ["M014", "1981"], "M015": ["M015", "1952"], "M016": ["M016", "2002"], "M017": ["M017", "1974"], "M018": ["M018", "1987"], "M019": ["M019", "1952"], "M020": ["M020", "1986"], "M021": ["M021", "1954"], "M022": ["M022", "1955"], "M023": ["M023", "1956"], "M024": ["M024", "1965"], "M025": ["M025", "1953"], "M026": ["M026", "1956"], "M027": ["M027", "1979"], "M028": ["M028", "1964"], "M029": ["M029", "1964"], "M030": ["M030", "1969"], "M031": ["M031", "1981"], "M032": ["M032", "2001"], "M033": ["M033", "1972"], "M034": ["M034", "1984"], "M035": ["M035", "1974"], "M036": ["M036", "2000"], "M037": ["M037", "1974"], "M038": ["M038", "1983"], "M039": ["M039", "1978"], "M040": ["M040", "1997"], "M041": ["M041", "1953"], "M042": ["M042", "1981"], "M043": ["M043", "1999"], "M044": ["M044", "1977"], "M045": ["M045", "1996"], "M046": ["M046", "1958"], "M047": ["M047", "1967"], "M048": ["M048", "1986"], "M049": ["M049", "1999"], "M050": ["M050", "1982"], "M051": ["M051", "1956"], "M052": ["M052", "1965"], "M053": ["M053", "1976"], "M054": ["M054", "1992"], "M055": ["M055", "1953"], "M056": ["M056", "1973"], "M057": ["M057", "1999"], "M058": ["M058", "1954"], "M059": ["M059", "1998"], "M060": ["M060", "1988"], "YUC": ["yuc", "2011"]};                 // 대문자 회원번호 → [파일에 쓰인 회원번호, 태어난 해]
+  var MEMBERS = {"M001": ["M001", "1952"], "M002": ["M002", "1963"], "M003": ["M003", "1968"], "M004": ["M004", "1974"], "M005": ["M005", "1987"], "M006": ["M006", "1980"], "YUC": ["yuc", "1952"], "M008": ["M008", "1968"], "M009": ["M009", "1955"], "M010": ["M010", "1982"], "M011": ["M011", "1999"], "M012": ["M012", "1979"], "M013": ["M013", "1952"], "M014": ["M014", "1981"], "M015": ["M015", "1952"], "M016": ["M016", "2002"], "M017": ["M017", "1974"], "M018": ["M018", "1987"], "M019": ["M019", "1952"], "M020": ["M020", "1986"], "M021": ["M021", "1954"], "M022": ["M022", "1955"], "M023": ["M023", "1956"], "M024": ["M024", "1965"], "M025": ["M025", "1953"], "M026": ["M026", "1956"], "M027": ["M027", "1979"], "M028": ["M028", "1964"], "M029": ["M029", "1964"], "M030": ["M030", "1969"], "M031": ["M031", "1981"], "M032": ["M032", "2001"], "M033": ["M033", "1972"], "M034": ["M034", "1984"], "M035": ["M035", "1974"], "M036": ["M036", "2000"], "M037": ["M037", "1974"], "M038": ["M038", "1983"], "M039": ["M039", "1978"], "M040": ["M040", "1997"], "M041": ["M041", "1953"], "M042": ["M042", "1981"], "M043": ["M043", "1999"], "M044": ["M044", "1977"], "M045": ["M045", "1996"], "M046": ["M046", "1958"], "M047": ["M047", "1967"], "M048": ["M048", "1986"], "M049": ["M049", "1999"], "M050": ["M050", "1982"], "M051": ["M051", "1956"], "M052": ["M052", "1965"], "M053": ["M053", "1976"], "M054": ["M054", "1992"], "M055": ["M055", "1953"], "M056": ["M056", "1973"], "M057": ["M057", "1999"], "M058": ["M058", "1954"], "M059": ["M059", "1998"], "M060": ["M060", "1988"]};                 // 대문자 회원번호 → [파일에 쓰인 회원번호, 태어난 해]
   function toast(msg) {
     var t = document.getElementById('demo-toast');
     if (!t) { t = document.createElement('div'); t.id = 'demo-toast'; t.setAttribute('role', 'status'); document.body.appendChild(t); }
@@ -13,7 +13,7 @@
     clearTimeout(t._h); t._h = setTimeout(function () { t.className = ''; }, 2800);
   }
   var SAVE = '시연판이라 저장·문자 발송·엑셀은 되지 않습니다. 설치판에서 동작합니다.';
-  var PAGE = '시연판에는 이 화면이 없습니다. 회원 상세 탭과 지난 달 달력은 M004·M007·M051과 장기 미출석 회원만 있습니다.';
+  var PAGE = '시연판에는 이 화면이 없습니다. 회원 상세 탭과 지난 달 달력은 M004·yuc·M051과 장기 미출석 회원만 있습니다.';
   document.addEventListener('click', function (e) {
     var a = e.target.closest && e.target.closest('a[href="#demo"], a[href="#demo-page"]');
     if (a) { e.preventDefault(); toast(a.getAttribute('href') === '#demo' ? SAVE : PAGE); }
@@ -24,7 +24,7 @@
     if (f.hasAttribute('data-demo-admin')) { location.href = 'admin.html'; return; }   // 시연: 비밀번호 없이 들어가기
     if (f.hasAttribute('data-demo-login')) {
       var id = (f.member_id.value || '').trim().toUpperCase(), by = (f.birth_year.value || '').trim();
-      if (!id && !by) { id = 'YUC'; by = MEMBERS.YUC ? MEMBERS.YUC[1] : ''; }          // 시연: 비워 두고 누르면 yuc
+      if ((!id && !by) || (id === 'YUC' && by === '2011')) { id = 'YUC'; by = MEMBERS.YUC ? MEMBERS.YUC[1] : ''; }  // 시연: 비워 두거나 yuc / 2011
       if (MEMBERS[id] && MEMBERS[id][1] === by) { location.href = 'my-' + MEMBERS[id][0] + '.html'; return; }
       toast('회원번호나 태어난 해가 맞지 않습니다. 예: yuc / 2011'); return;
     }
@@ -128,10 +128,10 @@
 </div>
 
 <div class="tiles">
-  <div class="tile"><div class="ico"><svg class="ic lg"><use href="#i-users"/></svg></div><div><div class="k">회원</div><div class="v num">61<small>명</small></div></div></div>
-  <div class="tile"><div class="ico"><svg class="ic lg"><use href="#i-scale"/></svg></div><div><div class="k">체성분 · 혈압 측정</div><div class="v num">1401<small>건 · 1215건</small></div></div></div>
-  <div class="tile"><div class="ico"><svg class="ic lg"><use href="#i-calendar"/></svg></div><div><div class="k">출석 기록</div><div class="v num">10065<small>건</small></div></div></div>
-  <div class="tile"><div class="ico"><svg class="ic lg"><use href="#i-list"/></svg></div><div><div class="k">수강 내역 · 강좌</div><div class="v num">1286<small>건 · 8개</small></div></div></div>
+  <div class="tile"><div class="ico"><svg class="ic lg"><use href="#i-users"/></svg></div><div><div class="k">회원</div><div class="v num">60<small>명</small></div></div></div>
+  <div class="tile"><div class="ico"><svg class="ic lg"><use href="#i-scale"/></svg></div><div><div class="k">체성분 · 혈압 측정</div><div class="v num">1371<small>건 · 1187건</small></div></div></div>
+  <div class="tile"><div class="ico"><svg class="ic lg"><use href="#i-calendar"/></svg></div><div><div class="k">출석 기록</div><div class="v num">9887<small>건</small></div></div></div>
+  <div class="tile"><div class="ico"><svg class="ic lg"><use href="#i-list"/></svg></div><div><div class="k">수강 내역 · 강좌</div><div class="v num">1263<small>건 · 8개</small></div></div></div>
   <div class="tile"><div class="ico gray"><svg class="ic lg"><use href="#i-clock"/></svg></div><div><div class="k">기준일</div><div class="v num">2026-10-26</div></div></div>
 </div>
 
@@ -141,21 +141,21 @@
     <div class="ico"><svg class="ic lg"><use href="#i-users"/></svg></div>
     <div>
       <h3>회원관리프로그램 <span class="badge ok">연결</span></h3>
-      <div class="method">내보내기 파일(CSV) · API 연동 가능 구조 · 갱신 2026-10-14 11:04</div>
+      <div class="method">내보내기 파일(CSV) · API 연동 가능 구조 · 갱신 2026-10-19 07:36</div>
       <table>
         <thead><tr><th>자료</th><th class="r">건수</th></tr></thead>
         <tbody>
-          <tr><td><svg class="ic "><use href="#i-file"/></svg> 회원 정보<div class="sub">members.csv</div></td><td class="r num">61</td></tr>
+          <tr><td><svg class="ic "><use href="#i-file"/></svg> 회원 정보<div class="sub">members.csv</div></td><td class="r num">60</td></tr>
         
-          <tr><td><svg class="ic "><use href="#i-file"/></svg> 출석 기록<div class="sub">attendance.csv</div></td><td class="r num">10065</td></tr>
+          <tr><td><svg class="ic "><use href="#i-file"/></svg> 출석 기록<div class="sub">attendance.csv</div></td><td class="r num">9887</td></tr>
         
-          <tr><td><svg class="ic "><use href="#i-file"/></svg> 수강 내역 (월 단위)<div class="sub">enrollments.csv</div></td><td class="r num">1286</td></tr>
+          <tr><td><svg class="ic "><use href="#i-file"/></svg> 수강 내역 (월 단위)<div class="sub">enrollments.csv</div></td><td class="r num">1263</td></tr>
         
           <tr><td><svg class="ic "><use href="#i-file"/></svg> 강좌 시간표<div class="sub">schedule.csv</div></td><td class="r num">8</td></tr>
         
           <tr><td><svg class="ic "><use href="#i-file"/></svg> 휴회 · 정지 이력<div class="sub">suspensions.csv</div></td><td class="r num">8</td></tr>
         
-          <tr><td><svg class="ic "><use href="#i-file"/></svg> 운동 전 건강 체크 (등록 시)<div class="sub">health_check.csv</div></td><td class="r num">50</td></tr>
+          <tr><td><svg class="ic "><use href="#i-file"/></svg> 운동 전 건강 체크 (등록 시)<div class="sub">health_check.csv</div></td><td class="r num">49</td></tr>
         </tbody>
       </table>
       <div class="note">회원번호로 다른 데이터와 연결합니다. 수강 내역이 없으면 회원 파일의 프로그램 항목을, 시간표가 없으면 설정 파일의 주당 횟수를 씁니다.</div>
@@ -166,13 +166,13 @@
     <div class="ico"><svg class="ic lg"><use href="#i-scale"/></svg></div>
     <div>
       <h3>인바디 (LookinBody) <span class="badge ok">연결</span></h3>
-      <div class="method">.mdb 직접 읽기(mdbtools) · CSV 병행 · 체성분 + 혈압계 · 갱신 2026-10-14 11:04</div>
+      <div class="method">.mdb 직접 읽기(mdbtools) · CSV 병행 · 체성분 + 혈압계 · 갱신 2026-10-19 07:36</div>
       <table>
         <thead><tr><th>자료</th><th class="r">건수</th></tr></thead>
         <tbody>
-          <tr><td><svg class="ic "><use href="#i-file"/></svg> mdb 추출 형식 CSV<div class="sub">body_composition.csv</div></td><td class="r num">1401</td></tr>
+          <tr><td><svg class="ic "><use href="#i-file"/></svg> mdb 추출 형식 CSV<div class="sub">body_composition.csv</div></td><td class="r num">1371</td></tr>
         
-          <tr><td><svg class="ic "><use href="#i-file"/></svg> 혈압계(BPBIO) 측정<div class="sub">blood_pressure.csv</div></td><td class="r num">1215</td></tr>
+          <tr><td><svg class="ic "><use href="#i-file"/></svg> 혈압계(BPBIO) 측정<div class="sub">blood_pressure.csv</div></td><td class="r num">1187</td></tr>
         </tbody>
       </table>
       <div class="note">mdbtools 없음 — .mdb 를 읽으려면 설치하세요 (brew install mdbtools / apt install mdbtools).</div>
@@ -183,11 +183,11 @@
     <div class="ico"><svg class="ic lg"><use href="#i-heart"/></svg></div>
     <div>
       <h3>국가건강검진 (나의건강기록) <span class="badge ok">연결</span></h3>
-      <div class="method">본인 동의 후 불러오기 · 지금은 모의 저장소(CSV) · 갱신 2026-10-14 11:04</div>
+      <div class="method">본인 동의 후 불러오기 · 지금은 모의 저장소(CSV) · 갱신 2026-10-19 07:36</div>
       <table>
         <thead><tr><th>자료</th><th class="r">건수</th></tr></thead>
         <tbody>
-          <tr><td><svg class="ic "><use href="#i-file"/></svg> 검진 결과<div class="sub">health_screening.csv</div></td><td class="r num">45</td></tr>
+          <tr><td><svg class="ic "><use href="#i-file"/></svg> 검진 결과<div class="sub">health_screening.csv</div></td><td class="r num">44</td></tr>
         </tbody>
       </table>
       <div class="note">동의한 회원의 기록만 읽습니다. 실제 연계 시 본인이 내려받은 검진 결과 업로드 또는 건강정보 고속도로 API로 교체합니다.</div>
@@ -220,35 +220,35 @@
       
       <div class="grid g-12">
         <div class="c-7">
-          <div class="sub" style="margin-bottom:6px">마지막 28일(2026-09-28~) 날짜 순서 평가 · 평소 오는 날 502번 중 결석 132번</div>
+          <div class="sub" style="margin-bottom:6px">마지막 28일(2026-09-28~) 날짜 순서 평가 · 평소 오는 날 492번 중 결석 125번</div>
           <table>
             <thead><tr><th>판정 방법</th><th class="r">알림</th><th class="r">맞은 알림<br><small>(그날 결석)</small></th><th class="r">헛알림<br><small>(늦게라도 옴)</small></th><th class="r">놓친 결석</th><th class="r">알림 시각</th></tr></thead>
             <tbody>
               
-              <tr><td><b>출석 예측 모델</b></td><td class="r num">142</td><td class="r num">132</td>
-                  <td class="r num">10</td><td class="r num">0</td><td class="r num">평소 +28분</td></tr>
+              <tr><td><b>출석 예측 모델</b></td><td class="r num">136</td><td class="r num">125</td>
+                  <td class="r num">11</td><td class="r num">0</td><td class="r num">평소 +28분</td></tr>
               
-              <tr><td>규칙 (평소 시각 + 30~60분)</td><td class="r num">143</td><td class="r num">132</td>
+              <tr><td>규칙 (평소 시각 + 30~60분)</td><td class="r num">136</td><td class="r num">125</td>
                   <td class="r num">11</td><td class="r num">0</td><td class="r num">평소 +30분</td></tr>
               
             </tbody>
           </table>
-          <div class="sub" style="margin-top:8px">오늘 올 확률 구분력(AUC): 모델 0.671 · 그 요일 출석률만 0.653 — 올 확률은 안부 확인 순서를 정하는 데만 씁니다.</div>
+          <div class="sub" style="margin-top:8px">오늘 올 확률 구분력(AUC): 모델 0.674 · 그 요일 출석률만 0.649 — 올 확률은 안부 확인 순서를 정하는 데만 씁니다.</div>
         </div>
         <div class="c-5">
           <div class="kpi" style="grid-template-columns:repeat(3,1fr)">
-            <div><div class="k">학습</div><div class="v num">13099<small>줄</small></div><div class="delta">60명 · 2024-11-12~</div></div>
-            <div><div class="k">평가</div><div class="v num">502<small>줄</small></div></div>
+            <div><div class="k">학습</div><div class="v num">12833<small>줄</small></div><div class="delta">59명 · 2024-11-12~</div></div>
+            <div><div class="k">평가</div><div class="v num">492<small>줄</small></div></div>
             <div><div class="k">날씨</div><div class="v" style="font-size:15px">반영</div><div class="delta">입력 파일</div></div>
           </div>
           
           <div class="sub" style="margin:10px 0 4px">올 확률에 영향이 큰 특징 (순열 중요도)</div>
           
-          <div class="coef"><div class="row"><span>강좌 출석률</span><div class="track"><i style="left:0;width:100.0%"></i></div><span class="num" style="text-align:right">0.135</span></div><div class="row"><span>그 요일 기록 수</span><div class="track"><i style="left:0;width:7.0%"></i></div><span class="num" style="text-align:right">0.010</span></div><div class="row"><span>그 요일 출석률</span><div class="track"><i style="left:0;width:6.0%"></i></div><span class="num" style="text-align:right">0.009</span></div><div class="row"><span>최저기온</span><div class="track"><i style="left:0;width:3.0%"></i></div><span class="num" style="text-align:right">0.005</span></div><div class="row"><span>연속 결석</span><div class="track"><i style="left:0;width:2.0%"></i></div><span class="num" style="text-align:right">0.002</span></div><div class="row"><span>최고기온</span><div class="track"><i style="left:0;width:1.0%"></i></div><span class="num" style="text-align:right">0.001</span></div><div class="row"><span>평소 시각</span><div class="track"><i style="left:0;width:1.0%"></i></div><span class="num" style="text-align:right">0.001</span></div><div class="row"><span>시설 출석 흐름</span><div class="track"><i style="left:0;width:0.0%"></i></div><span class="num" style="text-align:right">0.000</span></div></div>
+          <div class="coef"><div class="row"><span>강좌 출석률</span><div class="track"><i style="left:0;width:100.0%"></i></div><span class="num" style="text-align:right">0.121</span></div><div class="row"><span>그 요일 출석률</span><div class="track"><i style="left:0;width:7.0%"></i></div><span class="num" style="text-align:right">0.009</span></div><div class="row"><span>그 요일 기록 수</span><div class="track"><i style="left:0;width:4.0%"></i></div><span class="num" style="text-align:right">0.005</span></div><div class="row"><span>최저기온</span><div class="track"><i style="left:0;width:3.0%"></i></div><span class="num" style="text-align:right">0.004</span></div><div class="row"><span>시설 출석 흐름</span><div class="track"><i style="left:0;width:3.0%"></i></div><span class="num" style="text-align:right">0.003</span></div><div class="row"><span>연속 결석</span><div class="track"><i style="left:0;width:2.0%"></i></div><span class="num" style="text-align:right">0.003</span></div><div class="row"><span>요일</span><div class="track"><i style="left:0;width:2.0%"></i></div><span class="num" style="text-align:right">0.002</span></div><div class="row"><span>평소 시각</span><div class="track"><i style="left:0;width:0.0%"></i></div><span class="num" style="text-align:right">0.000</span></div></div>
           
         </div>
       </div>
-      <div class="sub" style="margin-top:10px">그래디언트 부스팅(scikit-learn) 두 개: ① 오늘 올 확률 ② 도착 시각의 90% 지점(분위 회귀). 특징은 그 요일·강좌 출석률(최근일수록 무겁게), 연속 결석, 마지막 출석 후 날수, 평소 시각과 들쭉날쭉함, 요일·월, 나이, 날씨(최저·최고·강수·적설·도착 전 3시간 강수), 시설 전체 출석 흐름. 결석은 규칙과 똑같이 모두 알리고, 모델은 언제 알릴지를 정합니다. 학습 2026-10-14 12:16.</div>
+      <div class="sub" style="margin-top:10px">그래디언트 부스팅(scikit-learn) 두 개: ① 오늘 올 확률 ② 도착 시각의 90% 지점(분위 회귀). 특징은 그 요일·강좌 출석률(최근일수록 무겁게), 연속 결석, 마지막 출석 후 날수, 평소 시각과 들쭉날쭉함, 요일·월, 나이, 날씨(최저·최고·강수·적설·도착 전 3시간 강수), 시설 전체 출석 흐름. 결석은 규칙과 똑같이 모두 알리고, 모델은 언제 알릴지를 정합니다. 학습 2026-10-19 10:04.</div>
       
     </div>
   </div>
@@ -267,7 +267,7 @@
           <td class="r num"><a href="admin-tier-high.html">16명</a></td></tr>
     
       <tr><td><span class="badge tier-mid">보통</span></td><td>50~80%</td>
-          <td class="r num">35명</td><td class="r num">28명</td>
+          <td class="r num">34명</td><td class="r num">27명</td>
           <td><div class="bar" style="margin:0"><i style="width:53%;background:var(--ok)"></i></div></td>
           <td class="r num"><b>-0.28</b></td>
           <td class="r num"><a href="admin-tier-mid.html">23명</a></td></tr>
@@ -276,7 +276,7 @@
           <td class="r num">10명</td><td class="r num">9명</td>
           <td><div class="bar" style="margin:0"><i style="width:45%;background:var(--ok)"></i></div></td>
           <td class="r num"><b>-0.24</b></td>
-          <td class="r num"><a href="admin-tier-low.html">12명</a></td></tr>
+          <td class="r num"><a href="admin-tier-low.html">11명</a></td></tr>
     
     </tbody>
   </table>

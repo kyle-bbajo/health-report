@@ -5,7 +5,7 @@
 (function () {
   window.fetch = function () { return Promise.resolve(new Response(null, {status: 404})); };
   if (navigator.serviceWorker) navigator.serviceWorker.register = function () { return Promise.reject(); };
-  var MEMBERS = {"M001": ["M001", "1952"], "M002": ["M002", "1963"], "M003": ["M003", "1968"], "M004": ["M004", "1974"], "M005": ["M005", "1987"], "M006": ["M006", "1980"], "M007": ["M007", "1972"], "M008": ["M008", "1968"], "M009": ["M009", "1955"], "M010": ["M010", "1982"], "M011": ["M011", "1999"], "M012": ["M012", "1979"], "M013": ["M013", "1952"], "M014": ["M014", "1981"], "M015": ["M015", "1952"], "M016": ["M016", "2002"], "M017": ["M017", "1974"], "M018": ["M018", "1987"], "M019": ["M019", "1952"], "M020": ["M020", "1986"], "M021": ["M021", "1954"], "M022": ["M022", "1955"], "M023": ["M023", "1956"], "M024": ["M024", "1965"], "M025": ["M025", "1953"], "M026": ["M026", "1956"], "M027": ["M027", "1979"], "M028": ["M028", "1964"], "M029": ["M029", "1964"], "M030": ["M030", "1969"], "M031": ["M031", "1981"], "M032": ["M032", "2001"], "M033": ["M033", "1972"], "M034": ["M034", "1984"], "M035": ["M035", "1974"], "M036": ["M036", "2000"], "M037": ["M037", "1974"], "M038": ["M038", "1983"], "M039": ["M039", "1978"], "M040": ["M040", "1997"], "M041": ["M041", "1953"], "M042": ["M042", "1981"], "M043": ["M043", "1999"], "M044": ["M044", "1977"], "M045": ["M045", "1996"], "M046": ["M046", "1958"], "M047": ["M047", "1967"], "M048": ["M048", "1986"], "M049": ["M049", "1999"], "M050": ["M050", "1982"], "M051": ["M051", "1956"], "M052": ["M052", "1965"], "M053": ["M053", "1976"], "M054": ["M054", "1992"], "M055": ["M055", "1953"], "M056": ["M056", "1973"], "M057": ["M057", "1999"], "M058": ["M058", "1954"], "M059": ["M059", "1998"], "M060": ["M060", "1988"], "YUC": ["yuc", "2011"]};                 // 대문자 회원번호 → [파일에 쓰인 회원번호, 태어난 해]
+  var MEMBERS = {"M001": ["M001", "1952"], "M002": ["M002", "1963"], "M003": ["M003", "1968"], "M004": ["M004", "1974"], "M005": ["M005", "1987"], "M006": ["M006", "1980"], "YUC": ["yuc", "1952"], "M008": ["M008", "1968"], "M009": ["M009", "1955"], "M010": ["M010", "1982"], "M011": ["M011", "1999"], "M012": ["M012", "1979"], "M013": ["M013", "1952"], "M014": ["M014", "1981"], "M015": ["M015", "1952"], "M016": ["M016", "2002"], "M017": ["M017", "1974"], "M018": ["M018", "1987"], "M019": ["M019", "1952"], "M020": ["M020", "1986"], "M021": ["M021", "1954"], "M022": ["M022", "1955"], "M023": ["M023", "1956"], "M024": ["M024", "1965"], "M025": ["M025", "1953"], "M026": ["M026", "1956"], "M027": ["M027", "1979"], "M028": ["M028", "1964"], "M029": ["M029", "1964"], "M030": ["M030", "1969"], "M031": ["M031", "1981"], "M032": ["M032", "2001"], "M033": ["M033", "1972"], "M034": ["M034", "1984"], "M035": ["M035", "1974"], "M036": ["M036", "2000"], "M037": ["M037", "1974"], "M038": ["M038", "1983"], "M039": ["M039", "1978"], "M040": ["M040", "1997"], "M041": ["M041", "1953"], "M042": ["M042", "1981"], "M043": ["M043", "1999"], "M044": ["M044", "1977"], "M045": ["M045", "1996"], "M046": ["M046", "1958"], "M047": ["M047", "1967"], "M048": ["M048", "1986"], "M049": ["M049", "1999"], "M050": ["M050", "1982"], "M051": ["M051", "1956"], "M052": ["M052", "1965"], "M053": ["M053", "1976"], "M054": ["M054", "1992"], "M055": ["M055", "1953"], "M056": ["M056", "1973"], "M057": ["M057", "1999"], "M058": ["M058", "1954"], "M059": ["M059", "1998"], "M060": ["M060", "1988"]};                 // 대문자 회원번호 → [파일에 쓰인 회원번호, 태어난 해]
   function toast(msg) {
     var t = document.getElementById('demo-toast');
     if (!t) { t = document.createElement('div'); t.id = 'demo-toast'; t.setAttribute('role', 'status'); document.body.appendChild(t); }
@@ -13,7 +13,7 @@
     clearTimeout(t._h); t._h = setTimeout(function () { t.className = ''; }, 2800);
   }
   var SAVE = '시연판이라 저장·문자 발송·엑셀은 되지 않습니다. 설치판에서 동작합니다.';
-  var PAGE = '시연판에는 이 화면이 없습니다. 회원 상세 탭과 지난 달 달력은 M004·M007·M051과 장기 미출석 회원만 있습니다.';
+  var PAGE = '시연판에는 이 화면이 없습니다. 회원 상세 탭과 지난 달 달력은 M004·yuc·M051과 장기 미출석 회원만 있습니다.';
   document.addEventListener('click', function (e) {
     var a = e.target.closest && e.target.closest('a[href="#demo"], a[href="#demo-page"]');
     if (a) { e.preventDefault(); toast(a.getAttribute('href') === '#demo' ? SAVE : PAGE); }
@@ -24,7 +24,7 @@
     if (f.hasAttribute('data-demo-admin')) { location.href = 'admin.html'; return; }   // 시연: 비밀번호 없이 들어가기
     if (f.hasAttribute('data-demo-login')) {
       var id = (f.member_id.value || '').trim().toUpperCase(), by = (f.birth_year.value || '').trim();
-      if (!id && !by) { id = 'YUC'; by = MEMBERS.YUC ? MEMBERS.YUC[1] : ''; }          // 시연: 비워 두고 누르면 yuc
+      if ((!id && !by) || (id === 'YUC' && by === '2011')) { id = 'YUC'; by = MEMBERS.YUC ? MEMBERS.YUC[1] : ''; }  // 시연: 비워 두거나 yuc / 2011
       if (MEMBERS[id] && MEMBERS[id][1] === by) { location.href = 'my-' + MEMBERS[id][0] + '.html'; return; }
       toast('회원번호나 태어난 해가 맞지 않습니다. 예: yuc / 2011'); return;
     }
@@ -124,10 +124,10 @@
 </div>
 
 <div class="tiles">
-  <div class="tile"><div class="ico"><svg class="ic lg"><use href="#i-bowl"/></svg></div><div><div class="k">최근 7일 평균 섭취</div><div class="v num">1,589<small>kcal</small></div></div></div>
+  <div class="tile"><div class="ico"><svg class="ic lg"><use href="#i-bowl"/></svg></div><div><div class="k">최근 7일 평균 섭취</div><div class="v num">1,864<small>kcal</small></div></div></div>
   
-  <div class="tile"><div class="ico gray"><svg class="ic lg"><use href="#i-walk"/></svg></div><div><div class="k">하루 추정 소비</div><div class="v num">1,820<small>kcal</small></div><div class="sub">기초대사 1,361 + 운동 51</div></div></div>
-  <div class="tile"><div class="ico ok"><svg class="ic lg"><use href="#i-target"/></svg></div><div><div class="k">하루 수지</div><div class="v num">-231<small>kcal</small></div></div></div>
+  <div class="tile"><div class="ico gray"><svg class="ic lg"><use href="#i-walk"/></svg></div><div><div class="k">하루 추정 소비</div><div class="v num">2,201<small>kcal</small></div><div class="sub">기초대사 1,647 + 운동 60</div></div></div>
+  <div class="tile"><div class="ico ok"><svg class="ic lg"><use href="#i-target"/></svg></div><div><div class="k">하루 수지</div><div class="v num">-337<small>kcal</small></div></div></div>
   
   <div class="tile"><div class="ico gray"><svg class="ic lg"><use href="#i-list"/></svg></div><div><div class="k">기록</div><div class="v num">101<small>건</small></div></div></div>
 </div>
@@ -181,244 +181,244 @@
       <thead><tr><th>날짜</th><th>끼니</th><th>음식</th><th class="r">kcal</th><th>입력</th><th></th></tr></thead>
       <tbody>
       
-        <tr><td>2026-10-26</td><td>저녁</td><td style="white-space:normal">라면과 김밥 <span class="sub">760</span></td>
-            <td class="r num"><b>760</b></td><td class="sub">mock</td>
+        <tr><td>2026-10-26</td><td>저녁</td><td style="white-space:normal">라면과 김밥 <span class="sub">900</span></td>
+            <td class="r num"><b>900</b></td><td class="sub">mock</td>
             <td><form method="post" action="/member/yuc/diet/seed-yuc-2026-10-26-%EC%A0%80%EB%85%81/delete"><button class="btn sm" type="submit">삭제</button></form></td></tr>
       
-        <tr><td>2026-10-26</td><td>점심</td><td style="white-space:normal">김치찌개와 밥 <span class="sub">570</span></td>
-            <td class="r num"><b>570</b></td><td class="sub">mock</td>
+        <tr><td>2026-10-26</td><td>점심</td><td style="white-space:normal">김치찌개와 밥 <span class="sub">670</span></td>
+            <td class="r num"><b>670</b></td><td class="sub">mock</td>
             <td><form method="post" action="/member/yuc/diet/seed-yuc-2026-10-26-%EC%A0%90%EC%8B%AC/delete"><button class="btn sm" type="submit">삭제</button></form></td></tr>
       
-        <tr><td>2026-10-25</td><td>간식</td><td style="white-space:normal">바나나 <span class="sub">90</span></td>
-            <td class="r num"><b>90</b></td><td class="sub">mock</td>
+        <tr><td>2026-10-25</td><td>간식</td><td style="white-space:normal">바나나 <span class="sub">100</span></td>
+            <td class="r num"><b>100</b></td><td class="sub">mock</td>
             <td><form method="post" action="/member/yuc/diet/seed-yuc-2026-10-25-%EA%B0%84%EC%8B%9D/delete"><button class="btn sm" type="submit">삭제</button></form></td></tr>
       
-        <tr><td>2026-10-25</td><td>저녁</td><td style="white-space:normal">불고기 백반 <span class="sub">670</span></td>
-            <td class="r num"><b>670</b></td><td class="sub">mock</td>
+        <tr><td>2026-10-25</td><td>저녁</td><td style="white-space:normal">불고기 백반 <span class="sub">780</span></td>
+            <td class="r num"><b>780</b></td><td class="sub">mock</td>
             <td><form method="post" action="/member/yuc/diet/seed-yuc-2026-10-25-%EC%A0%80%EB%85%81/delete"><button class="btn sm" type="submit">삭제</button></form></td></tr>
       
-        <tr><td>2026-10-25</td><td>점심</td><td style="white-space:normal">돈가스 정식 <span class="sub">780</span></td>
-            <td class="r num"><b>780</b></td><td class="sub">mock</td>
+        <tr><td>2026-10-25</td><td>점심</td><td style="white-space:normal">돈가스 정식 <span class="sub">920</span></td>
+            <td class="r num"><b>920</b></td><td class="sub">mock</td>
             <td><form method="post" action="/member/yuc/diet/seed-yuc-2026-10-25-%EC%A0%90%EC%8B%AC/delete"><button class="btn sm" type="submit">삭제</button></form></td></tr>
       
-        <tr><td>2026-10-25</td><td>아침</td><td style="white-space:normal">시리얼과 우유 <span class="sub">270</span></td>
-            <td class="r num"><b>270</b></td><td class="sub">mock</td>
+        <tr><td>2026-10-25</td><td>아침</td><td style="white-space:normal">시리얼과 우유 <span class="sub">310</span></td>
+            <td class="r num"><b>310</b></td><td class="sub">mock</td>
             <td><form method="post" action="/member/yuc/diet/seed-yuc-2026-10-25-%EC%95%84%EC%B9%A8/delete"><button class="btn sm" type="submit">삭제</button></form></td></tr>
       
-        <tr><td>2026-10-24</td><td>간식</td><td style="white-space:normal">과자 한 봉지 <span class="sub">230</span></td>
-            <td class="r num"><b>230</b></td><td class="sub">mock</td>
+        <tr><td>2026-10-24</td><td>간식</td><td style="white-space:normal">과자 한 봉지 <span class="sub">270</span></td>
+            <td class="r num"><b>270</b></td><td class="sub">mock</td>
             <td><form method="post" action="/member/yuc/diet/seed-yuc-2026-10-24-%EA%B0%84%EC%8B%9D/delete"><button class="btn sm" type="submit">삭제</button></form></td></tr>
       
-        <tr><td>2026-10-24</td><td>저녁</td><td style="white-space:normal">두부조림 백반 <span class="sub">540</span></td>
-            <td class="r num"><b>540</b></td><td class="sub">mock</td>
+        <tr><td>2026-10-24</td><td>저녁</td><td style="white-space:normal">두부조림 백반 <span class="sub">630</span></td>
+            <td class="r num"><b>630</b></td><td class="sub">mock</td>
             <td><form method="post" action="/member/yuc/diet/seed-yuc-2026-10-24-%EC%A0%80%EB%85%81/delete"><button class="btn sm" type="submit">삭제</button></form></td></tr>
       
-        <tr><td>2026-10-24</td><td>점심</td><td style="white-space:normal">돈가스 정식 <span class="sub">690</span></td>
-            <td class="r num"><b>690</b></td><td class="sub">mock</td>
+        <tr><td>2026-10-24</td><td>점심</td><td style="white-space:normal">돈가스 정식 <span class="sub">810</span></td>
+            <td class="r num"><b>810</b></td><td class="sub">mock</td>
             <td><form method="post" action="/member/yuc/diet/seed-yuc-2026-10-24-%EC%A0%90%EC%8B%AC/delete"><button class="btn sm" type="submit">삭제</button></form></td></tr>
       
-        <tr><td>2026-10-23</td><td>저녁</td><td style="white-space:normal">잡곡밥과 생선구이 <span class="sub">480</span></td>
-            <td class="r num"><b>480</b></td><td class="sub">mock</td>
+        <tr><td>2026-10-23</td><td>저녁</td><td style="white-space:normal">잡곡밥과 생선구이 <span class="sub">560</span></td>
+            <td class="r num"><b>560</b></td><td class="sub">mock</td>
             <td><form method="post" action="/member/yuc/diet/seed-yuc-2026-10-23-%EC%A0%80%EB%85%81/delete"><button class="btn sm" type="submit">삭제</button></form></td></tr>
       
-        <tr><td>2026-10-23</td><td>점심</td><td style="white-space:normal">비빔밥 <span class="sub">560</span></td>
-            <td class="r num"><b>560</b></td><td class="sub">mock</td>
+        <tr><td>2026-10-23</td><td>점심</td><td style="white-space:normal">비빔밥 <span class="sub">660</span></td>
+            <td class="r num"><b>660</b></td><td class="sub">mock</td>
             <td><form method="post" action="/member/yuc/diet/seed-yuc-2026-10-23-%EC%A0%90%EC%8B%AC/delete"><button class="btn sm" type="submit">삭제</button></form></td></tr>
       
-        <tr><td>2026-10-23</td><td>아침</td><td style="white-space:normal">죽 한 그릇 <span class="sub">270</span></td>
-            <td class="r num"><b>270</b></td><td class="sub">mock</td>
+        <tr><td>2026-10-23</td><td>아침</td><td style="white-space:normal">죽 한 그릇 <span class="sub">320</span></td>
+            <td class="r num"><b>320</b></td><td class="sub">mock</td>
             <td><form method="post" action="/member/yuc/diet/seed-yuc-2026-10-23-%EC%95%84%EC%B9%A8/delete"><button class="btn sm" type="submit">삭제</button></form></td></tr>
       
-        <tr><td>2026-10-22</td><td>저녁</td><td style="white-space:normal">닭가슴살 샐러드 <span class="sub">320</span></td>
-            <td class="r num"><b>320</b></td><td class="sub">mock</td>
+        <tr><td>2026-10-22</td><td>저녁</td><td style="white-space:normal">닭가슴살 샐러드 <span class="sub">370</span></td>
+            <td class="r num"><b>370</b></td><td class="sub">mock</td>
             <td><form method="post" action="/member/yuc/diet/seed-yuc-2026-10-22-%EC%A0%80%EB%85%81/delete"><button class="btn sm" type="submit">삭제</button></form></td></tr>
       
-        <tr><td>2026-10-22</td><td>점심</td><td style="white-space:normal">된장찌개 백반 <span class="sub">560</span></td>
-            <td class="r num"><b>560</b></td><td class="sub">mock</td>
+        <tr><td>2026-10-22</td><td>점심</td><td style="white-space:normal">된장찌개 백반 <span class="sub">660</span></td>
+            <td class="r num"><b>660</b></td><td class="sub">mock</td>
             <td><form method="post" action="/member/yuc/diet/seed-yuc-2026-10-22-%EC%A0%90%EC%8B%AC/delete"><button class="btn sm" type="submit">삭제</button></form></td></tr>
       
-        <tr><td>2026-10-22</td><td>아침</td><td style="white-space:normal">죽 한 그릇 <span class="sub">290</span></td>
-            <td class="r num"><b>290</b></td><td class="sub">mock</td>
+        <tr><td>2026-10-22</td><td>아침</td><td style="white-space:normal">죽 한 그릇 <span class="sub">340</span></td>
+            <td class="r num"><b>340</b></td><td class="sub">mock</td>
             <td><form method="post" action="/member/yuc/diet/seed-yuc-2026-10-22-%EC%95%84%EC%B9%A8/delete"><button class="btn sm" type="submit">삭제</button></form></td></tr>
       
-        <tr><td>2026-10-21</td><td>간식</td><td style="white-space:normal">빵 한 개 <span class="sub">230</span></td>
-            <td class="r num"><b>230</b></td><td class="sub">mock</td>
+        <tr><td>2026-10-21</td><td>간식</td><td style="white-space:normal">빵 한 개 <span class="sub">270</span></td>
+            <td class="r num"><b>270</b></td><td class="sub">mock</td>
             <td><form method="post" action="/member/yuc/diet/seed-yuc-2026-10-21-%EA%B0%84%EC%8B%9D/delete"><button class="btn sm" type="submit">삭제</button></form></td></tr>
       
-        <tr><td>2026-10-21</td><td>저녁</td><td style="white-space:normal">라면과 김밥 <span class="sub">800</span></td>
-            <td class="r num"><b>800</b></td><td class="sub">mock</td>
+        <tr><td>2026-10-21</td><td>저녁</td><td style="white-space:normal">라면과 김밥 <span class="sub">940</span></td>
+            <td class="r num"><b>940</b></td><td class="sub">mock</td>
             <td><form method="post" action="/member/yuc/diet/seed-yuc-2026-10-21-%EC%A0%80%EB%85%81/delete"><button class="btn sm" type="submit">삭제</button></form></td></tr>
       
-        <tr><td>2026-10-21</td><td>점심</td><td style="white-space:normal">돈가스 정식 <span class="sub">790</span></td>
-            <td class="r num"><b>790</b></td><td class="sub">mock</td>
+        <tr><td>2026-10-21</td><td>점심</td><td style="white-space:normal">돈가스 정식 <span class="sub">930</span></td>
+            <td class="r num"><b>930</b></td><td class="sub">mock</td>
             <td><form method="post" action="/member/yuc/diet/seed-yuc-2026-10-21-%EC%A0%90%EC%8B%AC/delete"><button class="btn sm" type="submit">삭제</button></form></td></tr>
       
-        <tr><td>2026-10-21</td><td>아침</td><td style="white-space:normal">김밥 한 줄 <span class="sub">420</span></td>
-            <td class="r num"><b>420</b></td><td class="sub">mock</td>
+        <tr><td>2026-10-21</td><td>아침</td><td style="white-space:normal">김밥 한 줄 <span class="sub">500</span></td>
+            <td class="r num"><b>500</b></td><td class="sub">mock</td>
             <td><form method="post" action="/member/yuc/diet/seed-yuc-2026-10-21-%EC%95%84%EC%B9%A8/delete"><button class="btn sm" type="submit">삭제</button></form></td></tr>
       
-        <tr><td>2026-10-20</td><td>저녁</td><td style="white-space:normal">불고기 백반 <span class="sub">680</span></td>
-            <td class="r num"><b>680</b></td><td class="sub">mock</td>
+        <tr><td>2026-10-20</td><td>저녁</td><td style="white-space:normal">불고기 백반 <span class="sub">790</span></td>
+            <td class="r num"><b>790</b></td><td class="sub">mock</td>
             <td><form method="post" action="/member/yuc/diet/seed-yuc-2026-10-20-%EC%A0%80%EB%85%81/delete"><button class="btn sm" type="submit">삭제</button></form></td></tr>
       
-        <tr><td>2026-10-20</td><td>점심</td><td style="white-space:normal">제육덮밥 <span class="sub">690</span></td>
-            <td class="r num"><b>690</b></td><td class="sub">mock</td>
+        <tr><td>2026-10-20</td><td>점심</td><td style="white-space:normal">제육덮밥 <span class="sub">810</span></td>
+            <td class="r num"><b>810</b></td><td class="sub">mock</td>
             <td><form method="post" action="/member/yuc/diet/seed-yuc-2026-10-20-%EC%A0%90%EC%8B%AC/delete"><button class="btn sm" type="submit">삭제</button></form></td></tr>
       
-        <tr><td>2026-10-20</td><td>아침</td><td style="white-space:normal">김밥 한 줄 <span class="sub">430</span></td>
-            <td class="r num"><b>430</b></td><td class="sub">mock</td>
+        <tr><td>2026-10-20</td><td>아침</td><td style="white-space:normal">김밥 한 줄 <span class="sub">510</span></td>
+            <td class="r num"><b>510</b></td><td class="sub">mock</td>
             <td><form method="post" action="/member/yuc/diet/seed-yuc-2026-10-20-%EC%95%84%EC%B9%A8/delete"><button class="btn sm" type="submit">삭제</button></form></td></tr>
       
-        <tr><td>2026-10-19</td><td>저녁</td><td style="white-space:normal">두부조림 백반 <span class="sub">480</span></td>
-            <td class="r num"><b>480</b></td><td class="sub">mock</td>
+        <tr><td>2026-10-19</td><td>저녁</td><td style="white-space:normal">두부조림 백반 <span class="sub">570</span></td>
+            <td class="r num"><b>570</b></td><td class="sub">mock</td>
             <td><form method="post" action="/member/yuc/diet/seed-yuc-2026-10-19-%EC%A0%80%EB%85%81/delete"><button class="btn sm" type="submit">삭제</button></form></td></tr>
       
-        <tr><td>2026-10-19</td><td>점심</td><td style="white-space:normal">김치찌개와 밥 <span class="sub">580</span></td>
-            <td class="r num"><b>580</b></td><td class="sub">mock</td>
+        <tr><td>2026-10-19</td><td>점심</td><td style="white-space:normal">김치찌개와 밥 <span class="sub">680</span></td>
+            <td class="r num"><b>680</b></td><td class="sub">mock</td>
             <td><form method="post" action="/member/yuc/diet/seed-yuc-2026-10-19-%EC%A0%90%EC%8B%AC/delete"><button class="btn sm" type="submit">삭제</button></form></td></tr>
       
-        <tr><td>2026-10-19</td><td>아침</td><td style="white-space:normal">샌드위치 <span class="sub">370</span></td>
-            <td class="r num"><b>370</b></td><td class="sub">mock</td>
+        <tr><td>2026-10-19</td><td>아침</td><td style="white-space:normal">샌드위치 <span class="sub">440</span></td>
+            <td class="r num"><b>440</b></td><td class="sub">mock</td>
             <td><form method="post" action="/member/yuc/diet/seed-yuc-2026-10-19-%EC%95%84%EC%B9%A8/delete"><button class="btn sm" type="submit">삭제</button></form></td></tr>
       
-        <tr><td>2026-10-18</td><td>간식</td><td style="white-space:normal">아메리카노와 쿠키 <span class="sub">170</span></td>
-            <td class="r num"><b>170</b></td><td class="sub">mock</td>
+        <tr><td>2026-10-18</td><td>간식</td><td style="white-space:normal">아메리카노와 쿠키 <span class="sub">200</span></td>
+            <td class="r num"><b>200</b></td><td class="sub">mock</td>
             <td><form method="post" action="/member/yuc/diet/seed-yuc-2026-10-18-%EA%B0%84%EC%8B%9D/delete"><button class="btn sm" type="submit">삭제</button></form></td></tr>
       
-        <tr><td>2026-10-18</td><td>저녁</td><td style="white-space:normal">삼겹살과 쌈 <span class="sub">710</span></td>
-            <td class="r num"><b>710</b></td><td class="sub">mock</td>
+        <tr><td>2026-10-18</td><td>저녁</td><td style="white-space:normal">삼겹살과 쌈 <span class="sub">840</span></td>
+            <td class="r num"><b>840</b></td><td class="sub">mock</td>
             <td><form method="post" action="/member/yuc/diet/seed-yuc-2026-10-18-%EC%A0%80%EB%85%81/delete"><button class="btn sm" type="submit">삭제</button></form></td></tr>
       
-        <tr><td>2026-10-18</td><td>점심</td><td style="white-space:normal">비빔밥 <span class="sub">550</span></td>
-            <td class="r num"><b>550</b></td><td class="sub">mock</td>
+        <tr><td>2026-10-18</td><td>점심</td><td style="white-space:normal">비빔밥 <span class="sub">640</span></td>
+            <td class="r num"><b>640</b></td><td class="sub">mock</td>
             <td><form method="post" action="/member/yuc/diet/seed-yuc-2026-10-18-%EC%A0%90%EC%8B%AC/delete"><button class="btn sm" type="submit">삭제</button></form></td></tr>
       
-        <tr><td>2026-10-18</td><td>아침</td><td style="white-space:normal">토스트와 달걀 <span class="sub">380</span></td>
-            <td class="r num"><b>380</b></td><td class="sub">mock</td>
+        <tr><td>2026-10-18</td><td>아침</td><td style="white-space:normal">토스트와 달걀 <span class="sub">440</span></td>
+            <td class="r num"><b>440</b></td><td class="sub">mock</td>
             <td><form method="post" action="/member/yuc/diet/seed-yuc-2026-10-18-%EC%95%84%EC%B9%A8/delete"><button class="btn sm" type="submit">삭제</button></form></td></tr>
       
-        <tr><td>2026-10-17</td><td>저녁</td><td style="white-space:normal">닭가슴살 샐러드 <span class="sub">320</span></td>
-            <td class="r num"><b>320</b></td><td class="sub">mock</td>
+        <tr><td>2026-10-17</td><td>저녁</td><td style="white-space:normal">닭가슴살 샐러드 <span class="sub">380</span></td>
+            <td class="r num"><b>380</b></td><td class="sub">mock</td>
             <td><form method="post" action="/member/yuc/diet/seed-yuc-2026-10-17-%EC%A0%80%EB%85%81/delete"><button class="btn sm" type="submit">삭제</button></form></td></tr>
       
-        <tr><td>2026-10-17</td><td>점심</td><td style="white-space:normal">제육덮밥 <span class="sub">600</span></td>
-            <td class="r num"><b>600</b></td><td class="sub">mock</td>
+        <tr><td>2026-10-17</td><td>점심</td><td style="white-space:normal">제육덮밥 <span class="sub">710</span></td>
+            <td class="r num"><b>710</b></td><td class="sub">mock</td>
             <td><form method="post" action="/member/yuc/diet/seed-yuc-2026-10-17-%EC%A0%90%EC%8B%AC/delete"><button class="btn sm" type="submit">삭제</button></form></td></tr>
       
-        <tr><td>2026-10-16</td><td>간식</td><td style="white-space:normal">빵 한 개 <span class="sub">230</span></td>
-            <td class="r num"><b>230</b></td><td class="sub">mock</td>
+        <tr><td>2026-10-16</td><td>간식</td><td style="white-space:normal">빵 한 개 <span class="sub">270</span></td>
+            <td class="r num"><b>270</b></td><td class="sub">mock</td>
             <td><form method="post" action="/member/yuc/diet/seed-yuc-2026-10-16-%EA%B0%84%EC%8B%9D/delete"><button class="btn sm" type="submit">삭제</button></form></td></tr>
       
-        <tr><td>2026-10-16</td><td>저녁</td><td style="white-space:normal">두부조림 백반 <span class="sub">480</span></td>
-            <td class="r num"><b>480</b></td><td class="sub">mock</td>
+        <tr><td>2026-10-16</td><td>저녁</td><td style="white-space:normal">두부조림 백반 <span class="sub">560</span></td>
+            <td class="r num"><b>560</b></td><td class="sub">mock</td>
             <td><form method="post" action="/member/yuc/diet/seed-yuc-2026-10-16-%EC%A0%80%EB%85%81/delete"><button class="btn sm" type="submit">삭제</button></form></td></tr>
       
-        <tr><td>2026-10-16</td><td>점심</td><td style="white-space:normal">제육덮밥 <span class="sub">700</span></td>
-            <td class="r num"><b>700</b></td><td class="sub">mock</td>
+        <tr><td>2026-10-16</td><td>점심</td><td style="white-space:normal">제육덮밥 <span class="sub">820</span></td>
+            <td class="r num"><b>820</b></td><td class="sub">mock</td>
             <td><form method="post" action="/member/yuc/diet/seed-yuc-2026-10-16-%EC%A0%90%EC%8B%AC/delete"><button class="btn sm" type="submit">삭제</button></form></td></tr>
       
-        <tr><td>2026-10-16</td><td>아침</td><td style="white-space:normal">시리얼과 우유 <span class="sub">270</span></td>
-            <td class="r num"><b>270</b></td><td class="sub">mock</td>
+        <tr><td>2026-10-16</td><td>아침</td><td style="white-space:normal">시리얼과 우유 <span class="sub">320</span></td>
+            <td class="r num"><b>320</b></td><td class="sub">mock</td>
             <td><form method="post" action="/member/yuc/diet/seed-yuc-2026-10-16-%EC%95%84%EC%B9%A8/delete"><button class="btn sm" type="submit">삭제</button></form></td></tr>
       
-        <tr><td>2026-10-15</td><td>저녁</td><td style="white-space:normal">삼겹살과 쌈 <span class="sub">760</span></td>
-            <td class="r num"><b>760</b></td><td class="sub">mock</td>
+        <tr><td>2026-10-15</td><td>저녁</td><td style="white-space:normal">삼겹살과 쌈 <span class="sub">900</span></td>
+            <td class="r num"><b>900</b></td><td class="sub">mock</td>
             <td><form method="post" action="/member/yuc/diet/seed-yuc-2026-10-15-%EC%A0%80%EB%85%81/delete"><button class="btn sm" type="submit">삭제</button></form></td></tr>
       
-        <tr><td>2026-10-15</td><td>점심</td><td style="white-space:normal">비빔밥 <span class="sub">510</span></td>
-            <td class="r num"><b>510</b></td><td class="sub">mock</td>
+        <tr><td>2026-10-15</td><td>점심</td><td style="white-space:normal">비빔밥 <span class="sub">600</span></td>
+            <td class="r num"><b>600</b></td><td class="sub">mock</td>
             <td><form method="post" action="/member/yuc/diet/seed-yuc-2026-10-15-%EC%A0%90%EC%8B%AC/delete"><button class="btn sm" type="submit">삭제</button></form></td></tr>
       
-        <tr><td>2026-10-15</td><td>아침</td><td style="white-space:normal">샌드위치 <span class="sub">350</span></td>
-            <td class="r num"><b>350</b></td><td class="sub">mock</td>
+        <tr><td>2026-10-15</td><td>아침</td><td style="white-space:normal">샌드위치 <span class="sub">410</span></td>
+            <td class="r num"><b>410</b></td><td class="sub">mock</td>
             <td><form method="post" action="/member/yuc/diet/seed-yuc-2026-10-15-%EC%95%84%EC%B9%A8/delete"><button class="btn sm" type="submit">삭제</button></form></td></tr>
       
-        <tr><td>2026-10-14</td><td>점심</td><td style="white-space:normal">제육덮밥 <span class="sub">610</span></td>
-            <td class="r num"><b>610</b></td><td class="sub">mock</td>
+        <tr><td>2026-10-14</td><td>점심</td><td style="white-space:normal">제육덮밥 <span class="sub">710</span></td>
+            <td class="r num"><b>710</b></td><td class="sub">mock</td>
             <td><form method="post" action="/member/yuc/diet/seed-yuc-2026-10-14-%EC%A0%90%EC%8B%AC/delete"><button class="btn sm" type="submit">삭제</button></form></td></tr>
       
-        <tr><td>2026-10-14</td><td>아침</td><td style="white-space:normal">샌드위치 <span class="sub">400</span></td>
-            <td class="r num"><b>400</b></td><td class="sub">mock</td>
+        <tr><td>2026-10-14</td><td>아침</td><td style="white-space:normal">샌드위치 <span class="sub">470</span></td>
+            <td class="r num"><b>470</b></td><td class="sub">mock</td>
             <td><form method="post" action="/member/yuc/diet/seed-yuc-2026-10-14-%EC%95%84%EC%B9%A8/delete"><button class="btn sm" type="submit">삭제</button></form></td></tr>
       
-        <tr><td>2026-10-13</td><td>저녁</td><td style="white-space:normal">잡곡밥과 생선구이 <span class="sub">560</span></td>
-            <td class="r num"><b>560</b></td><td class="sub">mock</td>
+        <tr><td>2026-10-13</td><td>저녁</td><td style="white-space:normal">잡곡밥과 생선구이 <span class="sub">660</span></td>
+            <td class="r num"><b>660</b></td><td class="sub">mock</td>
             <td><form method="post" action="/member/yuc/diet/seed-yuc-2026-10-13-%EC%A0%80%EB%85%81/delete"><button class="btn sm" type="submit">삭제</button></form></td></tr>
       
-        <tr><td>2026-10-13</td><td>점심</td><td style="white-space:normal">비빔밥 <span class="sub">590</span></td>
-            <td class="r num"><b>590</b></td><td class="sub">mock</td>
+        <tr><td>2026-10-13</td><td>점심</td><td style="white-space:normal">비빔밥 <span class="sub">690</span></td>
+            <td class="r num"><b>690</b></td><td class="sub">mock</td>
             <td><form method="post" action="/member/yuc/diet/seed-yuc-2026-10-13-%EC%A0%90%EC%8B%AC/delete"><button class="btn sm" type="submit">삭제</button></form></td></tr>
       
-        <tr><td>2026-10-13</td><td>아침</td><td style="white-space:normal">샌드위치 <span class="sub">380</span></td>
-            <td class="r num"><b>380</b></td><td class="sub">mock</td>
+        <tr><td>2026-10-13</td><td>아침</td><td style="white-space:normal">샌드위치 <span class="sub">440</span></td>
+            <td class="r num"><b>440</b></td><td class="sub">mock</td>
             <td><form method="post" action="/member/yuc/diet/seed-yuc-2026-10-13-%EC%95%84%EC%B9%A8/delete"><button class="btn sm" type="submit">삭제</button></form></td></tr>
       
-        <tr><td>2026-10-12</td><td>저녁</td><td style="white-space:normal">닭가슴살 샐러드 <span class="sub">380</span></td>
-            <td class="r num"><b>380</b></td><td class="sub">mock</td>
+        <tr><td>2026-10-12</td><td>저녁</td><td style="white-space:normal">닭가슴살 샐러드 <span class="sub">450</span></td>
+            <td class="r num"><b>450</b></td><td class="sub">mock</td>
             <td><form method="post" action="/member/yuc/diet/seed-yuc-2026-10-12-%EC%A0%80%EB%85%81/delete"><button class="btn sm" type="submit">삭제</button></form></td></tr>
       
-        <tr><td>2026-10-12</td><td>점심</td><td style="white-space:normal">제육덮밥 <span class="sub">630</span></td>
-            <td class="r num"><b>630</b></td><td class="sub">mock</td>
+        <tr><td>2026-10-12</td><td>점심</td><td style="white-space:normal">제육덮밥 <span class="sub">740</span></td>
+            <td class="r num"><b>740</b></td><td class="sub">mock</td>
             <td><form method="post" action="/member/yuc/diet/seed-yuc-2026-10-12-%EC%A0%90%EC%8B%AC/delete"><button class="btn sm" type="submit">삭제</button></form></td></tr>
       
-        <tr><td>2026-10-11</td><td>간식</td><td style="white-space:normal">과자 한 봉지 <span class="sub">250</span></td>
-            <td class="r num"><b>250</b></td><td class="sub">mock</td>
+        <tr><td>2026-10-11</td><td>간식</td><td style="white-space:normal">과자 한 봉지 <span class="sub">290</span></td>
+            <td class="r num"><b>290</b></td><td class="sub">mock</td>
             <td><form method="post" action="/member/yuc/diet/seed-yuc-2026-10-11-%EA%B0%84%EC%8B%9D/delete"><button class="btn sm" type="submit">삭제</button></form></td></tr>
       
-        <tr><td>2026-10-11</td><td>저녁</td><td style="white-space:normal">불고기 백반 <span class="sub">640</span></td>
-            <td class="r num"><b>640</b></td><td class="sub">mock</td>
+        <tr><td>2026-10-11</td><td>저녁</td><td style="white-space:normal">불고기 백반 <span class="sub">750</span></td>
+            <td class="r num"><b>750</b></td><td class="sub">mock</td>
             <td><form method="post" action="/member/yuc/diet/seed-yuc-2026-10-11-%EC%A0%80%EB%85%81/delete"><button class="btn sm" type="submit">삭제</button></form></td></tr>
       
-        <tr><td>2026-10-11</td><td>점심</td><td style="white-space:normal">비빔밥 <span class="sub">510</span></td>
-            <td class="r num"><b>510</b></td><td class="sub">mock</td>
+        <tr><td>2026-10-11</td><td>점심</td><td style="white-space:normal">비빔밥 <span class="sub">600</span></td>
+            <td class="r num"><b>600</b></td><td class="sub">mock</td>
             <td><form method="post" action="/member/yuc/diet/seed-yuc-2026-10-11-%EC%A0%90%EC%8B%AC/delete"><button class="btn sm" type="submit">삭제</button></form></td></tr>
       
-        <tr><td>2026-10-11</td><td>아침</td><td style="white-space:normal">시리얼과 우유 <span class="sub">320</span></td>
-            <td class="r num"><b>320</b></td><td class="sub">mock</td>
+        <tr><td>2026-10-11</td><td>아침</td><td style="white-space:normal">시리얼과 우유 <span class="sub">380</span></td>
+            <td class="r num"><b>380</b></td><td class="sub">mock</td>
             <td><form method="post" action="/member/yuc/diet/seed-yuc-2026-10-11-%EC%95%84%EC%B9%A8/delete"><button class="btn sm" type="submit">삭제</button></form></td></tr>
       
-        <tr><td>2026-10-10</td><td>점심</td><td style="white-space:normal">칼국수 <span class="sub">480</span></td>
-            <td class="r num"><b>480</b></td><td class="sub">mock</td>
+        <tr><td>2026-10-10</td><td>점심</td><td style="white-space:normal">칼국수 <span class="sub">560</span></td>
+            <td class="r num"><b>560</b></td><td class="sub">mock</td>
             <td><form method="post" action="/member/yuc/diet/seed-yuc-2026-10-10-%EC%A0%90%EC%8B%AC/delete"><button class="btn sm" type="submit">삭제</button></form></td></tr>
       
-        <tr><td>2026-10-10</td><td>아침</td><td style="white-space:normal">토스트와 달걀 <span class="sub">350</span></td>
-            <td class="r num"><b>350</b></td><td class="sub">mock</td>
+        <tr><td>2026-10-10</td><td>아침</td><td style="white-space:normal">토스트와 달걀 <span class="sub">410</span></td>
+            <td class="r num"><b>410</b></td><td class="sub">mock</td>
             <td><form method="post" action="/member/yuc/diet/seed-yuc-2026-10-10-%EC%95%84%EC%B9%A8/delete"><button class="btn sm" type="submit">삭제</button></form></td></tr>
       
-        <tr><td>2026-10-09</td><td>저녁</td><td style="white-space:normal">삼겹살과 쌈 <span class="sub">810</span></td>
-            <td class="r num"><b>810</b></td><td class="sub">mock</td>
+        <tr><td>2026-10-09</td><td>저녁</td><td style="white-space:normal">삼겹살과 쌈 <span class="sub">950</span></td>
+            <td class="r num"><b>950</b></td><td class="sub">mock</td>
             <td><form method="post" action="/member/yuc/diet/seed-yuc-2026-10-09-%EC%A0%80%EB%85%81/delete"><button class="btn sm" type="submit">삭제</button></form></td></tr>
       
-        <tr><td>2026-10-09</td><td>점심</td><td style="white-space:normal">칼국수 <span class="sub">510</span></td>
-            <td class="r num"><b>510</b></td><td class="sub">mock</td>
+        <tr><td>2026-10-09</td><td>점심</td><td style="white-space:normal">칼국수 <span class="sub">600</span></td>
+            <td class="r num"><b>600</b></td><td class="sub">mock</td>
             <td><form method="post" action="/member/yuc/diet/seed-yuc-2026-10-09-%EC%A0%90%EC%8B%AC/delete"><button class="btn sm" type="submit">삭제</button></form></td></tr>
       
-        <tr><td>2026-10-09</td><td>아침</td><td style="white-space:normal">죽 한 그릇 <span class="sub">260</span></td>
-            <td class="r num"><b>260</b></td><td class="sub">mock</td>
+        <tr><td>2026-10-09</td><td>아침</td><td style="white-space:normal">죽 한 그릇 <span class="sub">300</span></td>
+            <td class="r num"><b>300</b></td><td class="sub">mock</td>
             <td><form method="post" action="/member/yuc/diet/seed-yuc-2026-10-09-%EC%95%84%EC%B9%A8/delete"><button class="btn sm" type="submit">삭제</button></form></td></tr>
       
-        <tr><td>2026-10-08</td><td>간식</td><td style="white-space:normal">빵 한 개 <span class="sub">240</span></td>
-            <td class="r num"><b>240</b></td><td class="sub">mock</td>
+        <tr><td>2026-10-08</td><td>간식</td><td style="white-space:normal">빵 한 개 <span class="sub">290</span></td>
+            <td class="r num"><b>290</b></td><td class="sub">mock</td>
             <td><form method="post" action="/member/yuc/diet/seed-yuc-2026-10-08-%EA%B0%84%EC%8B%9D/delete"><button class="btn sm" type="submit">삭제</button></form></td></tr>
       
-        <tr><td>2026-10-08</td><td>저녁</td><td style="white-space:normal">닭가슴살 샐러드 <span class="sub">350</span></td>
-            <td class="r num"><b>350</b></td><td class="sub">mock</td>
+        <tr><td>2026-10-08</td><td>저녁</td><td style="white-space:normal">닭가슴살 샐러드 <span class="sub">410</span></td>
+            <td class="r num"><b>410</b></td><td class="sub">mock</td>
             <td><form method="post" action="/member/yuc/diet/seed-yuc-2026-10-08-%EC%A0%80%EB%85%81/delete"><button class="btn sm" type="submit">삭제</button></form></td></tr>
       
-        <tr><td>2026-10-08</td><td>점심</td><td style="white-space:normal">비빔밥 <span class="sub">530</span></td>
-            <td class="r num"><b>530</b></td><td class="sub">mock</td>
+        <tr><td>2026-10-08</td><td>점심</td><td style="white-space:normal">비빔밥 <span class="sub">620</span></td>
+            <td class="r num"><b>620</b></td><td class="sub">mock</td>
             <td><form method="post" action="/member/yuc/diet/seed-yuc-2026-10-08-%EC%A0%90%EC%8B%AC/delete"><button class="btn sm" type="submit">삭제</button></form></td></tr>
       
-        <tr><td>2026-10-08</td><td>아침</td><td style="white-space:normal">죽 한 그릇 <span class="sub">280</span></td>
-            <td class="r num"><b>280</b></td><td class="sub">mock</td>
+        <tr><td>2026-10-08</td><td>아침</td><td style="white-space:normal">죽 한 그릇 <span class="sub">330</span></td>
+            <td class="r num"><b>330</b></td><td class="sub">mock</td>
             <td><form method="post" action="/member/yuc/diet/seed-yuc-2026-10-08-%EC%95%84%EC%B9%A8/delete"><button class="btn sm" type="submit">삭제</button></form></td></tr>
       
-        <tr><td>2026-10-07</td><td>저녁</td><td style="white-space:normal">라면과 김밥 <span class="sub">780</span></td>
-            <td class="r num"><b>780</b></td><td class="sub">mock</td>
+        <tr><td>2026-10-07</td><td>저녁</td><td style="white-space:normal">라면과 김밥 <span class="sub">910</span></td>
+            <td class="r num"><b>910</b></td><td class="sub">mock</td>
             <td><form method="post" action="/member/yuc/diet/seed-yuc-2026-10-07-%EC%A0%80%EB%85%81/delete"><button class="btn sm" type="submit">삭제</button></form></td></tr>
       
-        <tr><td>2026-10-07</td><td>점심</td><td style="white-space:normal">된장찌개 백반 <span class="sub">590</span></td>
-            <td class="r num"><b>590</b></td><td class="sub">mock</td>
+        <tr><td>2026-10-07</td><td>점심</td><td style="white-space:normal">된장찌개 백반 <span class="sub">690</span></td>
+            <td class="r num"><b>690</b></td><td class="sub">mock</td>
             <td><form method="post" action="/member/yuc/diet/seed-yuc-2026-10-07-%EC%A0%90%EC%8B%AC/delete"><button class="btn sm" type="submit">삭제</button></form></td></tr>
       
       </tbody>
