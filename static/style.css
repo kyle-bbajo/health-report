@@ -419,3 +419,11 @@ details.more[open] > summary { color: var(--muted); }
 .inapp strong { display: block; font-size: 16px; color: #111827; line-height: 1.35; }
 .inapp p { margin: 2px 0 0; font-size: 15px; color: #374151; line-height: 1.4; }
 @media (prefers-reduced-motion: reduce) { .inapp { transition: none; } }
+.my-diet-day { padding: 14px 0; border-top: 1px solid var(--line); }
+.my-diet-hd { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; margin-bottom: 6px; font-size: 18px; }
+.my-diet-hd small { font-size: 16px; color: var(--muted); }
+.my-diet-day ul { list-style: none; margin: 0; padding: 0; }
+.my-diet-day li { padding: 3px 0; font-size: 17px; line-height: 1.5; color: var(--ink); }
+.my-diet-day li span { display: inline-block; min-width: 3.2em; color: var(--muted); }
+.my-rows .v small.up { color: #15803d; }
+.my-rows .v small.down { color: #b45309; }

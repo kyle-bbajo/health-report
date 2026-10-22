@@ -146,6 +146,12 @@
   </form>
   
   <form method="post" action="/settings/features" class="toggle">
+    <input type="hidden" name="key" value="guardian_report"><input type="hidden" name="on" value="1">
+    <div><b>보호자 건강 리포트</b> <span class="badge muted">꺼짐</span><div class="sub">회원이 보호자마다 허락하면, 보호자가 동의 문자의 링크에서 체성분(체중·골격근량·체지방률과 변화)과 최근 7일 식단을 볼 수 있습니다. 사진·혈압·검진 결과는 보이지 않습니다.</div></div>
+    <button class="btn sm primary" type="submit">켜기</button>
+  </form>
+  
+  <form method="post" action="/settings/features" class="toggle">
     <input type="hidden" name="key" value="kid_alert"><input type="hidden" name="on" value="1">
     <div><b>어린이 강좌 출결 알림</b> <span class="badge muted">꺼짐</span><div class="sub">학원 출결 알림처럼, 어린이 회원(13세 이하)이 수강 강좌 시작 15분이 지나도록 출석하지 않으면 수신에 동의한 보호자에게 그날 문자를 보냅니다. 휴관·휴강일, 휴회 중에는 보내지 않습니다.</div></div>
     <button class="btn sm primary" type="submit">켜기</button>
