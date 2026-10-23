@@ -96,6 +96,7 @@
     <div class="brand"><svg class="ic lg"><use href="#i-heart"/></svg><div>용인도시공사<small>관리자 · 공공체육시설 출석 기반 고독사 위험 조기 발견 · 건강 리포트</small></div></div>
     <nav>
       <a href="admin.html" class=""><svg class="ic "><use href="#i-users"/></svg> 회원</a>
+      <a href="classes.html" class=""><svg class="ic "><use href="#i-calendar"/></svg> 강좌</a>
       <a href="messages.html" class=""><svg class="ic "><use href="#i-chat"/></svg> 문자</a>
       
       
@@ -171,5 +172,30 @@
   </main>
 </div>
 
+<script>
+// 표의 줄이나 카드 전체를 눌러도 상세로 간다 (안쪽 링크·버튼·입력칸은 그대로). 키보드로는 Enter.
+(function () {
+  function go(el, e) {
+    if (e.target.closest('a, button, input, select, textarea, label, form')) return;
+    var url = el.getAttribute('data-href');
+    if (!url || url.charAt(0) === '#') return;
+    if (e.metaKey || e.ctrlKey) window.open(url, '_blank'); else location.href = url;
+  }
+  document.querySelectorAll('[data-href]').forEach(function (el) {
+    el.setAttribute('tabindex', '0');
+    el.addEventListener('click', function (e) { go(el, e); });
+    el.addEventListener('keydown', function (e) { if (e.key === 'Enter') go(el, e); });
+  });
+  // '목록' 버튼은 방금 보던 목록(검색·필터·쪽 그대로)으로 돌아간다
+  document.querySelectorAll('[data-back]').forEach(function (a) {
+    a.addEventListener('click', function (e) {
+      try {
+        var ref = document.referrer && new URL(document.referrer);
+        if (ref && ref.origin === location.origin && ref.pathname !== location.pathname && history.length > 1) { e.preventDefault(); history.back(); }
+      } catch (err) {}
+    });
+  });
+})();
+</script>
 </body>
 </html>
