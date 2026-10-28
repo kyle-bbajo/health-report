@@ -480,3 +480,8 @@ a.lnk:hover { text-decoration: underline; }
   .main td.id, .main td.num, .main td.r { white-space: nowrap; }
 }
 .st-came, .st-absent, .st-other, .st-none { white-space: nowrap; }
+
+/* 확인 통화 메모 · 전달서 */
+textarea { font: inherit; letter-spacing: normal; border: 1px solid var(--line, #d9dee5); border-radius: 8px; padding: 8px 10px; box-sizing: border-box; }
+.callnote { padding: 10px 14px 4px; }
+.todo input[name=note], form input[name=approver], form input[name=sent_to], form input[name=doc_no] { font: inherit; border: 1px solid var(--line, #d9dee5); border-radius: 6px; padding: 4px 8px; }

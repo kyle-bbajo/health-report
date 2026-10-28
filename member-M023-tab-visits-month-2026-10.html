@@ -135,10 +135,23 @@
   <form method="post" action="/member/M023/wellness-ack" style="margin-left:auto"><button class="btn sm" type="submit">확인함</button></form>
 </div>
 
-<div class="sub" style="margin:-6px 0 12px 4px"><b>조금 드문 결석</b> · 평소 출석률 58% · 평소라면 이렇게 빠질 확률 약 79분의 1 (AI 예측) · 결석한 날마다 올 확률 :
+<div class="sub" style="margin:-6px 0 12px 4px"><b>조금 드문 결석</b> · 평소 금 19:54 · 결석한 5일 중 비·눈 온 날 1일 · 평소 출석률 58% · 평소라면 이렇게 빠질 확률 약 79분의 1 (AI 예측) · 결석한 날마다 올 확률 :
   09/25 요가 58% · 10/02 요가 58% · 10/09 요가 58% · 10/16 요가 59% · 10/23 요가 59%</div>
 
 
+
+
+
+<div class="panel" style="margin-bottom:14px">
+  <div class="hd"><svg class="ic "><use href="#i-user"/></svg> 확인 통화<span class="meta">메모를 적으면 결과를 읽어 다음 단계를 정합니다(문장 모델, 없으면 키워드) · 결과는 직접 고를 수도 있습니다 · 연락 두절·도움 필요는 주민센터 전달서 초안</span></div>
+  <form method="post" action="/member/M023/callnote" class="callnote">
+    <textarea name="note" rows="2" maxlength="500" placeholder="예) 딸 집에 가 계심, 다음 주 복귀 / 전화 안 받음, 문자 확인 없음" style="width:100%"></textarea>
+    <div style="display:flex;gap:8px;align-items:center;margin-top:6px">
+      <select name="category" class="btn sm" aria-label="통화 결과"><option value="">결과: 메모로 자동 분류</option><option value="무사">무사</option><option value="일시 부재">일시 부재</option><option value="입원">입원</option><option value="이사">이사</option><option value="연락 두절">연락 두절</option><option value="도움 필요">도움 필요</option></select>
+      <button class="btn sm" type="submit">통화 기록</button></div>
+  </form>
+  
+</div>
 
 
 <div class="grid g-12" style="margin-bottom:14px">
