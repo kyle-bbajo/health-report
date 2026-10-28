@@ -131,7 +131,7 @@
 <div class="tiles">
   <div class="tile"><div class="ico"><svg class="ic lg"><use href="#i-users"/></svg></div><div><div class="k">회원</div><div class="v num">60<small>명</small></div></div></div>
   <div class="tile"><div class="ico"><svg class="ic lg"><use href="#i-scale"/></svg></div><div><div class="k">체성분 · 혈압 측정</div><div class="v num">1371<small>건 · 1187건</small></div></div></div>
-  <div class="tile"><div class="ico"><svg class="ic lg"><use href="#i-calendar"/></svg></div><div><div class="k">출석 기록</div><div class="v num">9887<small>건</small></div></div></div>
+  <div class="tile"><div class="ico"><svg class="ic lg"><use href="#i-calendar"/></svg></div><div><div class="k">출석 기록</div><div class="v num">9909<small>건</small></div></div></div>
   <div class="tile"><div class="ico"><svg class="ic lg"><use href="#i-list"/></svg></div><div><div class="k">수강 내역 · 강좌</div><div class="v num">1263<small>건 · 8개</small></div></div></div>
   <div class="tile"><div class="ico gray"><svg class="ic lg"><use href="#i-clock"/></svg></div><div><div class="k">기준일</div><div class="v num">2026-10-26</div></div></div>
 </div>
@@ -142,13 +142,13 @@
     <div class="ico"><svg class="ic lg"><use href="#i-users"/></svg></div>
     <div>
       <h3>회원관리프로그램 <span class="badge ok">연결</span></h3>
-      <div class="method">내보내기 파일(CSV) · API 연동 가능 구조 · 갱신 2026-10-22 00:29</div>
+      <div class="method">내보내기 파일(CSV) · API 연동 가능 구조 · 갱신 2026-10-27 12:14</div>
       <table>
         <thead><tr><th>자료</th><th class="r">건수</th></tr></thead>
         <tbody>
           <tr><td><svg class="ic "><use href="#i-file"/></svg> 회원 정보<div class="sub">members.csv</div></td><td class="r num">60</td></tr>
         
-          <tr><td><svg class="ic "><use href="#i-file"/></svg> 출석 기록<div class="sub">attendance.csv</div></td><td class="r num">9887</td></tr>
+          <tr><td><svg class="ic "><use href="#i-file"/></svg> 출석 기록<div class="sub">attendance.csv</div></td><td class="r num">9909</td></tr>
         
           <tr><td><svg class="ic "><use href="#i-file"/></svg> 수강 내역 (월 단위)<div class="sub">enrollments.csv</div></td><td class="r num">1263</td></tr>
         
@@ -167,7 +167,7 @@
     <div class="ico"><svg class="ic lg"><use href="#i-scale"/></svg></div>
     <div>
       <h3>인바디 (LookinBody) <span class="badge ok">연결</span></h3>
-      <div class="method">.mdb 직접 읽기(mdbtools) · CSV 병행 · 체성분 + 혈압계 · 갱신 2026-10-22 00:29</div>
+      <div class="method">.mdb 직접 읽기(mdbtools) · CSV 병행 · 체성분 + 혈압계 · 갱신 2026-10-27 12:14</div>
       <table>
         <thead><tr><th>자료</th><th class="r">건수</th></tr></thead>
         <tbody>
@@ -184,7 +184,7 @@
     <div class="ico"><svg class="ic lg"><use href="#i-heart"/></svg></div>
     <div>
       <h3>국가건강검진 (나의건강기록) <span class="badge ok">연결</span></h3>
-      <div class="method">본인 동의 후 불러오기 · 지금은 모의 저장소(CSV) · 갱신 2026-10-22 00:29</div>
+      <div class="method">본인 동의 후 불러오기 · 지금은 모의 저장소(CSV) · 갱신 2026-10-27 12:14</div>
       <table>
         <thead><tr><th>자료</th><th class="r">건수</th></tr></thead>
         <tbody>
@@ -221,20 +221,21 @@
       
       <div class="grid g-12">
         <div class="c-7">
-          <div class="sub" style="margin-bottom:6px">마지막 28일(2026-09-28~) 날짜 순서 평가 · 평소 오는 날 492번 중 결석 125번</div>
+          <div class="sub" style="margin-bottom:6px">마지막 28일(2026-09-28~) 날짜 순서 평가 · 평소 오는 날 492번 중 결석 124번</div>
           <table>
             <thead><tr><th>판정 방법</th><th class="r">알림</th><th class="r">맞은 알림<br><small>(그날 결석)</small></th><th class="r">헛알림<br><small>(늦게라도 옴)</small></th><th class="r">놓친 결석</th><th class="r">알림 시각</th></tr></thead>
             <tbody>
               
-              <tr><td><b>출석 예측 모델</b></td><td class="r num">136</td><td class="r num">125</td>
-                  <td class="r num">11</td><td class="r num">0</td><td class="r num">평소 +28분</td></tr>
+              <tr><td><b>출석 예측 모델</b></td><td class="r num">135</td><td class="r num">124</td>
+                  <td class="r num">11</td><td class="r num">0</td><td class="r num">평소 +27분</td></tr>
               
-              <tr><td>규칙 (평소 시각 + 30~60분)</td><td class="r num">136</td><td class="r num">125</td>
+              <tr><td>규칙 (평소 시각 + 30~60분)</td><td class="r num">135</td><td class="r num">124</td>
                   <td class="r num">11</td><td class="r num">0</td><td class="r num">평소 +30분</td></tr>
               
             </tbody>
           </table>
-          <div class="sub" style="margin-top:8px">오늘 올 확률 구분력(AUC): 모델 0.674 · 그 요일 출석률만 0.649 — 올 확률은 안부 확인 순서를 정하는 데만 씁니다.</div>
+          <div class="sub" style="margin-top:8px">오늘 올 확률 구분력(AUC): 모델 0.664 · 그 요일 출석률만 0.629 — 올 확률은 안부 확인 순서를 정하는 데만 씁니다.</div>
+          <div class="sub" style="margin-top:6px">장기 결석 명단 순서: 같은 기간 8번의 기준일에 위쪽 10명 중 14일 안에 다시 온 회원(괜한 확인) AI 이례성 순 48% · 요일 출석률 순 48% → <b>AI 이례성 순</b>으로 세웁니다.</div>
         </div>
         <div class="c-5">
           <div class="kpi" style="grid-template-columns:repeat(3,1fr)">
@@ -245,11 +246,11 @@
           
           <div class="sub" style="margin:10px 0 4px">올 확률에 영향이 큰 특징 (순열 중요도)</div>
           
-          <div class="coef"><div class="row"><span>강좌 출석률</span><div class="track"><i style="left:0;width:100.0%"></i></div><span class="num" style="text-align:right">0.121</span></div><div class="row"><span>그 요일 출석률</span><div class="track"><i style="left:0;width:7.0%"></i></div><span class="num" style="text-align:right">0.009</span></div><div class="row"><span>그 요일 기록 수</span><div class="track"><i style="left:0;width:4.0%"></i></div><span class="num" style="text-align:right">0.005</span></div><div class="row"><span>최저기온</span><div class="track"><i style="left:0;width:3.0%"></i></div><span class="num" style="text-align:right">0.004</span></div><div class="row"><span>시설 출석 흐름</span><div class="track"><i style="left:0;width:3.0%"></i></div><span class="num" style="text-align:right">0.003</span></div><div class="row"><span>연속 결석</span><div class="track"><i style="left:0;width:2.0%"></i></div><span class="num" style="text-align:right">0.003</span></div><div class="row"><span>요일</span><div class="track"><i style="left:0;width:2.0%"></i></div><span class="num" style="text-align:right">0.002</span></div><div class="row"><span>평소 시각</span><div class="track"><i style="left:0;width:0.0%"></i></div><span class="num" style="text-align:right">0.000</span></div></div>
+          <div class="coef"><div class="row"><span>강좌 출석률</span><div class="track"><i style="left:0;width:100.0%"></i></div><span class="num" style="text-align:right">0.100</span></div><div class="row"><span>그 요일 기록 수</span><div class="track"><i style="left:0;width:7.0%"></i></div><span class="num" style="text-align:right">0.007</span></div><div class="row"><span>연속 결석</span><div class="track"><i style="left:0;width:2.0%"></i></div><span class="num" style="text-align:right">0.002</span></div><div class="row"><span>요일</span><div class="track"><i style="left:0;width:0.0%"></i></div><span class="num" style="text-align:right">0.000</span></div><div class="row"><span>그 요일 출석률</span><div class="track"><i style="left:0;width:0.0%"></i></div><span class="num" style="text-align:right">0.000</span></div><div class="row"><span>시설 출석 흐름</span><div class="track"><i style="left:0;width:0.0%"></i></div><span class="num" style="text-align:right">0.000</span></div></div>
           
         </div>
       </div>
-      <div class="sub" style="margin-top:10px">그래디언트 부스팅(scikit-learn) 두 개: ① 오늘 올 확률 ② 도착 시각의 90% 지점(분위 회귀). 특징은 그 요일·강좌 출석률(최근일수록 무겁게), 연속 결석, 마지막 출석 후 날수, 평소 시각과 들쭉날쭉함, 요일·월, 나이, 날씨(최저·최고·강수·적설·도착 전 3시간 강수), 시설 전체 출석 흐름. 결석은 규칙과 똑같이 모두 알리고, 모델은 언제 알릴지를 정합니다. 학습 2026-10-23 02:50.</div>
+      <div class="sub" style="margin-top:10px">그래디언트 부스팅(scikit-learn) 두 개: ① 오늘 올 확률 ② 도착 시각의 90% 지점(분위 회귀). 특징은 그 요일·강좌 출석률(최근일수록 무겁게), 연속 결석, 마지막 출석 후 날수, 평소 시각과 들쭉날쭉함, 요일·월, 나이, 날씨(최저·최고·강수·적설·도착 전 3시간 강수), 시설 전체 출석 흐름. 결석은 규칙과 똑같이 모두 알리고, 모델은 언제 알릴지를 정합니다. 학습 2026-10-28 01:08.</div>
       
     </div>
   </div>
@@ -262,22 +263,22 @@
     <tbody>
     
       <tr><td><span class="badge tier-high">꾸준</span></td><td>80% 이상</td>
-          <td class="r num">14명</td><td class="r num">13명</td>
+          <td class="r num">15명</td><td class="r num">14명</td>
           <td><div class="bar" style="margin:0"><i style="width:100%;background:var(--ok)"></i></div></td>
-          <td class="r num"><b>-0.53</b></td>
-          <td class="r num"><a href="admin-tier-high.html">16명</a></td></tr>
+          <td class="r num"><b>-0.51</b></td>
+          <td class="r num"><a href="admin-tier-high.html">15명</a></td></tr>
     
       <tr><td><span class="badge tier-mid">보통</span></td><td>50~80%</td>
-          <td class="r num">34명</td><td class="r num">27명</td>
-          <td><div class="bar" style="margin:0"><i style="width:53%;background:var(--ok)"></i></div></td>
-          <td class="r num"><b>-0.28</b></td>
-          <td class="r num"><a href="admin-tier-mid.html">23명</a></td></tr>
+          <td class="r num">33명</td><td class="r num">26명</td>
+          <td><div class="bar" style="margin:0"><i style="width:57%;background:var(--ok)"></i></div></td>
+          <td class="r num"><b>-0.29</b></td>
+          <td class="r num"><a href="admin-tier-mid.html">25명</a></td></tr>
     
       <tr><td><span class="badge tier-low">부족</span></td><td>0~50%</td>
           <td class="r num">10명</td><td class="r num">9명</td>
-          <td><div class="bar" style="margin:0"><i style="width:45%;background:var(--ok)"></i></div></td>
+          <td><div class="bar" style="margin:0"><i style="width:47%;background:var(--ok)"></i></div></td>
           <td class="r num"><b>-0.24</b></td>
-          <td class="r num"><a href="admin-tier-low.html">11명</a></td></tr>
+          <td class="r num"><a href="admin-tier-low.html">10명</a></td></tr>
     
     </tbody>
   </table>

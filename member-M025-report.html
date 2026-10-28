@@ -1,0 +1,644 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<script>
+(function () {
+  window.fetch = function () { return Promise.resolve(new Response(null, {status: 404})); };
+  if (navigator.serviceWorker) navigator.serviceWorker.register = function () { return Promise.reject(); };
+  var MEMBERS = {"M001": ["M001", "1952"], "M002": ["M002", "1963"], "M003": ["M003", "1968"], "M004": ["M004", "1974"], "M005": ["M005", "1987"], "M006": ["M006", "1980"], "YUC": ["yuc", "1952"], "M008": ["M008", "1968"], "M009": ["M009", "1955"], "M010": ["M010", "1982"], "M011": ["M011", "1999"], "M012": ["M012", "1979"], "M013": ["M013", "1952"], "M014": ["M014", "1981"], "M015": ["M015", "1952"], "M016": ["M016", "2002"], "M017": ["M017", "1974"], "M018": ["M018", "1987"], "M019": ["M019", "1952"], "M020": ["M020", "1986"], "M021": ["M021", "1954"], "M022": ["M022", "1955"], "M023": ["M023", "1956"], "M024": ["M024", "1965"], "M025": ["M025", "1953"], "M026": ["M026", "1956"], "M027": ["M027", "1979"], "M028": ["M028", "1964"], "M029": ["M029", "1964"], "M030": ["M030", "1969"], "M031": ["M031", "1981"], "M032": ["M032", "2001"], "M033": ["M033", "1972"], "M034": ["M034", "1984"], "M035": ["M035", "1974"], "M036": ["M036", "2000"], "M037": ["M037", "1974"], "M038": ["M038", "1983"], "M039": ["M039", "1978"], "M040": ["M040", "1997"], "M041": ["M041", "1953"], "M042": ["M042", "1981"], "M043": ["M043", "1999"], "M044": ["M044", "1977"], "M045": ["M045", "1996"], "M046": ["M046", "1958"], "M047": ["M047", "1967"], "M048": ["M048", "1986"], "M049": ["M049", "1999"], "M050": ["M050", "1982"], "M051": ["M051", "1956"], "M052": ["M052", "1965"], "M053": ["M053", "1976"], "M054": ["M054", "1992"], "M055": ["M055", "1953"], "M056": ["M056", "1973"], "M057": ["M057", "1999"], "M058": ["M058", "1954"], "M059": ["M059", "1998"], "M060": ["M060", "1988"]};                 // 대문자 회원번호 → [파일에 쓰인 회원번호, 태어난 해]
+  function toast(msg) {
+    var t = document.getElementById('demo-toast');
+    if (!t) { t = document.createElement('div'); t.id = 'demo-toast'; t.setAttribute('role', 'status'); document.body.appendChild(t); }
+    t.textContent = msg; t.className = 'show';
+    clearTimeout(t._h); t._h = setTimeout(function () { t.className = ''; }, 2800);
+  }
+  var SAVE = '시연판이라 저장·문자 발송·엑셀은 되지 않습니다. 설치판에서 동작합니다.';
+  var PAGE = '시연판에는 이 화면이 없습니다. 회원 상세 탭과 지난 달 달력은 M004·yuc·M051과 장기 미출석 회원만 있습니다.';
+  document.addEventListener('click', function (e) {
+    var a = e.target.closest && e.target.closest('a[href="#demo"], a[href="#demo-page"]');
+    if (a) { e.preventDefault(); toast(a.getAttribute('href') === '#demo' ? SAVE : PAGE); }
+  }, true);
+  document.addEventListener('submit', function (e) {
+    e.preventDefault();
+    var f = e.target;
+    if (f.hasAttribute('data-demo-admin')) { location.href = 'admin.html'; return; }   // 시연: 비밀번호 없이 들어가기
+    if (f.hasAttribute('data-demo-login')) {
+      var id = (f.member_id.value || '').trim().toUpperCase(), by = (f.birth_year.value || '').trim();
+      if ((!id && !by) || (id === 'YUC' && by === '2011')) { id = 'YUC'; by = MEMBERS.YUC ? MEMBERS.YUC[1] : ''; }  // 시연: 비워 두거나 yuc / 2011
+      if (MEMBERS[id] && MEMBERS[id][1] === by) { location.href = 'my-' + MEMBERS[id][0] + '.html'; return; }
+      toast('회원번호나 태어난 해가 맞지 않습니다. 예: yuc / 2011'); return;
+    }
+    toast(SAVE);
+  }, true);
+  document.addEventListener('DOMContentLoaded', function () {
+    var b = document.createElement('div'); b.id = 'demo-bar';
+    b.innerHTML = '시연판 · 가상 데이터 · 2026-10-26 낮 12시 화면 · <a href="start.html">처음으로</a>';
+    document.body.insertBefore(b, document.body.firstChild);
+  });
+})();
+</script>
+<style>
+#demo-bar{background:#1b2533;color:#c5cdd8;font-size:12.5px;padding:6px 16px;text-align:center}
+#demo-bar a{color:#9ec1ff;text-decoration:underline}
+#demo-toast{position:fixed;left:50%;bottom:96px;transform:translateX(-50%);background:#1c2430;color:#fff;padding:10px 16px;border-radius:10px;font-size:14px;line-height:1.45;opacity:0;pointer-events:none;transition:opacity .2s;z-index:9999;width:max-content;max-width:min(420px,88vw);text-align:center}
+#demo-toast.show{opacity:.96}
+</style>
+
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>조민수 · 건강 리포트</title>
+<link rel="stylesheet" href="static/style.css">
+</head>
+<body>
+
+<svg xmlns="http://www.w3.org/2000/svg" style="display:none" aria-hidden="true">
+  <symbol id="i-grid" viewBox="0 0 24 24"><rect x="3" y="3" width="8" height="8" rx="1.5"/><rect x="13" y="3" width="8" height="8" rx="1.5"/><rect x="3" y="13" width="8" height="8" rx="1.5"/><rect x="13" y="13" width="8" height="8" rx="1.5"/></symbol>
+  <symbol id="i-users" viewBox="0 0 24 24"><circle cx="9" cy="8" r="3.5"/><path d="M2.5 20v-1.5a5 5 0 0 1 5-5h3a5 5 0 0 1 5 5V20"/><path d="M16 4.3a3.5 3.5 0 0 1 0 7.4"/><path d="M18 13.6a5 5 0 0 1 3.5 4.9V20"/></symbol>
+  <symbol id="i-user" viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 21v-1a6 6 0 0 1 6-6h4a6 6 0 0 1 6 6v1"/></symbol>
+  <symbol id="i-scale" viewBox="0 0 24 24"><rect x="4" y="3" width="16" height="18" rx="3"/><path d="M8 10a4 4 0 0 1 8 0"/><path d="m12 10 2.2-2.2"/></symbol>
+  <symbol id="i-calendar" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4"/><path d="m9 15 2 2 4-4"/></symbol>
+  <symbol id="i-trend" viewBox="0 0 24 24"><path d="M3 17l6-6 4 4 8-8"/><path d="M15 7h6v6"/></symbol>
+  <symbol id="i-dumbbell" viewBox="0 0 24 24"><path d="M3 10v4M21 10v4"/><rect x="5" y="8" width="3" height="8" rx="1"/><rect x="16" y="8" width="3" height="8" rx="1"/><path d="M8 12h8"/></symbol>
+  <symbol id="i-heart" viewBox="0 0 24 24"><path d="M19.5 12.6 12 20l-7.5-7.4A4.6 4.6 0 0 1 12 6.4a4.6 4.6 0 0 1 7.5 6.2z"/><path d="M4.5 12h3l1.5-2.5 2.5 5 2-3.5h4.5"/></symbol>
+  <symbol id="i-database" viewBox="0 0 24 24"><ellipse cx="12" cy="5" rx="8" ry="3"/><path d="M4 5v14c0 1.7 3.6 3 8 3s8-1.3 8-3V5"/><path d="M4 12c0 1.7 3.6 3 8 3s8-1.3 8-3"/></symbol>
+  <symbol id="i-refresh" viewBox="0 0 24 24"><path d="M20 11a8 8 0 0 0-14.5-4.5L3 9"/><path d="M3 4v5h5"/><path d="M4 13a8 8 0 0 0 14.5 4.5L21 15"/><path d="M21 20v-5h-5"/></symbol>
+  <symbol id="i-camera" viewBox="0 0 24 24"><path d="M4 8h3l1.5-2h7L17 8h3a1 1 0 0 1 1 1v9a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V9a1 1 0 0 1 1-1z"/><circle cx="12" cy="13" r="3.5"/></symbol>
+  <symbol id="i-search" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></symbol>
+  <symbol id="i-wave" viewBox="0 0 24 24"><path d="M2 10c2 0 2-2 4-2s2 2 4 2 2-2 4-2 2 2 4 2 2-2 4-2"/><path d="M2 16c2 0 2-2 4-2s2 2 4 2 2-2 4-2 2 2 4 2 2-2 4-2"/></symbol>
+  <symbol id="i-stretch" viewBox="0 0 24 24"><circle cx="12" cy="4.5" r="2"/><path d="M12 8v5"/><path d="m5 11 7 2 7-2"/><path d="m7 21 5-8 5 8"/></symbol>
+  <symbol id="i-walk" viewBox="0 0 24 24"><circle cx="13.5" cy="4" r="2"/><path d="m8 21 3.5-7"/><path d="m11.5 14 3 2.5V21"/><path d="M9 11.5 12 9l3 1 2.5 3.5"/><path d="M12 9l-1.5 5"/><path d="M6 13l3-1.5"/></symbol>
+  <symbol id="i-bowl" viewBox="0 0 24 24"><path d="M3 12h18"/><path d="M4 12a8 8 0 0 0 16 0"/><path d="M8 20h8"/><path d="M9 9V5M15 9V6"/></symbol>
+  <symbol id="i-plus-circle" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 8v8M8 12h8"/></symbol>
+  <symbol id="i-star" viewBox="0 0 24 24"><path d="m12 3 2.8 5.7 6.2.9-4.5 4.4 1.1 6.2L12 17.3 6.4 20.2l1.1-6.2L3 9.6l6.2-.9z"/></symbol>
+  <symbol id="i-alert" viewBox="0 0 24 24"><path d="M12 3 2.5 20h19z"/><path d="M12 10v4M12 17.3v.4"/></symbol>
+  <symbol id="i-check" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="m8 12 3 3 5-6"/></symbol>
+  <symbol id="i-shield" viewBox="0 0 24 24"><path d="M12 3 4 6v6c0 4.5 3.4 7.8 8 9 4.6-1.2 8-4.5 8-9V6z"/><path d="m9 12 2 2 4-4"/></symbol>
+  <symbol id="i-bell" viewBox="0 0 24 24"><path d="M6 9a6 6 0 0 1 12 0c0 6 2.5 7.5 2.5 7.5h-17S6 15 6 9"/><path d="M10 20a2 2 0 0 0 4 0"/></symbol>
+  <symbol id="i-clock" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></symbol>
+  <symbol id="i-file" viewBox="0 0 24 24"><path d="M14 3H6a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"/><path d="M14 3v6h6"/></symbol>
+  <symbol id="i-link" viewBox="0 0 24 24"><path d="M10 14a4 4 0 0 0 5.7 0l3-3a4 4 0 0 0-5.7-5.7l-1 1"/><path d="M14 10a4 4 0 0 0-5.7 0l-3 3a4 4 0 0 0 5.7 5.7l1-1"/></symbol>
+  <symbol id="i-cpu" viewBox="0 0 24 24"><rect x="6" y="6" width="12" height="12" rx="2"/><rect x="10" y="10" width="4" height="4"/><path d="M9 2v4M15 2v4M9 18v4M15 18v4M2 9h4M2 15h4M18 9h4M18 15h4"/></symbol>
+  <symbol id="i-chat" viewBox="0 0 24 24"><path d="M4 5h16a1 1 0 0 1 1 1v9a1 1 0 0 1-1 1H9l-5 4V6a1 1 0 0 1 1-1z"/></symbol>
+  <symbol id="i-arrow-down" viewBox="0 0 24 24"><path d="M12 5v14"/><path d="m6 13 6 6 6-6"/></symbol>
+  <symbol id="i-arrow-up" viewBox="0 0 24 24"><path d="M12 19V5"/><path d="m6 11 6-6 6 6"/></symbol>
+  <symbol id="i-minus" viewBox="0 0 24 24"><path d="M6 12h12"/></symbol>
+  <symbol id="i-ruler" viewBox="0 0 24 24"><path d="M3 8h18v8H3z"/><path d="M7 8v3M11 8v4M15 8v3M19 8v4"/></symbol>
+  <symbol id="i-map" viewBox="0 0 24 24"><path d="M12 21s-6-5.6-6-11a6 6 0 0 1 12 0c0 5.4-6 11-6 11z"/><circle cx="12" cy="10" r="2.2"/></symbol>
+  <symbol id="i-target" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1"/></symbol>
+  <symbol id="i-list" viewBox="0 0 24 24"><path d="M8 6h13M8 12h13M8 18h13"/><path d="M3 6h.5M3 12h.5M3 18h.5"/></symbol>
+  <symbol id="i-back" viewBox="0 0 24 24"><path d="M19 12H5"/><path d="m11 18-6-6 6-6"/></symbol>
+  <symbol id="i-print" viewBox="0 0 24 24"><path d="M6 9V3h12v6"/><rect x="3" y="9" width="18" height="9" rx="2"/><path d="M6 14h12v7H6z"/></symbol>
+</svg>
+
+
+<div class="app">
+  <aside class="side">
+    <div class="brand"><svg class="ic lg"><use href="#i-heart"/></svg><div>용인도시공사<small>관리자 · 공공체육시설 출석 기반 고독사 위험 조기 발견 · 건강 리포트</small></div></div>
+    <nav>
+      <a href="admin.html" class=""><svg class="ic "><use href="#i-users"/></svg> 회원</a>
+      <a href="classes.html" class=""><svg class="ic "><use href="#i-calendar"/></svg> 강좌</a>
+      <a href="messages.html" class=""><svg class="ic "><use href="#i-chat"/></svg> 문자</a>
+      
+      
+      
+      <a href="settings.html" class=""><svg class="ic "><use href="#i-cpu"/></svg> 설정</a>
+      <a href="my.html" target="_blank" style="margin-top:10px;opacity:.75"><svg class="ic "><use href="#i-user"/></svg> 회원 화면 열기</a>
+    </nav>
+    <div class="foot">
+      <div class="row"><svg class="ic "><use href="#i-calendar"/></svg> 기준일 2026-10-26</div>
+      <div class="row"><span class="dot off"></span> 자동 처리 꺼짐</div>
+      <div class="row"><span class="dot ok"></span> 미출석 판정 예측 모델</div>
+      <div class="row"><span class="dot off"></span> 문자 발송 연결 안 됨</div>
+      <div class="row"><span class="dot off" id="llm-dot"></span> <span title="LLM 미사용 (규칙 기반 문장)">문장 생성 미사용</span></div>
+    </div>
+  </aside>
+  <main class="main narrow">
+    
+      
+    
+    
+    
+    
+
+<div class="panel who" style="margin-bottom:14px">
+  <div class="avatar"><svg class="ic lg"><use href="#i-user"/></svg></div>
+  <div>
+    <h1>조민수</h1>
+    <div class="chips">
+      <span class="chip">남 · 73세</span>
+      <span class="chip"><svg class="ic "><use href="#i-ruler"/></svg> 174 cm</span>
+      <span class="chip"><svg class="ic "><use href="#i-dumbbell"/></svg> 필라테스 <span class="sub">월·수 11:00~11:50</span></span>
+      
+      <span class="chip"><svg class="ic "><use href="#i-calendar"/></svg> 수강 10/01~10/31</span>
+      
+      <span class="badge info">재등록 안내 · 5일 남음</span>
+    </div>
+  </div>
+  
+  <div class="actions">
+    <a class="btn sm" href="member-M025-diet.html"><svg class="ic "><use href="#i-bowl"/></svg> 식단 기록</a>
+    <a class="btn sm" href="member-M025.html"><svg class="ic "><use href="#i-back"/></svg> 회원 정보</a>
+  </div>
+  
+</div>
+
+
+
+<div class="grid g-12" style="margin-bottom:14px">
+  <div class="panel c-8">
+    <div class="hd"><svg class="ic "><use href="#i-scale"/></svg> 최근 측정<span class="meta">2026-10-03 · 23일 전 · 총 31회</span></div>
+    <div class="bd kpi">
+      <div><div class="k">체지방률</div><div class="v num">9.3<small>%</small> <span class="badge lean">낮음</span></div>
+        <div class="delta down"><svg class="ic "><use href="#i-arrow-down"/></svg>7.6%p <span class="sub">2024-09 이후</span></div></div>
+      <div><div class="k">체중</div><div class="v num">51.8<small> kg</small></div>
+        <div class="delta down"><svg class="ic "><use href="#i-arrow-down"/></svg>7.3 kg</div></div>
+      <div><div class="k">골격근량</div><div class="v num">28.2<small> kg</small></div>
+        <div class="delta">체중의 54%</div></div>
+      <div><div class="k">BMI</div><div class="v num">17.2</div><div class="delta">체지방량 4.8 kg</div></div>
+    </div>
+    
+    <div class="bd chips" style="padding-top:0">
+      <span class="chip"><svg class="ic "><use href="#i-heart"/></svg> 혈압 <b class="num">113/75</b> mmHg · 맥박 73 <span class="sub">10/03</span></span>
+      <span class="chip">최근 3회 평균 <b class="num">109/70</b> <span class="lvl ok">정상</span></span>
+      <span class="chip">기초대사량 <b class="num">1,385</b> kcal</span>
+      <span class="chip">내장지방단면적 <b class="num">31</b> cm²</span>
+    </div>
+    
+  </div>
+  <div class="panel c-4">
+    <div class="hd"><svg class="ic "><use href="#i-calendar"/></svg> 출석<span class="meta">회원관리프로그램</span></div>
+    <div class="bd">
+      <div class="att">
+        <div>
+          <div class="big num">4<small> 회 / 30일</small></div>
+          <div class="bar"><i style="width:44%"></i></div>
+          <div class="sub">출석률 44% <span class="badge tier-low">부족</span> · 시간표 기준 9회</div>
+          <div class="sub" style="margin-top:6px"><svg class="ic "><use href="#i-clock"/></svg> 마지막 2026-10-14 (12일 전)</div>
+        </div>
+        <img class="chart-img" src="data:image/svg+xml;base64,PHN2ZyB2aWV3Qm94PSIwIDAgMzYwIDExMCIgd2lkdGg9IjEwMCUiIHJvbGU9ImltZyIgYXJpYS1sYWJlbD0i7LWc6re8IDEy7KO8IOyjvOqwhCDstpzshJ0iIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgZm9udC1mYW1pbHk9IlByZXRlbmRhcmQsIEFwcGxlIFNEIEdvdGhpYyBOZW8sIE1hbGd1biBHb3RoaWMsIE5vdG8gU2FucyBLUiwgc2Fucy1zZXJpZiIgZm9udC1zaXplPSIxMCI+PGxpbmUgeDE9IjIyIiB5MT0iODguMCIgeDI9IjM1NCIgeTI9Ijg4LjAiIHN0cm9rZT0iI2VlZjFmNSIvPjx0ZXh0IHg9IjE4IiB5PSI5MS4wIiB0ZXh0LWFuY2hvcj0iZW5kIiBmaWxsPSIjNmI3MjgwIj4wPC90ZXh0PjxsaW5lIHgxPSIyMiIgeTE9IjYyLjAiIHgyPSIzNTQiIHkyPSI2Mi4wIiBzdHJva2U9IiNlZWYxZjUiLz48dGV4dCB4PSIxOCIgeT0iNjUuMCIgdGV4dC1hbmNob3I9ImVuZCIgZmlsbD0iIzZiNzI4MCI+MTwvdGV4dD48bGluZSB4MT0iMjIiIHkxPSIzNi4wIiB4Mj0iMzU0IiB5Mj0iMzYuMCIgc3Ryb2tlPSIjZWVmMWY1Ii8+PHRleHQgeD0iMTgiIHk9IjM5LjAiIHRleHQtYW5jaG9yPSJlbmQiIGZpbGw9IiM2YjcyODAiPjI8L3RleHQ+PGxpbmUgeDE9IjIyIiB5MT0iMTAuMCIgeDI9IjM1NCIgeTI9IjEwLjAiIHN0cm9rZT0iI2VlZjFmNSIvPjx0ZXh0IHg9IjE4IiB5PSIxMy4wIiB0ZXh0LWFuY2hvcj0iZW5kIiBmaWxsPSIjNmI3MjgwIj4zPC90ZXh0PjxyZWN0IHg9IjI3LjUiIHk9Ijg2LjAiIHdpZHRoPSIxNi42IiBoZWlnaHQ9IjIuMCIgcng9IjIiIGZpbGw9IiNkOWRlZTYiLz48dGV4dCB4PSIzNS44IiB5PSIxMDQiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGZpbGw9IiM2YjcyODAiPjA4LzA0PC90ZXh0PjxyZWN0IHg9IjU1LjIiIHk9Ijg2LjAiIHdpZHRoPSIxNi42IiBoZWlnaHQ9IjIuMCIgcng9IjIiIGZpbGw9IiNkOWRlZTYiLz48cmVjdCB4PSI4Mi45IiB5PSI4Ni4wIiB3aWR0aD0iMTYuNiIgaGVpZ2h0PSIyLjAiIHJ4PSIyIiBmaWxsPSIjZDlkZWU2Ii8+PHJlY3QgeD0iMTEwLjUiIHk9Ijg2LjAiIHdpZHRoPSIxNi42IiBoZWlnaHQ9IjIuMCIgcng9IjIiIGZpbGw9IiNkOWRlZTYiLz48cmVjdCB4PSIxMzguMiIgeT0iNjIuMCIgd2lkdGg9IjE2LjYiIGhlaWdodD0iMjYuMCIgcng9IjIiIGZpbGw9IiMyZjZmZGQiLz48cmVjdCB4PSIxNjUuOSIgeT0iODYuMCIgd2lkdGg9IjE2LjYiIGhlaWdodD0iMi4wIiByeD0iMiIgZmlsbD0iI2Q5ZGVlNiIvPjxyZWN0IHg9IjE5My41IiB5PSIzNi4wIiB3aWR0aD0iMTYuNiIgaGVpZ2h0PSI1Mi4wIiByeD0iMiIgZmlsbD0iIzJmNmZkZCIvPjxyZWN0IHg9IjIyMS4yIiB5PSIzNi4wIiB3aWR0aD0iMTYuNiIgaGVpZ2h0PSI1Mi4wIiByeD0iMiIgZmlsbD0iIzJmNmZkZCIvPjxyZWN0IHg9IjI0OC45IiB5PSI2Mi4wIiB3aWR0aD0iMTYuNiIgaGVpZ2h0PSIyNi4wIiByeD0iMiIgZmlsbD0iIzJmNmZkZCIvPjxyZWN0IHg9IjI3Ni41IiB5PSI2Mi4wIiB3aWR0aD0iMTYuNiIgaGVpZ2h0PSIyNi4wIiByeD0iMiIgZmlsbD0iIzJmNmZkZCIvPjxyZWN0IHg9IjMwNC4yIiB5PSI2Mi4wIiB3aWR0aD0iMTYuNiIgaGVpZ2h0PSIyNi4wIiByeD0iMiIgZmlsbD0iIzJmNmZkZCIvPjxyZWN0IHg9IjMzMS45IiB5PSI4Ni4wIiB3aWR0aD0iMTYuNiIgaGVpZ2h0PSIyLjAiIHJ4PSIyIiBmaWxsPSIjZDlkZWU2Ii8+PHRleHQgeD0iMzQwLjIiIHk9IjEwNCIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZmlsbD0iIzZiNzI4MCI+MTAvMjA8L3RleHQ+PC9zdmc+" alt="최근 12주 주간 출석">
+      </div>
+      
+    </div>
+  </div>
+</div>
+
+<div class="panel" style="margin-bottom:14px">
+  <div class="hd"><svg class="ic "><use href="#i-trend"/></svg> 30일 후 체지방률<span class="meta">실제 출석 기준 · 생리학 공식 · 출석 1회 ≈ 136 kcal</span></div>
+  <div class="bd">
+    <div class="scen">
+      
+      
+      <div class="s">
+        <div class="ico" style="background:#8a94a6"><svg class="ic lg"><use href="#i-walk"/></svg></div>
+        <div class="t">지금처럼 다니면</div>
+        <div class="n num" style="color:#8a94a6">9.2<small>%</small> <span class="delta down">-0.1%p</span></div>
+        <div class="d">최근 30일 기준 월 4회 · 생리학 공식</div>
+      </div>
+      
+      <div class="s">
+        <div class="ico" style="background:#e08a1e"><svg class="ic lg"><use href="#i-bowl"/></svg></div>
+        <div class="t">식단만 조절하면</div>
+        <div class="n num" style="color:#e08a1e">7.3<small>%</small> <span class="delta down">-2.0%p</span></div>
+        <div class="d">월 4회 출석 · 하루 300 kcal 줄이면</div>
+      </div>
+      
+      <div class="s">
+        <div class="ico" style="background:#2f6fdd"><svg class="ic lg"><use href="#i-plus-circle"/></svg></div>
+        <div class="t">주 1회 더 나오면</div>
+        <div class="n num" style="color:#2f6fdd">9.0<small>%</small> <span class="delta down">-0.3%p</span></div>
+        <div class="d">월 8회 출석</div>
+      </div>
+      
+      <div class="s">
+        <div class="ico" style="background:#15936d"><svg class="ic lg"><use href="#i-star"/></svg></div>
+        <div class="t">주 1회 더 + 식단 조절</div>
+        <div class="n num" style="color:#15936d">7.3<small>%</small> <span class="delta down">-2.0%p</span></div>
+        <div class="d">월 8회 출석 · 하루 300 kcal 줄이면</div>
+      </div>
+      
+    </div>
+    <img class="chart-img" style="margin-top:12px" src="data:image/svg+xml;base64,PHN2ZyB2aWV3Qm94PSIwIDAgNzYwIDMwMCIgd2lkdGg9IjEwMCUiIHJvbGU9ImltZyIgYXJpYS1sYWJlbD0i7LK07KeA67Cp66WgIOuzgO2ZlOyZgCDsi5zrgpjrpqzsmKQiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgZm9udC1mYW1pbHk9IlByZXRlbmRhcmQsIEFwcGxlIFNEIEdvdGhpYyBOZW8sIE1hbGd1biBHb3RoaWMsIE5vdG8gU2FucyBLUiwgc2Fucy1zZXJpZiIgZm9udC1zaXplPSIxMSI+PGxpbmUgeDE9IjQ0IiB5MT0iMjY0LjAiIHgyPSI3NDQiIHkyPSIyNjQuMCIgc3Ryb2tlPSIjZTNlOGVmIiBzdHJva2Utd2lkdGg9IjEiLz48dGV4dCB4PSIzOCIgeT0iMjY4LjAiIHRleHQtYW5jaG9yPSJlbmQiIGZpbGw9IiM2YjcyODAiPjQlPC90ZXh0PjxsaW5lIHgxPSI0NCIgeTE9IjIzNi44IiB4Mj0iNzQ0IiB5Mj0iMjM2LjgiIHN0cm9rZT0iI2UzZThlZiIgc3Ryb2tlLXdpZHRoPSIxIi8+PHRleHQgeD0iMzgiIHk9IjI0MC44IiB0ZXh0LWFuY2hvcj0iZW5kIiBmaWxsPSIjNmI3MjgwIj42JTwvdGV4dD48bGluZSB4MT0iNDQiIHkxPSIyMDkuNSIgeDI9Ijc0NCIgeTI9IjIwOS41IiBzdHJva2U9IiNlM2U4ZWYiIHN0cm9rZS13aWR0aD0iMSIvPjx0ZXh0IHg9IjM4IiB5PSIyMTMuNSIgdGV4dC1hbmNob3I9ImVuZCIgZmlsbD0iIzZiNzI4MCI+OCU8L3RleHQ+PGxpbmUgeDE9IjQ0IiB5MT0iMTgyLjIiIHgyPSI3NDQiIHkyPSIxODIuMiIgc3Ryb2tlPSIjZTNlOGVmIiBzdHJva2Utd2lkdGg9IjEiLz48dGV4dCB4PSIzOCIgeT0iMTg2LjIiIHRleHQtYW5jaG9yPSJlbmQiIGZpbGw9IiM2YjcyODAiPjEwJTwvdGV4dD48bGluZSB4MT0iNDQiIHkxPSIxNTUuMCIgeDI9Ijc0NCIgeTI9IjE1NS4wIiBzdHJva2U9IiNlM2U4ZWYiIHN0cm9rZS13aWR0aD0iMSIvPjx0ZXh0IHg9IjM4IiB5PSIxNTkuMCIgdGV4dC1hbmNob3I9ImVuZCIgZmlsbD0iIzZiNzI4MCI+MTIlPC90ZXh0PjxsaW5lIHgxPSI0NCIgeTE9IjEyNy44IiB4Mj0iNzQ0IiB5Mj0iMTI3LjgiIHN0cm9rZT0iI2UzZThlZiIgc3Ryb2tlLXdpZHRoPSIxIi8+PHRleHQgeD0iMzgiIHk9IjEzMS44IiB0ZXh0LWFuY2hvcj0iZW5kIiBmaWxsPSIjNmI3MjgwIj4xNCU8L3RleHQ+PGxpbmUgeDE9IjQ0IiB5MT0iMTAwLjUiIHgyPSI3NDQiIHkyPSIxMDAuNSIgc3Ryb2tlPSIjZTNlOGVmIiBzdHJva2Utd2lkdGg9IjEiLz48dGV4dCB4PSIzOCIgeT0iMTA0LjUiIHRleHQtYW5jaG9yPSJlbmQiIGZpbGw9IiM2YjcyODAiPjE2JTwvdGV4dD48bGluZSB4MT0iNDQiIHkxPSI3My4yIiB4Mj0iNzQ0IiB5Mj0iNzMuMiIgc3Ryb2tlPSIjZTNlOGVmIiBzdHJva2Utd2lkdGg9IjEiLz48dGV4dCB4PSIzOCIgeT0iNzcuMiIgdGV4dC1hbmNob3I9ImVuZCIgZmlsbD0iIzZiNzI4MCI+MTglPC90ZXh0PjxsaW5lIHgxPSI0NCIgeTE9IjQ2LjAiIHgyPSI3NDQiIHkyPSI0Ni4wIiBzdHJva2U9IiNlM2U4ZWYiIHN0cm9rZS13aWR0aD0iMSIvPjx0ZXh0IHg9IjM4IiB5PSI1MC4wIiB0ZXh0LWFuY2hvcj0iZW5kIiBmaWxsPSIjNmI3MjgwIj4yMCU8L3RleHQ+PGxpbmUgeDE9IjQ0LjAiIHkxPSI0NiIgeDI9IjQ0LjAiIHkyPSIyNjQiIHN0cm9rZT0iI2VlZjFmNSIgc3Ryb2tlLXdpZHRoPSIxIi8+PHRleHQgeD0iNDQuMCIgeT0iMjgwIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmaWxsPSIjNmI3MjgwIj4wOS8yOTwvdGV4dD48bGluZSB4MT0iMTg0LjIiIHkxPSI0NiIgeDI9IjE4NC4yIiB5Mj0iMjY0IiBzdHJva2U9IiNlZWYxZjUiIHN0cm9rZS13aWR0aD0iMSIvPjx0ZXh0IHg9IjE4NC4yIiB5PSIyODAiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGZpbGw9IiM2YjcyODAiPjAzLzA3PC90ZXh0PjxsaW5lIHgxPSIzMjQuNCIgeTE9IjQ2IiB4Mj0iMzI0LjQiIHkyPSIyNjQiIHN0cm9rZT0iI2VlZjFmNSIgc3Ryb2tlLXdpZHRoPSIxIi8+PHRleHQgeD0iMzI0LjQiIHk9IjI4MCIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZmlsbD0iIzZiNzI4MCI+MDgvMTM8L3RleHQ+PGxpbmUgeDE9IjQ2My42IiB5MT0iNDYiIHgyPSI0NjMuNiIgeTI9IjI2NCIgc3Ryb2tlPSIjZWVmMWY1IiBzdHJva2Utd2lkdGg9IjEiLz48dGV4dCB4PSI0NjMuNiIgeT0iMjgwIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmaWxsPSIjNmI3MjgwIj4wMS8xODwvdGV4dD48bGluZSB4MT0iNjAzLjgiIHkxPSI0NiIgeDI9IjYwMy44IiB5Mj0iMjY0IiBzdHJva2U9IiNlZWYxZjUiIHN0cm9rZS13aWR0aD0iMSIvPjx0ZXh0IHg9IjYwMy44IiB5PSIyODAiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGZpbGw9IiM2YjcyODAiPjA2LzI2PC90ZXh0PjxsaW5lIHgxPSI3NDQuMCIgeTE9IjQ2IiB4Mj0iNzQ0LjAiIHkyPSIyNjQiIHN0cm9rZT0iI2VlZjFmNSIgc3Ryb2tlLXdpZHRoPSIxIi8+PHRleHQgeD0iNzQ0LjAiIHk9IjI4MCIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZmlsbD0iIzZiNzI4MCI+MTIvMDI8L3RleHQ+PGxpbmUgeDE9IjY5MS4xIiB5MT0iNDYiIHgyPSI2OTEuMSIgeTI9IjI2NCIgc3Ryb2tlPSIjOWFhM2IyIiBzdHJva2UtZGFzaGFycmF5PSIzIDMiLz48dGV4dCB4PSI2OTUuMSIgeT0iNTgiIGZpbGw9IiM2YjcyODAiPuy1nOq3vCDsuKHsoJU8L3RleHQ+PGxpbmUgeDE9IjQ0IiB5MT0iMTQiIHgyPSI2MiIgeTI9IjE0IiBzdHJva2U9IiMxZjI5MzciIHN0cm9rZS13aWR0aD0iMi41Ii8+PHRleHQgeD0iNjciIHk9IjE4IiBmaWxsPSIjMzc0MTUxIj7si6TsoJwg7Lih7KCVPC90ZXh0PjxsaW5lIHgxPSIxMjYuNSIgeTE9IjE0IiB4Mj0iMTQ0LjUiIHkyPSIxNCIgc3Ryb2tlPSIjOGE5NGE2IiBzdHJva2Utd2lkdGg9IjIuNSIgc3Ryb2tlLWRhc2hhcnJheT0iNiA0Ii8+PHRleHQgeD0iMTQ5LjUiIHk9IjE4IiBmaWxsPSIjMzc0MTUxIj7sp4DquIjsspjrn7wg64uk64uI66m0PC90ZXh0PjxsaW5lIHgxPSIyMzEuNSIgeTE9IjE0IiB4Mj0iMjQ5LjUiIHkyPSIxNCIgc3Ryb2tlPSIjZTA4YTFlIiBzdHJva2Utd2lkdGg9IjIuNSIvPjx0ZXh0IHg9IjI1NC41IiB5PSIxOCIgZmlsbD0iIzM3NDE1MSI+7Iud64uo66eMIOyhsOygiO2VmOuptDwvdGV4dD48bGluZSB4MT0iMzM2LjUiIHkxPSIxNCIgeDI9IjM1NC41IiB5Mj0iMTQiIHN0cm9rZT0iIzJmNmZkZCIgc3Ryb2tlLXdpZHRoPSIyLjUiLz48dGV4dCB4PSIzNTkuNSIgeT0iMTgiIGZpbGw9IiMzNzQxNTEiPuyjvCAx7ZqMIOuNlCDrgpjsmKTrqbQ8L3RleHQ+PGxpbmUgeDE9IjQ1Ni41IiB5MT0iMTQiIHgyPSI0NzQuNSIgeTI9IjE0IiBzdHJva2U9IiMxNTkzNmQiIHN0cm9rZS13aWR0aD0iMi41Ii8+PHRleHQgeD0iNDc5LjUiIHk9IjE4IiBmaWxsPSIjMzc0MTUxIj7so7wgMe2ajCDrjZQgKyDsi53ri6gg7KGw7KCIPC90ZXh0Pjxwb2x5bGluZSBwb2ludHM9IjY5MS4xLDE5MS44IDY5Mi4wLDE5MS44IDY5Mi45LDE5MS45IDY5My43LDE5Mi4wIDY5NC42LDE5Mi4wIDY5NS41LDE5Mi4xIDY5Ni40LDE5Mi4xIDY5Ny4zLDE5Mi4yIDY5OC4yLDE5Mi4zIDY5OS4wLDE5Mi4zIDY5OS45LDE5Mi40IDcwMC44LDE5Mi40IDcwMS43LDE5Mi41IDcwMi42LDE5Mi42IDcwMy40LDE5Mi42IDcwNC4zLDE5Mi43IDcwNS4yLDE5Mi43IDcwNi4xLDE5Mi44IDcwNy4wLDE5Mi44IDcwNy45LDE5Mi45IDcwOC43LDE5My4wIDcwOS42LDE5My4wIDcxMC41LDE5My4xIDcxMS40LDE5My4xIDcxMi4zLDE5My4yIDcxMy4xLDE5My4zIDcxNC4wLDE5My4zIDcxNC45LDE5My40IDcxNS44LDE5My40IDcxNi43LDE5My41IDcxNy42LDE5My42IDcxOC40LDE5My42IDcxOS4zLDE5My43IDcyMC4yLDE5My43IDcyMS4xLDE5My44IDcyMi4wLDE5My45IDcyMi44LDE5My45IDcyMy43LDE5NC4wIDcyNC42LDE5NC4wIDcyNS41LDE5NC4xIDcyNi40LDE5NC4xIDcyNy4yLDE5NC4yIDcyOC4xLDE5NC4zIDcyOS4wLDE5NC4zIDcyOS45LDE5NC40IDczMC44LDE5NC40IDczMS43LDE5NC41IDczMi41LDE5NC42IDczMy40LDE5NC42IDczNC4zLDE5NC43IDczNS4yLDE5NC43IDczNi4xLDE5NC44IDczNi45LDE5NC45IDczNy44LDE5NC45IDczOC43LDE5NS4wIDczOS42LDE5NS4wIDc0MC41LDE5NS4xIDc0MS40LDE5NS4xIDc0Mi4yLDE5NS4yIDc0My4xLDE5NS4zIDc0NC4wLDE5NS4zIiBmaWxsPSJub25lIiBzdHJva2U9IiM4YTk0YTYiIHN0cm9rZS13aWR0aD0iMi4yIiBzdHJva2UtZGFzaGFycmF5PSI2IDQiLz48Y2lyY2xlIGN4PSI3NDQuMCIgY3k9IjE5NS4zIiByPSIzIiBmaWxsPSIjOGE5NGE2Ii8+PHBvbHlsaW5lIHBvaW50cz0iNjkxLjEsMTkxLjggNjkyLjAsMTkyLjcgNjkyLjksMTkzLjYgNjkzLjcsMTk0LjUgNjk0LjYsMTk1LjQgNjk1LjUsMTk2LjMgNjk2LjQsMTk3LjIgNjk3LjMsMTk4LjEgNjk4LjIsMTk5LjEgNjk5LjAsMjAwLjAgNjk5LjksMjAwLjkgNzAwLjgsMjAxLjggNzAxLjcsMjAyLjcgNzAyLjYsMjAzLjYgNzAzLjQsMjA0LjUgNzA0LjMsMjA1LjQgNzA1LjIsMjA2LjMgNzA2LjEsMjA3LjIgNzA3LjAsMjA4LjEgNzA3LjksMjA5LjAgNzA4LjcsMjEwLjAgNzA5LjYsMjEwLjkgNzEwLjUsMjExLjggNzExLjQsMjEyLjcgNzEyLjMsMjEzLjYgNzEzLjEsMjE0LjUgNzE0LjAsMjE1LjQgNzE0LjksMjE2LjMgNzE1LjgsMjE3LjIgNzE2LjcsMjE4LjEgNzE3LjYsMjE5LjAgNzE4LjQsMjE5LjkgNzE5LjMsMjIwLjkgNzIwLjIsMjIxLjggNzIxLjEsMjIyLjcgNzIyLjAsMjIzLjYgNzIyLjgsMjI0LjUgNzIzLjcsMjI1LjQgNzI0LjYsMjI2LjMgNzI1LjUsMjI3LjIgNzI2LjQsMjI4LjEgNzI3LjIsMjI5LjAgNzI4LjEsMjI5LjkgNzI5LjAsMjMwLjggNzI5LjksMjMxLjggNzMwLjgsMjMyLjcgNzMxLjcsMjMzLjYgNzMyLjUsMjM0LjUgNzMzLjQsMjM1LjQgNzM0LjMsMjM2LjMgNzM1LjIsMjM3LjIgNzM2LjEsMjM4LjEgNzM2LjksMjM5LjAgNzM3LjgsMjM5LjkgNzM4LjcsMjQwLjggNzM5LjYsMjQxLjcgNzQwLjUsMjQyLjcgNzQxLjQsMjQzLjYgNzQyLjIsMjQ0LjUgNzQzLjEsMjQ1LjQgNzQ0LjAsMjQ2LjMiIGZpbGw9Im5vbmUiIHN0cm9rZT0iI2UwOGExZSIgc3Ryb2tlLXdpZHRoPSIyLjIiLz48Y2lyY2xlIGN4PSI3NDQuMCIgY3k9IjI0Ni4zIiByPSIzIiBmaWxsPSIjZTA4YTFlIi8+PHBvbHlsaW5lIHBvaW50cz0iNjkxLjEsMTkxLjggNjkyLjAsMTkxLjkgNjkyLjksMTkyLjAgNjkzLjcsMTkyLjIgNjk0LjYsMTkyLjMgNjk1LjUsMTkyLjQgNjk2LjQsMTkyLjUgNjk3LjMsMTkyLjcgNjk4LjIsMTkyLjggNjk5LjAsMTkyLjkgNjk5LjksMTkzLjAgNzAwLjgsMTkzLjIgNzAxLjcsMTkzLjMgNzAyLjYsMTkzLjQgNzAzLjQsMTkzLjYgNzA0LjMsMTkzLjcgNzA1LjIsMTkzLjggNzA2LjEsMTkzLjkgNzA3LjAsMTk0LjEgNzA3LjksMTk0LjIgNzA4LjcsMTk0LjMgNzA5LjYsMTk0LjQgNzEwLjUsMTk0LjYgNzExLjQsMTk0LjcgNzEyLjMsMTk0LjggNzEzLjEsMTk0LjkgNzE0LjAsMTk1LjEgNzE0LjksMTk1LjIgNzE1LjgsMTk1LjMgNzE2LjcsMTk1LjQgNzE3LjYsMTk1LjYgNzE4LjQsMTk1LjcgNzE5LjMsMTk1LjggNzIwLjIsMTk1LjkgNzIxLjEsMTk2LjEgNzIyLjAsMTk2LjIgNzIyLjgsMTk2LjMgNzIzLjcsMTk2LjQgNzI0LjYsMTk2LjYgNzI1LjUsMTk2LjcgNzI2LjQsMTk2LjggNzI3LjIsMTk2LjkgNzI4LjEsMTk3LjEgNzI5LjAsMTk3LjIgNzI5LjksMTk3LjMgNzMwLjgsMTk3LjUgNzMxLjcsMTk3LjYgNzMyLjUsMTk3LjcgNzMzLjQsMTk3LjggNzM0LjMsMTk4LjAgNzM1LjIsMTk4LjEgNzM2LjEsMTk4LjIgNzM2LjksMTk4LjMgNzM3LjgsMTk4LjUgNzM4LjcsMTk4LjYgNzM5LjYsMTk4LjcgNzQwLjUsMTk4LjggNzQxLjQsMTk5LjAgNzQyLjIsMTk5LjEgNzQzLjEsMTk5LjIgNzQ0LjAsMTk5LjMiIGZpbGw9Im5vbmUiIHN0cm9rZT0iIzJmNmZkZCIgc3Ryb2tlLXdpZHRoPSIyLjIiLz48Y2lyY2xlIGN4PSI3NDQuMCIgY3k9IjE5OS4zIiByPSIzIiBmaWxsPSIjMmY2ZmRkIi8+PHBvbHlsaW5lIHBvaW50cz0iNjkxLjEsMTkxLjggNjkyLjAsMTkyLjcgNjkyLjksMTkzLjYgNjkzLjcsMTk0LjUgNjk0LjYsMTk1LjQgNjk1LjUsMTk2LjMgNjk2LjQsMTk3LjIgNjk3LjMsMTk4LjEgNjk4LjIsMTk5LjEgNjk5LjAsMjAwLjAgNjk5LjksMjAwLjkgNzAwLjgsMjAxLjggNzAxLjcsMjAyLjcgNzAyLjYsMjAzLjYgNzAzLjQsMjA0LjUgNzA0LjMsMjA1LjQgNzA1LjIsMjA2LjMgNzA2LjEsMjA3LjIgNzA3LjAsMjA4LjEgNzA3LjksMjA5LjAgNzA4LjcsMjEwLjAgNzA5LjYsMjEwLjkgNzEwLjUsMjExLjggNzExLjQsMjEyLjcgNzEyLjMsMjEzLjYgNzEzLjEsMjE0LjUgNzE0LjAsMjE1LjQgNzE0LjksMjE2LjMgNzE1LjgsMjE3LjIgNzE2LjcsMjE4LjEgNzE3LjYsMjE5LjAgNzE4LjQsMjE5LjkgNzE5LjMsMjIwLjkgNzIwLjIsMjIxLjggNzIxLjEsMjIyLjcgNzIyLjAsMjIzLjYgNzIyLjgsMjI0LjUgNzIzLjcsMjI1LjQgNzI0LjYsMjI2LjMgNzI1LjUsMjI3LjIgNzI2LjQsMjI4LjEgNzI3LjIsMjI5LjAgNzI4LjEsMjI5LjkgNzI5LjAsMjMwLjggNzI5LjksMjMxLjggNzMwLjgsMjMyLjcgNzMxLjcsMjMzLjYgNzMyLjUsMjM0LjUgNzMzLjQsMjM1LjQgNzM0LjMsMjM2LjMgNzM1LjIsMjM3LjIgNzM2LjEsMjM4LjEgNzM2LjksMjM5LjAgNzM3LjgsMjM5LjkgNzM4LjcsMjQwLjggNzM5LjYsMjQxLjcgNzQwLjUsMjQyLjcgNzQxLjQsMjQzLjYgNzQyLjIsMjQ0LjUgNzQzLjEsMjQ1LjQgNzQ0LjAsMjQ2LjMiIGZpbGw9Im5vbmUiIHN0cm9rZT0iIzE1OTM2ZCIgc3Ryb2tlLXdpZHRoPSIyLjIiLz48Y2lyY2xlIGN4PSI3NDQuMCIgY3k9IjI0Ni4zIiByPSIzIiBmaWxsPSIjMTU5MzZkIi8+PHBvbHlsaW5lIHBvaW50cz0iNDQuMCw4OC4yIDU4LjEsOTYuNCA3Mi4yLDg1LjUgODcuMiw5MS4wIDExOC4xLDEwOC43IDE0Ni4zLDExOS42IDE3NS40LDEyNy44IDE5MS4yLDEzMy4yIDIwOS43LDEzNy4zIDIzOC44LDE0MC4wIDI1OS4xLDE0NC4xIDI4MS4yLDE0NS41IDMwMy4yLDE0OC4yIDMyNy4wLDE1Ny43IDM1MC44LDE2NC41IDM3OC4xLDE2My4yIDQwNy4yLDE1OS4xIDQzNy4yLDE2MC40IDQ1OC40LDE3Mi43IDQ3Ni4wLDE3OC4yIDQ5NS40LDE4NS4wIDUxMS4zLDE5MS44IDUzNy43LDE5NC41IDU2Ni44LDIwNC4wIDU5NC4xLDIwNi44IDYwOS4xLDIwMi43IDYyNi43LDIwMC4wIDY0Ni4xLDE5OC42IDY2Mi45LDE5NC41IDY3Ni4xLDE4OS4xIDY5MS4xLDE5MS44IiBmaWxsPSJub25lIiBzdHJva2U9IiMxZjI5MzciIHN0cm9rZS13aWR0aD0iMiIvPjxjaXJjbGUgY3g9IjQ0LjAiIGN5PSI4OC4yIiByPSI0IiBmaWxsPSIjMWYyOTM3IiBzdHJva2U9IiNmZmYiIHN0cm9rZS13aWR0aD0iMS41Ii8+PGNpcmNsZSBjeD0iNTguMSIgY3k9Ijk2LjQiIHI9IjQiIGZpbGw9IiMxZjI5MzciIHN0cm9rZT0iI2ZmZiIgc3Ryb2tlLXdpZHRoPSIxLjUiLz48Y2lyY2xlIGN4PSI3Mi4yIiBjeT0iODUuNSIgcj0iNCIgZmlsbD0iIzFmMjkzNyIgc3Ryb2tlPSIjZmZmIiBzdHJva2Utd2lkdGg9IjEuNSIvPjxjaXJjbGUgY3g9Ijg3LjIiIGN5PSI5MS4wIiByPSI0IiBmaWxsPSIjMWYyOTM3IiBzdHJva2U9IiNmZmYiIHN0cm9rZS13aWR0aD0iMS41Ii8+PGNpcmNsZSBjeD0iMTE4LjEiIGN5PSIxMDguNyIgcj0iNCIgZmlsbD0iIzFmMjkzNyIgc3Ryb2tlPSIjZmZmIiBzdHJva2Utd2lkdGg9IjEuNSIvPjxjaXJjbGUgY3g9IjE0Ni4zIiBjeT0iMTE5LjYiIHI9IjQiIGZpbGw9IiMxZjI5MzciIHN0cm9rZT0iI2ZmZiIgc3Ryb2tlLXdpZHRoPSIxLjUiLz48Y2lyY2xlIGN4PSIxNzUuNCIgY3k9IjEyNy44IiByPSI0IiBmaWxsPSIjMWYyOTM3IiBzdHJva2U9IiNmZmYiIHN0cm9rZS13aWR0aD0iMS41Ii8+PGNpcmNsZSBjeD0iMTkxLjIiIGN5PSIxMzMuMiIgcj0iNCIgZmlsbD0iIzFmMjkzNyIgc3Ryb2tlPSIjZmZmIiBzdHJva2Utd2lkdGg9IjEuNSIvPjxjaXJjbGUgY3g9IjIwOS43IiBjeT0iMTM3LjMiIHI9IjQiIGZpbGw9IiMxZjI5MzciIHN0cm9rZT0iI2ZmZiIgc3Ryb2tlLXdpZHRoPSIxLjUiLz48Y2lyY2xlIGN4PSIyMzguOCIgY3k9IjE0MC4wIiByPSI0IiBmaWxsPSIjMWYyOTM3IiBzdHJva2U9IiNmZmYiIHN0cm9rZS13aWR0aD0iMS41Ii8+PGNpcmNsZSBjeD0iMjU5LjEiIGN5PSIxNDQuMSIgcj0iNCIgZmlsbD0iIzFmMjkzNyIgc3Ryb2tlPSIjZmZmIiBzdHJva2Utd2lkdGg9IjEuNSIvPjxjaXJjbGUgY3g9IjI4MS4yIiBjeT0iMTQ1LjUiIHI9IjQiIGZpbGw9IiMxZjI5MzciIHN0cm9rZT0iI2ZmZiIgc3Ryb2tlLXdpZHRoPSIxLjUiLz48Y2lyY2xlIGN4PSIzMDMuMiIgY3k9IjE0OC4yIiByPSI0IiBmaWxsPSIjMWYyOTM3IiBzdHJva2U9IiNmZmYiIHN0cm9rZS13aWR0aD0iMS41Ii8+PGNpcmNsZSBjeD0iMzI3LjAiIGN5PSIxNTcuNyIgcj0iNCIgZmlsbD0iIzFmMjkzNyIgc3Ryb2tlPSIjZmZmIiBzdHJva2Utd2lkdGg9IjEuNSIvPjxjaXJjbGUgY3g9IjM1MC44IiBjeT0iMTY0LjUiIHI9IjQiIGZpbGw9IiMxZjI5MzciIHN0cm9rZT0iI2ZmZiIgc3Ryb2tlLXdpZHRoPSIxLjUiLz48Y2lyY2xlIGN4PSIzNzguMSIgY3k9IjE2My4yIiByPSI0IiBmaWxsPSIjMWYyOTM3IiBzdHJva2U9IiNmZmYiIHN0cm9rZS13aWR0aD0iMS41Ii8+PGNpcmNsZSBjeD0iNDA3LjIiIGN5PSIxNTkuMSIgcj0iNCIgZmlsbD0iIzFmMjkzNyIgc3Ryb2tlPSIjZmZmIiBzdHJva2Utd2lkdGg9IjEuNSIvPjxjaXJjbGUgY3g9IjQzNy4yIiBjeT0iMTYwLjQiIHI9IjQiIGZpbGw9IiMxZjI5MzciIHN0cm9rZT0iI2ZmZiIgc3Ryb2tlLXdpZHRoPSIxLjUiLz48Y2lyY2xlIGN4PSI0NTguNCIgY3k9IjE3Mi43IiByPSI0IiBmaWxsPSIjMWYyOTM3IiBzdHJva2U9IiNmZmYiIHN0cm9rZS13aWR0aD0iMS41Ii8+PGNpcmNsZSBjeD0iNDc2LjAiIGN5PSIxNzguMiIgcj0iNCIgZmlsbD0iIzFmMjkzNyIgc3Ryb2tlPSIjZmZmIiBzdHJva2Utd2lkdGg9IjEuNSIvPjxjaXJjbGUgY3g9IjQ5NS40IiBjeT0iMTg1LjAiIHI9IjQiIGZpbGw9IiMxZjI5MzciIHN0cm9rZT0iI2ZmZiIgc3Ryb2tlLXdpZHRoPSIxLjUiLz48Y2lyY2xlIGN4PSI1MTEuMyIgY3k9IjE5MS44IiByPSI0IiBmaWxsPSIjMWYyOTM3IiBzdHJva2U9IiNmZmYiIHN0cm9rZS13aWR0aD0iMS41Ii8+PGNpcmNsZSBjeD0iNTM3LjciIGN5PSIxOTQuNSIgcj0iNCIgZmlsbD0iIzFmMjkzNyIgc3Ryb2tlPSIjZmZmIiBzdHJva2Utd2lkdGg9IjEuNSIvPjxjaXJjbGUgY3g9IjU2Ni44IiBjeT0iMjA0LjAiIHI9IjQiIGZpbGw9IiMxZjI5MzciIHN0cm9rZT0iI2ZmZiIgc3Ryb2tlLXdpZHRoPSIxLjUiLz48Y2lyY2xlIGN4PSI1OTQuMSIgY3k9IjIwNi44IiByPSI0IiBmaWxsPSIjMWYyOTM3IiBzdHJva2U9IiNmZmYiIHN0cm9rZS13aWR0aD0iMS41Ii8+PGNpcmNsZSBjeD0iNjA5LjEiIGN5PSIyMDIuNyIgcj0iNCIgZmlsbD0iIzFmMjkzNyIgc3Ryb2tlPSIjZmZmIiBzdHJva2Utd2lkdGg9IjEuNSIvPjxjaXJjbGUgY3g9IjYyNi43IiBjeT0iMjAwLjAiIHI9IjQiIGZpbGw9IiMxZjI5MzciIHN0cm9rZT0iI2ZmZiIgc3Ryb2tlLXdpZHRoPSIxLjUiLz48Y2lyY2xlIGN4PSI2NDYuMSIgY3k9IjE5OC42IiByPSI0IiBmaWxsPSIjMWYyOTM3IiBzdHJva2U9IiNmZmYiIHN0cm9rZS13aWR0aD0iMS41Ii8+PGNpcmNsZSBjeD0iNjYyLjkiIGN5PSIxOTQuNSIgcj0iNCIgZmlsbD0iIzFmMjkzNyIgc3Ryb2tlPSIjZmZmIiBzdHJva2Utd2lkdGg9IjEuNSIvPjxjaXJjbGUgY3g9IjY3Ni4xIiBjeT0iMTg5LjEiIHI9IjQiIGZpbGw9IiMxZjI5MzciIHN0cm9rZT0iI2ZmZiIgc3Ryb2tlLXdpZHRoPSIxLjUiLz48Y2lyY2xlIGN4PSI2OTEuMSIgY3k9IjE5MS44IiByPSI0IiBmaWxsPSIjMWYyOTM3IiBzdHJva2U9IiNmZmYiIHN0cm9rZS13aWR0aD0iMS41Ii8+PGNpcmNsZSBjeD0iNjkxLjEiIGN5PSIxOTEuOCIgcj0iNyIgZmlsbD0iIzExMTgyNyIgc3Ryb2tlPSIjZmZmIiBzdHJva2Utd2lkdGg9IjIiLz48L3N2Zz4=" alt="체지방률 변화와 30일 뒤 예측">
+  </div>
+</div>
+
+<div class="grid g-12" style="margin-bottom:14px">
+  <div class="panel c-7">
+    <div class="hd"><svg class="ic "><use href="#i-dumbbell"/></svg> 운동 프로그램 추천<span class="meta">중점 근력</span></div>
+    <div class="bd">
+      <div class="target"><svg class="ic lg"><use href="#i-target"/></svg><div><div class="n num">주 3<small>회</small></div><div class="k">목표 출석 · 현재 주 0.9회</div></div></div>
+      <div class="progs">
+        
+        <div class="prog">
+          <div class="ico "><svg class="ic lg"><use href="#i-wave"/></svg></div>
+          <div><b>수영 초급</b> <span class="badge info">건강 체크 반영 · 평소 오시는 수요일에 있음</span><div class="meta">유산소 · 수중 · 저충격 · 중강도 · 50분</div></div>
+          <div class="goal"><b>월·수·금</b><div class="meta">09:00~09:50</div></div>
+        </div>
+        
+        <div class="prog">
+          <div class="ico strength"><svg class="ic lg"><use href="#i-dumbbell"/></svg></div>
+          <div><b>헬스(자유이용)</b> <span class="badge info">평소 오시는 수요일에 있음</span><div class="meta">근력 · 중충격 · 중강도 · 60분</div></div>
+          <div class="goal"><b>월·화·수·목·금</b><div class="meta">06:00~07:00</div></div>
+        </div>
+        
+      </div>
+      <ul class="why">
+        <li><svg class="ic "><use href="#i-check"/></svg><span>체지방률 9.3% (낮음) → 근육량 유지·증가 위주</span></li><li><svg class="ic "><use href="#i-check"/></svg><span>최근 한 달 출석 4회 → 주 3회로 늘리기</span></li><li><svg class="ic "><use href="#i-check"/></svg><span>건강 체크 무릎·고관절 통증 / 관절염 → 수중·저충격 강좌 우선, 고충격 강좌 제외</span></li><li><svg class="ic "><use href="#i-check"/></svg><span>건강 체크 고혈압 → 중강도 유산소 우선, 고강도·숨 참는 운동 제외</span></li><li><svg class="ic "><use href="#i-check"/></svg><span>평소 오시는 시간(수요일) → 그 시간에 맞는 반을 먼저 고름</span></li>
+        <li class="caution"><svg class="ic "><use href="#i-alert"/></svg><span>65세 이상 → 저·중강도 프로그램 우선</span></li><li class="caution"><svg class="ic "><use href="#i-alert"/></svg><span>건강 체크에 따라 제외: 그룹 근력 운동(고혈압), 배드민턴(무릎·고관절 통증 / 관절염)</span></li>
+      </ul>
+      <div class="memo"><svg class="ic "><use href="#i-chat"/></svg><div>최근 측정 체지방률은 9.3%(낮음)이고, 최근 30일 동안 4회 출석하셨습니다. 지금처럼 다니시면 30일 뒤 9.2%, 주 1회 더 나오시면 9.0%로 예상됩니다. 근력 위주로 수영 초급, 헬스(자유이용) 프로그램을 주 3회 목표로 권해 드립니다. 주의 사항을 확인하고 무리하지 않는 범위에서 시작하세요.<div class="from">규칙 기반 문장</div></div></div>
+    </div>
+  </div>
+
+  <div class="panel c-5" id="screening">
+    <div class="hd"><svg class="ic "><use href="#i-heart"/></svg> 건강검진 연계<span class="meta">나의건강기록(건강정보 고속도로)</span></div>
+    <div class="bd">
+    
+      <div class="consent"><svg class="ic xl"><use href="#i-shield"/></svg>
+        <div><p>본인은 나의건강기록에서 내려받은 국가건강검진 결과(혈압, 공복혈당, 총콜레스테롤, HDL·LDL 콜레스테롤, 중성지방, 허리둘레)를 운동 프로그램 추천 목적으로 용인도시공사에 제공하는 데 동의합니다. 보유 기간은 회원 탈퇴 또는 동의 철회 시까지이며, 동의하지 않아도 체성분·출석 리포트는 동일하게 제공됩니다.</p>
+        
+        <form method="post" action="/member/M025/consent">
+          <input type="hidden" name="action" value="agree">
+          <button type="submit" class="btn primary"><svg class="ic "><use href="#i-link"/></svg> 동의하고 불러오기</button>
+        </form>
+        </div>
+      </div>
+    
+    </div>
+  </div>
+</div>
+
+
+<div class="panel" id="health" style="margin-bottom:14px">
+  <div class="hd"><svg class="ic "><use href="#i-shield"/></svg> 운동 전 건강 체크<span class="meta">회원 등록 시 · 2024-09-27 · 갱신 필요</span></div>
+  <div class="bd">
+    
+    
+    <form method="post" action="/member/M025/healthcheck/suggest" style="display:flex;gap:8px;margin-bottom:12px">
+      <label class="search" style="flex:1"><svg class="ic "><use href="#i-chat"/></svg><input type="text" name="text" value="" placeholder="몸 상태를 편하게 적어 주세요 (예: 계단 오를 때 무릎이 시큰하고 혈압약을 먹어요)" style="width:100%"></label>
+      <button type="submit" class="btn"><svg class="ic "><use href="#i-cpu"/></svg> 항목 찾기</button>
+    </form>
+    <form method="post" action="/member/M025/healthcheck">
+      <div class="grid g-12">
+        
+        <div class="c-12">
+          <div class="sub" style="margin-bottom:8px">해당하는 항목을 고르면 강좌 추천에 반영됩니다. 없으면 그대로 저장하세요.</div>
+          <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:10px">
+            
+            <label class="prog" style="align-items:flex-start;cursor:pointer"><input type="checkbox" name="condition" value="knee_hip" checked style="margin-top:3px">
+              <span><b style="font-size:13px">무릎·고관절 통증 / 관절염</b><span class="meta">수중·저충격 강좌 우선, 고충격 강좌 제외</span></span></label>
+            
+            <label class="prog" style="align-items:flex-start;cursor:pointer"><input type="checkbox" name="condition" value="back"  style="margin-top:3px">
+              <span><b style="font-size:13px">허리 통증</b><span class="meta">수중·저충격 강좌 우선, 고충격 강좌 제외</span></span></label>
+            
+            <label class="prog" style="align-items:flex-start;cursor:pointer"><input type="checkbox" name="condition" value="hypertension" checked style="margin-top:3px">
+              <span><b style="font-size:13px">고혈압</b><span class="meta">중강도 유산소 우선, 고강도·숨 참는 운동 제외</span></span></label>
+            
+            <label class="prog" style="align-items:flex-start;cursor:pointer"><input type="checkbox" name="condition" value="diabetes"  style="margin-top:3px">
+              <span><b style="font-size:13px">당뇨 · 혈당 관리</b><span class="meta">유산소와 근력 병행, 주 3회 이상</span></span></label>
+            
+            <label class="prog" style="align-items:flex-start;cursor:pointer"><input type="checkbox" name="condition" value="osteoporosis"  style="margin-top:3px">
+              <span><b style="font-size:13px">골다공증</b><span class="meta">체중부하·근력 강좌 우선(수중 운동만으로는 부족), 낙상 위험 동작 주의</span></span></label>
+            
+          </div>
+        </div>
+      </div>
+      <div style="display:flex;gap:10px;align-items:center;margin-top:12px">
+        <button type="submit" class="btn primary"><svg class="ic "><use href="#i-check"/></svg> 수정</button>
+        <span class="sub">체크한 내용은 안전한 운동 강좌 추천에만 사용하며, 회원 탈퇴 또는 삭제 요청 시 지웁니다. 진단이 아니며 강좌 선택에만 씁니다.</span>
+      </div>
+    </form>
+    
+  </div>
+</div>
+
+
+
+<div class="panel" style="margin-bottom:14px">
+  <div class="hd"><svg class="ic "><use href="#i-bowl"/></svg> 식단<span class="meta">최근 7일 · 5일 기록</span></div>
+  <div class="bd kpi">
+    <div><div class="k">평균 섭취</div><div class="v num">1,234<small> kcal</small></div></div>
+    
+    <div><div class="k">추정 소비</div><div class="v num">1,819<small> kcal</small></div><div class="delta">기초대사 1,385 + 운동 18</div></div>
+    <div><div class="k">하루 수지</div><div class="v num ">-585<small> kcal</small></div></div>
+    
+    <div><div class="k">기록</div><div class="v num">84<small> 건</small></div><a class="sub" href="member-M025-diet.html">식단 기록 열기 →</a></div>
+  </div>
+  <div class="bd" style="border-top:1px solid var(--line)">
+<table class="dp">
+  <thead><tr><th></th><th>최근 7일</th><th>최근 30일</th></tr></thead>
+  <tbody>
+    <tr><td>기록한 날</td><td><b class="num">5</b>일</td><td><b class="num">25</b>일</td></tr>
+    <tr><td>하루 평균 섭취</td><td><b class="num">1,230</b> kcal</td><td><b class="num">1,550</b> kcal</td></tr>
+    <tr><td>권장량 대비</td><td><b class="num down">-590</b> kcal</td><td><b class="num down">-270</b> kcal</td></tr>
+    <tr class="sep"><td>식단으로 계산한 체지방</td><td><b class="num down">-0.4</b> kg</td><td><b class="num down">-0.9</b> kg</td></tr>
+    <tr><td>인바디 실제 체지방</td><td>—</td><td><b class="num up">+0.1</b> kg</td></tr>
+    <tr><td>인바디 실제 체중</td><td>—</td><td><b class="num down">-0.2</b> kg<small>09/01→10/03</small></td></tr>
+  </tbody>
+</table>
+<p class="sub dp-note">기록한 날 = 세 끼 중 두 끼 이상 적은 날. 식단으로 계산한 값은 그 날들의 (섭취 − 추정 소비)를 더해 지방 1 kg ≈ 7,700 kcal로 바꾼 것입니다. 인바디 값은 그 기간에 가까운 두 번의 측정 차이이며, 측정이 없으면 비워 둡니다.</p>
+</div>
+</div>
+
+
+
+
+<div class="panel" style="margin-bottom:14px">
+  <div class="hd"><svg class="ic "><use href="#i-heart"/></svg> 혈압 측정 이력<span class="meta">인바디 혈압계 · 총 27회 · 판정은 최근 3회 평균</span></div>
+  <table><thead><tr><th>측정일</th><th class="r">수축기</th><th class="r">이완기</th><th class="r">맥박</th></tr></thead>
+  <tbody><tr style="font-weight:600"><td>2026-10-03</td><td class="r num">113</td><td class="r num">75</td><td class="r num">73</td></tr><tr><td>2026-09-16</td><td class="r num">99</td><td class="r num">63</td><td class="r num">67</td></tr><tr><td>2026-09-01</td><td class="r num">115</td><td class="r num">73</td><td class="r num">61</td></tr><tr><td>2026-08-13</td><td class="r num">115</td><td class="r num">71</td><td class="r num">67</td></tr><tr><td>2026-07-22</td><td class="r num">108</td><td class="r num">62</td><td class="r num">78</td></tr><tr><td>2026-07-02</td><td class="r num">105</td><td class="r num">68</td><td class="r num">73</td></tr><tr><td>2026-06-15</td><td class="r num">110</td><td class="r num">78</td><td class="r num">66</td></tr><tr><td>2026-05-15</td><td class="r num">110</td><td class="r num">67</td><td class="r num">82</td></tr></tbody></table>
+</div>
+
+<div class="panel">
+  <div class="hd"><svg class="ic "><use href="#i-list"/></svg> 측정 이력</div>
+  <table>
+    <thead><tr><th>측정일</th><th class="r">체중 (kg)</th><th class="r">체지방률</th><th class="r">골격근량 (kg)</th><th class="r">BMI</th></tr></thead>
+    <tbody>
+    
+      <tr style="font-weight:600">
+        <td>2026-10-03</td>
+        <td class="r num">51.8</td>
+        <td class="r num">9.3%</td>
+        <td class="r num">28.2</td>
+        <td class="r num">17.2</td>
+      </tr>
+    
+      <tr>
+        <td>2026-09-16</td>
+        <td class="r num">51.7</td>
+        <td class="r num">9.5%</td>
+        <td class="r num">28.1</td>
+        <td class="r num">17.1</td>
+      </tr>
+    
+      <tr>
+        <td>2026-09-01</td>
+        <td class="r num">52.0</td>
+        <td class="r num">9.1%</td>
+        <td class="r num">28.4</td>
+        <td class="r num">17.2</td>
+      </tr>
+    
+      <tr>
+        <td>2026-08-13</td>
+        <td class="r num">51.9</td>
+        <td class="r num">8.8%</td>
+        <td class="r num">28.4</td>
+        <td class="r num">17.2</td>
+      </tr>
+    
+      <tr>
+        <td>2026-07-22</td>
+        <td class="r num">51.9</td>
+        <td class="r num">8.7%</td>
+        <td class="r num">28.4</td>
+        <td class="r num">17.2</td>
+      </tr>
+    
+      <tr>
+        <td>2026-07-02</td>
+        <td class="r num">51.8</td>
+        <td class="r num">8.5%</td>
+        <td class="r num">28.5</td>
+        <td class="r num">17.2</td>
+      </tr>
+    
+      <tr>
+        <td>2026-06-15</td>
+        <td class="r num">51.8</td>
+        <td class="r num">8.2%</td>
+        <td class="r num">28.5</td>
+        <td class="r num">17.2</td>
+      </tr>
+    
+      <tr>
+        <td>2026-05-15</td>
+        <td class="r num">52.5</td>
+        <td class="r num">8.4%</td>
+        <td class="r num">28.8</td>
+        <td class="r num">17.4</td>
+      </tr>
+    
+      <tr>
+        <td>2026-04-12</td>
+        <td class="r num">52.6</td>
+        <td class="r num">9.1%</td>
+        <td class="r num">28.7</td>
+        <td class="r num">17.4</td>
+      </tr>
+    
+      <tr>
+        <td>2026-03-13</td>
+        <td class="r num">53.2</td>
+        <td class="r num">9.3%</td>
+        <td class="r num">29.0</td>
+        <td class="r num">17.6</td>
+      </tr>
+    
+      <tr>
+        <td>2026-02-23</td>
+        <td class="r num">53.5</td>
+        <td class="r num">9.8%</td>
+        <td class="r num">28.9</td>
+        <td class="r num">17.7</td>
+      </tr>
+    
+      <tr>
+        <td>2026-02-01</td>
+        <td class="r num">53.7</td>
+        <td class="r num">10.3%</td>
+        <td class="r num">28.9</td>
+        <td class="r num">17.8</td>
+      </tr>
+    
+      <tr>
+        <td>2026-01-12</td>
+        <td class="r num">53.8</td>
+        <td class="r num">10.7%</td>
+        <td class="r num">28.9</td>
+        <td class="r num">17.8</td>
+      </tr>
+    
+      <tr>
+        <td>2025-12-19</td>
+        <td class="r num">53.8</td>
+        <td class="r num">11.6%</td>
+        <td class="r num">28.5</td>
+        <td class="r num">17.8</td>
+      </tr>
+    
+      <tr>
+        <td>2025-11-15</td>
+        <td class="r num">54.3</td>
+        <td class="r num">11.7%</td>
+        <td class="r num">28.5</td>
+        <td class="r num">18.0</td>
+      </tr>
+    
+      <tr>
+        <td>2025-10-13</td>
+        <td class="r num">54.9</td>
+        <td class="r num">11.4%</td>
+        <td class="r num">28.7</td>
+        <td class="r num">18.2</td>
+      </tr>
+    
+      <tr>
+        <td>2025-09-12</td>
+        <td class="r num">55.3</td>
+        <td class="r num">11.3%</td>
+        <td class="r num">28.8</td>
+        <td class="r num">18.3</td>
+      </tr>
+    
+      <tr>
+        <td>2025-08-16</td>
+        <td class="r num">55.7</td>
+        <td class="r num">11.8%</td>
+        <td class="r num">28.8</td>
+        <td class="r num">18.5</td>
+      </tr>
+    
+      <tr>
+        <td>2025-07-20</td>
+        <td class="r num">55.5</td>
+        <td class="r num">12.5%</td>
+        <td class="r num">28.4</td>
+        <td class="r num">18.4</td>
+      </tr>
+    
+      <tr>
+        <td>2025-06-25</td>
+        <td class="r num">55.6</td>
+        <td class="r num">12.7%</td>
+        <td class="r num">28.5</td>
+        <td class="r num">18.4</td>
+      </tr>
+    
+      <tr>
+        <td>2025-05-31</td>
+        <td class="r num">55.7</td>
+        <td class="r num">12.8%</td>
+        <td class="r num">28.4</td>
+        <td class="r num">18.5</td>
+      </tr>
+    
+      <tr>
+        <td>2025-05-08</td>
+        <td class="r num">55.8</td>
+        <td class="r num">13.1%</td>
+        <td class="r num">28.3</td>
+        <td class="r num">18.5</td>
+      </tr>
+    
+      <tr>
+        <td>2025-04-05</td>
+        <td class="r num">56.4</td>
+        <td class="r num">13.3%</td>
+        <td class="r num">28.2</td>
+        <td class="r num">18.7</td>
+      </tr>
+    
+      <tr>
+        <td>2025-03-15</td>
+        <td class="r num">56.9</td>
+        <td class="r num">13.6%</td>
+        <td class="r num">28.4</td>
+        <td class="r num">18.8</td>
+      </tr>
+    
+      <tr>
+        <td>2025-02-25</td>
+        <td class="r num">57.2</td>
+        <td class="r num">14.0%</td>
+        <td class="r num">28.4</td>
+        <td class="r num">18.9</td>
+      </tr>
+    
+      <tr>
+        <td>2025-01-23</td>
+        <td class="r num">57.4</td>
+        <td class="r num">14.6%</td>
+        <td class="r num">28.0</td>
+        <td class="r num">19.0</td>
+      </tr>
+    
+      <tr>
+        <td>2024-12-22</td>
+        <td class="r num">58.2</td>
+        <td class="r num">15.4%</td>
+        <td class="r num">28.1</td>
+        <td class="r num">19.3</td>
+      </tr>
+    
+      <tr>
+        <td>2024-11-17</td>
+        <td class="r num">58.9</td>
+        <td class="r num">16.7%</td>
+        <td class="r num">27.8</td>
+        <td class="r num">19.5</td>
+      </tr>
+    
+      <tr>
+        <td>2024-10-31</td>
+        <td class="r num">58.5</td>
+        <td class="r num">17.1%</td>
+        <td class="r num">27.4</td>
+        <td class="r num">19.4</td>
+      </tr>
+    
+      <tr>
+        <td>2024-10-15</td>
+        <td class="r num">58.6</td>
+        <td class="r num">16.3%</td>
+        <td class="r num">27.7</td>
+        <td class="r num">19.4</td>
+      </tr>
+    
+      <tr>
+        <td>2024-09-29</td>
+        <td class="r num">59.1</td>
+        <td class="r num">16.9%</td>
+        <td class="r num">27.7</td>
+        <td class="r num">19.6</td>
+      </tr>
+    
+    </tbody>
+  </table>
+</div>
+
+
+<div class="foot">
+  예측은 참고용 추정치입니다 — 생리학 공식 · 출석 1회 ≈ 136 kcal (MET × 체중 × 시간) · 식단: 하루 300 kcal 감량 · 지방 1 kg ≈ 7,700 kcal.
+  실제 변화는 수분·수면·식사·개인차에 따라 다르며, 이 리포트는 운동 참여를 돕기 위한 자료로 의료적 판단에 사용할 수 없습니다.
+</div>
+
+  </main>
+</div>
+
+<script>
+// 표의 줄이나 카드 전체를 눌러도 상세로 간다 (안쪽 링크·버튼·입력칸은 그대로). 키보드로는 Enter.
+(function () {
+  function go(el, e) {
+    if (e.target.closest('a, button, input, select, textarea, label, form')) return;
+    var url = el.getAttribute('data-href');
+    if (!url || url.charAt(0) === '#') return;
+    if (e.metaKey || e.ctrlKey) window.open(url, '_blank'); else location.href = url;
+  }
+  document.querySelectorAll('[data-href]').forEach(function (el) {
+    el.setAttribute('tabindex', '0');
+    el.addEventListener('click', function (e) { go(el, e); });
+    el.addEventListener('keydown', function (e) { if (e.key === 'Enter') go(el, e); });
+  });
+  // '목록' 버튼은 방금 보던 목록(검색·필터·쪽 그대로)으로 돌아간다
+  document.querySelectorAll('[data-back]').forEach(function (a) {
+    a.addEventListener('click', function (e) {
+      try {
+        var ref = document.referrer && new URL(document.referrer);
+        if (ref && ref.origin === location.origin && ref.pathname !== location.pathname && history.length > 1) { e.preventDefault(); history.back(); }
+      } catch (err) {}
+    });
+  });
+})();
+</script>
+</body>
+</html>

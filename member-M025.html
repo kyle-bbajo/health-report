@@ -122,13 +122,22 @@
 <div class="topline">
   <h1>조민수</h1><span class="sub">M025 · 수강 중</span>
   <div class="right">
-    <a class="btn sm" href="#demo-page"><svg class="ic "><use href="#i-trend"/></svg> 건강 리포트</a>
-    <a class="btn sm" href="#demo-page"><svg class="ic "><use href="#i-bowl"/></svg> 식단</a>
+    <a class="btn sm" href="member-M025-report.html"><svg class="ic "><use href="#i-trend"/></svg> 건강 리포트</a>
+    <a class="btn sm" href="member-M025-diet.html"><svg class="ic "><use href="#i-bowl"/></svg> 식단</a>
     <a class="btn sm" href="admin.html" data-back><svg class="ic "><use href="#i-back"/></svg> 목록</a>
   </div>
 </div>
 
-<div class="flash warn"><svg class="ic "><use href="#i-alert"/></svg> 평소 오던 날 1번 · 9일째 출석이 없어 본인에게 안부 문자가 갑니다.</div>
+
+<div class="flash warn" style="display:flex;align-items:center;gap:10px"><svg class="ic "><use href="#i-alert"/></svg>
+  <span><b>평소 오던 날 3번 연속</b> 출석이 없습니다 (마지막 2026-10-14).
+  보호자가 없어 본인에게 안부 문자가 갑니다.</span>
+  <form method="post" action="/member/M025/wellness-ack" style="margin-left:auto"><button class="btn sm" type="submit">확인함</button></form>
+</div>
+
+<div class="sub" style="margin:-6px 0 12px 4px"><b>평소에도 있는 결석</b> · 평소 출석률 59% · 평소라면 이렇게 빠질 확률 약 6분의 1 (AI 예측) · 결석한 날마다 올 확률 :
+  10/19 필라테스 51% · 10/21 필라테스 67%</div>
+
 
 
 
@@ -153,27 +162,27 @@
   <div class="panel c-4">
     <div class="hd"><svg class="ic "><use href="#i-users"/></svg> 보호자</div>
     <div class="bd sub">등록된 보호자가 없습니다. 회원 화면 알림 탭에서 2명까지 등록합니다.</div>
-    <div class="bd sub" style="border-top:1px solid var(--line)">연속 미출석 <b>1</b> / 3번 · 출석 없이 <b>9</b> / 14일</div>
+    <div class="bd sub" style="border-top:1px solid var(--line)">연속 미출석 <b>3</b> / 3번 · 출석 없이 <b>9</b> / 14일</div>
   </div>
 </div>
 
 <div class="panel">
   <div class="toolbar"><div class="chips">
     
-    <a class="chip on" href="#demo-page">출석 달력</a>
+    <a class="chip on" href="member-M025-tab-visits.html">출석 달력</a>
     
-    <a class="chip " href="#demo-page">수강 내역</a>
+    <a class="chip " href="member-M025-tab-enroll.html">수강 내역</a>
     
-    <a class="chip " href="#demo-page">안부 기록</a>
+    <a class="chip " href="member-M025-tab-guardian.html">안부 기록</a>
     
-    <a class="chip " href="#demo-page">문자 기록</a>
+    <a class="chip " href="member-M025-tab-sent.html">문자 기록</a>
     
   </div></div>
 
   
   <div class="bd">
     <div style="display:flex;align-items:center;gap:8px;margin-bottom:10px">
-      <a class="btn sm" href="#demo-page">‹ 이전 달</a>
+      <a class="btn sm" href="member-M025-tab-visits-month-2026-09.html">‹ 이전 달</a>
       <b style="font-size:16px">2026년 10월</b>
       
       <span class="sub" style="margin-left:auto">출석 2일 · 평소 요일 미출석 1일 · 전체 122회 (첫 출석 2024-09-30)</span>

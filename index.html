@@ -6,7 +6,6 @@
 <title>공공체육시설 출석 기반 고독사 위험 조기 발견 · 건강 리포트</title>
 <meta name="description" content="체육시설이 이미 가진 출석 기록으로 평소 시간에 안 온 날을 찾아 본인·보호자·주민센터 순으로 알리는 안부 확인 서비스.">
 <link rel="icon" href="static/icon-192.png">
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
 <style>
 /* 토큰: 앱(관리자 사이드바 남색, 파랑 강조, 출석 초록, 결석 분홍)과 같은 색을 쓴다 */
 :root {
@@ -171,7 +170,7 @@ footer a { color: var(--ink-2); }
   <div class="wrap hero">
     <div>
       <h1>꾸준히 오시던&nbsp;분이 안&nbsp;보이면, 먼저 알아차립니다</h1>
-      <p class="lead">공공체육시설에 이미 쌓이는 출석 기록으로 회원마다 평소 오는 요일과 시간을 찾고, 그 시간이 지나도 안 오면 본인, 보호자, 주민센터 순으로 알립니다. 새 장비도, 직원의 전화 당번도 필요 없습니다.</p>
+      <p class="lead">공공체육시설에 이미 쌓이는 출석 기록으로 회원마다 평소 오는 요일과 시간을 찾고, 그 시간이 지나도 안 오면 본인, 보호자, 주민센터 순으로 알립니다. 새 장비는 필요 없고, 직원은 확인 통화와 전달만 합니다.</p>
       <p class="who">2026 공공 AI 대전환 챌린지 세션 1 출품작. 회원관리 프로그램·인바디의 실제 자료 구조와 유사한 구조로 생성한 가상 회원 60명으로 동작합니다.</p>
       <div class="cta">
         <a class="btn fill" href="admin-login.html"><svg viewBox="0 0 24 24"><circle cx="9" cy="8" r="3.5"/><path d="M2.5 20v-1.5a5 5 0 0 1 5-5h3a5 5 0 0 1 5 5V20"/><path d="M16 4.3a3.5 3.5 0 0 1 0 7.4"/></svg>관리자 화면 열기</a>
@@ -194,8 +193,8 @@ footer a { color: var(--ink-2); }
       <div class="key"><span><i style="background:var(--came-bg);border:1px solid var(--came)"></i>오신 날</span><span><i style="background:var(--missed-bg);border:1px solid var(--missed)"></i>평소 오는 날인데 안 옴</span><span><i style="background:#e4e7ec"></i>휴관</span></div>
       <div class="chain">
         <div style="--i:0"><b>1번째</b>회원 화면에 알림: 오늘 수영 시간이 지났어요</div>
-        <div style="--i:1"><b>2번째</b>본인에게 안부 문자(또는 알림톡)</div>
-        <div style="--i:2"><b>3번째</b>동의한 보호자에게 문자(또는 알림톡)</div>
+        <div style="--i:1"><b>2번째</b>본인에게 안부 문자</div>
+        <div style="--i:2"><b>3번째</b>동의한 보호자에게 문자</div>
         <div class="now" style="--i:3"><b>오늘</b>보호자가 없거나 답이 없음. 주민센터 전달 명단에 오름</div>
       </div>
     </figure>
@@ -203,8 +202,8 @@ footer a { color: var(--ink-2); }
 
   <div class="wrap facts">
     <div><b>새 장비 0대</b><span>회원관리 프로그램과 인바디 기록을 그대로 씀</span></div>
-    <div><b class="num">0건 / 7,434건</b><span>평소 오던 날 결석을 놓친 알림</span></div>
-    <div><b class="num">25~32% 적게</b><span>규칙보다 줄어든 헛알림 (알렸는데 늦게라도 온 날)</span></div>
+    <div><b class="num">0건 / 27,016건</b><span>평소 오던 날 결석을 놓친 알림</span></div>
+    <div><b class="num">31~33% 적게</b><span>규칙보다 줄어든 헛알림 (알렸는데 늦게라도 온 날)</span></div>
     <div><b class="num">1분 52초</b><span>회원 2만 명 10년치 출석 학습 시간, 일반 PC</span></div>
     <p class="note">가상 회원 2만 명, 출석 423만 건으로 실험한 수치입니다. 실제 효과는 기관 자료로 다시 학습해야 압니다.</p>
   </div>
@@ -216,7 +215,7 @@ footer a { color: var(--ink-2); }
       <div class="steps">
         <div class="step"><h3>출석 기록을 읽습니다</h3><p>회원관리 프로그램의 입장 기록을 조회만 합니다. 휴회, 휴관, 수강 기간 밖은 세지 않습니다.<small>인바디 측정과 기상청 날씨, 천문연 공휴일도 함께</small></p></div>
         <div class="step"><h3>평소 오는 시간을 찾습니다</h3><p>최근 26주에서 요일마다 절반 넘게 온 요일, 최근 12번 도착 시각의 중앙값을 그 회원의 평소로 봅니다.<small>오는 시간이 바뀌면 따라갑니다</small></p></div>
-        <div class="step hot"><h3>안 오면 단계별로 알립니다</h3><p>연락은 문자 또는 카카오 알림톡으로 합니다. 2번 연속이면 본인, 3번이면 보호자에게 보내고, 평소 시간이 지난 날은 회원 화면에 먼저 띄웁니다. 폭염과 한파 예보일에는 하루 앞당깁니다.<small>몇 시에 알릴지는 날씨와 그날 시설 흐름을 본 예측 모델이 정합니다</small></p></div>
+        <div class="step hot"><h3>안 오면 단계별로 알립니다</h3><p>연락은 문자로 합니다(카카오 알림톡은 기관 채널 승인 뒤). 2번 연속이면 본인, 3번이면 보호자에게 보내고, 평소 시간이 지난 날은 회원 화면에 먼저 띄웁니다. 폭염과 한파 예보일에는 보호자 연락을 2번(10일)으로 앞당깁니다.<small>몇 시에 알릴지는 날씨와 그날 시설 흐름을 본 예측 모델이 정합니다</small></p></div>
         <div class="step"><h3>닿지 않으면 주민센터로</h3><p>보호자가 없거나 답이 없는 회원만 엑셀 명단으로 정리합니다. 직원이 할 일은 이 명단을 확인하는 것뿐입니다.<small>개인정보는 꼭 필요한 칸만</small></p></div>
       </div>
     </div>
@@ -244,7 +243,7 @@ footer a { color: var(--ink-2); }
           <tr><td>용도공</td><td><code>yuc / 2011</code></td><td>평소 월·수·금 아침 수영. 10월 14일 뒤로 못 나와 오늘 알림이 떠 있고, 보호자 안부 단계</td><td><a href="my-yuc.html">열기</a></td></tr>
           <tr><td>최성호</td><td><code>M051 / 1956</code></td><td>평소 오던 날 여러 번 연속 미출석. 보호자 등록과 안부 단계</td><td><a href="my-M051.html">열기</a></td></tr>
           <tr><td>황광수</td><td><code>M004 / 1974</code></td><td>30일 뒤 체지방률 4가지 경우, 지난 측정, 출석 달력, 추천 강좌</td><td><a href="my-M004-body.html">열기</a></td></tr>
-          <tr><td>관리자</td><td>로그인 창에서 들어가기 (시연은 비밀번호 없음)</td><td>장기 미출석 6명, 그중 보호자 없음 6명</td><td><a href="admin-login.html">열기</a></td></tr>
+          <tr><td>관리자</td><td>로그인 창에서 들어가기 (시연은 비밀번호 없음)</td><td>장기 미출석 8명, 그중 보호자 없음 8명</td><td><a href="admin-login.html">열기</a></td></tr>
         </tbody>
       </table></div>
     </div>
