@@ -142,7 +142,7 @@
     <div class="ico"><svg class="ic lg"><use href="#i-users"/></svg></div>
     <div>
       <h3>회원관리프로그램 <span class="badge ok">연결</span></h3>
-      <div class="method">내보내기 파일(CSV) · API 연동 가능 구조 · 갱신 2026-10-27 12:14</div>
+      <div class="method">내보내기 파일(CSV) · API 연동 가능 구조 · 갱신 2026-10-29 08:34</div>
       <table>
         <thead><tr><th>자료</th><th class="r">건수</th></tr></thead>
         <tbody>
@@ -167,7 +167,7 @@
     <div class="ico"><svg class="ic lg"><use href="#i-scale"/></svg></div>
     <div>
       <h3>인바디 (LookinBody) <span class="badge ok">연결</span></h3>
-      <div class="method">.mdb 직접 읽기(mdbtools) · CSV 병행 · 체성분 + 혈압계 · 갱신 2026-10-27 12:14</div>
+      <div class="method">.mdb 직접 읽기(mdbtools) · CSV 병행 · 체성분 + 혈압계 · 갱신 2026-10-29 08:34</div>
       <table>
         <thead><tr><th>자료</th><th class="r">건수</th></tr></thead>
         <tbody>
@@ -184,7 +184,7 @@
     <div class="ico"><svg class="ic lg"><use href="#i-heart"/></svg></div>
     <div>
       <h3>국가건강검진 (나의건강기록) <span class="badge ok">연결</span></h3>
-      <div class="method">본인 동의 후 불러오기 · 지금은 모의 저장소(CSV) · 갱신 2026-10-27 12:14</div>
+      <div class="method">본인 동의 후 불러오기 · 지금은 모의 저장소(CSV) · 갱신 2026-10-29 08:34</div>
       <table>
         <thead><tr><th>자료</th><th class="r">건수</th></tr></thead>
         <tbody>
@@ -234,7 +234,7 @@
               
             </tbody>
           </table>
-          <div class="sub" style="margin-top:8px">오늘 올 확률 구분력(AUC): 모델 0.664 · 그 요일 출석률만 0.629 — 올 확률은 안부 확인 순서를 정하는 데만 씁니다.</div>
+          <div class="sub" style="margin-top:8px">오늘 올 확률 구분력(AUC): 모델 0.672 · 그 요일 출석률만 0.629 — 올 확률은 안부 확인 순서를 정하는 데만 씁니다.</div>
           <div class="sub" style="margin-top:6px">장기 결석 명단 순서: 같은 기간 8번의 기준일에 위쪽 10명 중 14일 안에 다시 온 회원(불필요한 확인) AI 이례성 순 48% · 요일 출석률 순 48% → <b>AI 이례성 순</b>으로 세웁니다.</div>
         </div>
         <div class="c-5">
@@ -246,11 +246,11 @@
           
           <div class="sub" style="margin:10px 0 4px">올 확률에 영향이 큰 특징 (순열 중요도)</div>
           
-          <div class="coef"><div class="row"><span>강좌 출석률</span><div class="track"><i style="left:0;width:100.0%"></i></div><span class="num" style="text-align:right">0.100</span></div><div class="row"><span>그 요일 기록 수</span><div class="track"><i style="left:0;width:7.0%"></i></div><span class="num" style="text-align:right">0.007</span></div><div class="row"><span>연속 결석</span><div class="track"><i style="left:0;width:2.0%"></i></div><span class="num" style="text-align:right">0.002</span></div><div class="row"><span>요일</span><div class="track"><i style="left:0;width:0.0%"></i></div><span class="num" style="text-align:right">0.000</span></div><div class="row"><span>그 요일 출석률</span><div class="track"><i style="left:0;width:0.0%"></i></div><span class="num" style="text-align:right">0.000</span></div><div class="row"><span>시설 출석 흐름</span><div class="track"><i style="left:0;width:0.0%"></i></div><span class="num" style="text-align:right">0.000</span></div></div>
+          <div class="coef"><div class="row"><span>강좌 출석률</span><div class="track"><i style="left:0;width:100.0%"></i></div><span class="num" style="text-align:right">0.096</span></div><div class="row"><span>그 요일 기록 수</span><div class="track"><i style="left:0;width:16.0%"></i></div><span class="num" style="text-align:right">0.016</span></div><div class="row"><span>시설 출석 흐름</span><div class="track"><i style="left:0;width:1.0%"></i></div><span class="num" style="text-align:right">0.001</span></div><div class="row"><span>연속 결석</span><div class="track"><i style="left:0;width:1.0%"></i></div><span class="num" style="text-align:right">0.001</span></div><div class="row"><span>요일</span><div class="track"><i style="left:0;width:0.0%"></i></div><span class="num" style="text-align:right">0.000</span></div></div>
           
         </div>
       </div>
-      <div class="sub" style="margin-top:10px">그래디언트 부스팅(scikit-learn) 두 개: ① 오늘 올 확률 ② 도착 시각의 90% 지점(분위 회귀). 특징은 그 요일·강좌 출석률(최근일수록 무겁게), 연속 결석, 마지막 출석 후 날수, 평소 시각과 들쭉날쭉함, 요일·월, 나이, 날씨(최저·최고·강수·적설·도착 전 3시간 강수), 시설 전체 출석 흐름. 결석은 규칙과 똑같이 모두 알리고, 모델은 언제 알릴지를 정합니다. 학습 2026-10-28 15:00.</div>
+      <div class="sub" style="margin-top:10px">그래디언트 부스팅(scikit-learn) 두 개: ① 오늘 올 확률 ② 도착 시각의 90% 지점(분위 회귀). 특징은 그 요일·강좌 출석률(최근일수록 무겁게), 연속 결석, 마지막 출석 후 날수, 평소 시각과 들쭉날쭉함, 요일·월, 나이, 날씨(최저·최고·강수·적설·도착 전 3시간 강수), 시설 전체 출석 흐름. 결석은 규칙과 똑같이 모두 알리고, 모델은 언제 알릴지를 정합니다. 학습 2026-10-29 09:37.</div>
       
     </div>
   </div>
