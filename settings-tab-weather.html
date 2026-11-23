@@ -21,6 +21,7 @@
   document.addEventListener('submit', function (e) {
     e.preventDefault();
     var f = e.target;
+    if (f.hasAttribute('data-live')) return;   // static/live.js 가 실제 API로 처리
     if (f.hasAttribute('data-demo-admin')) { location.href = 'admin.html'; return; }   // 시연: 비밀번호 없이 들어가기
     if (f.hasAttribute('data-demo-login')) {
       var id = (f.member_id.value || '').trim().toUpperCase(), by = (f.birth_year.value || '').trim();
@@ -134,41 +135,42 @@
         <div class="sub" style="margin-top:6px">지도를 누르거나 핀을 끌어 시설 위치를 정하고 [저장]을 누르세요. 지도는 브이월드 키가 있으면 국토교통부 브이월드, 없으면 OpenStreetMap이고 인터넷이 있어야 보입니다. 안 보이면 위도·경도를 직접 넣어도 됩니다.</div>
       </div>
       <div class="c-5">
-        <form method="post" action="/settings/weather" style="display:grid;gap:9px">
+        <form data-live method="post" action="/settings/weather" style="display:grid;gap:9px">
           <label class="sub">시설 주소
             <span style="display:flex;gap:6px;margin-top:3px"><input name="address" value="" placeholder="예: 경기도 용인시 처인구 중부대로 1199" class="btn" style="flex:1;cursor:text">
-            <button class="btn" name="action" value="geocode" type="submit" title="도로명주소 API 승인키가 필요합니다">주소로 찾기</button></span></label>
+            <button class="btn" name="action" value="geocode" type="submit">주소로 찾기</button></span></label>
           
           <div style="display:flex;gap:6px">
             <label class="sub" style="flex:1">위도<input id="wx-lat" name="lat" value="37.2411" class="btn" style="width:100%;margin-top:3px;cursor:text"></label>
             <label class="sub" style="flex:1">경도<input id="wx-lon" name="lon" value="127.1776" class="btn" style="width:100%;margin-top:3px;cursor:text"></label>
           </div>
-          <div class="sub">기상청 격자 <b class="num">63, 120</b> (저장하면 다시 계산)</div>
+          <div class="sub">기상청 격자 <b class="num" id="wx-grid">63, 120</b> (핀을 옮기면 바로 다시 계산)</div>
           <label class="sub">과거 날씨 관측소 (가까운 순)
             <select name="station" class="btn" style="width:100%;margin-top:3px">
               <option value="119" selected>수원 (119) · 17.4km</option><option value="203" >이천 (203) · 27.2km</option><option value="202" >양평 (202) · 39.3km</option><option value="108" >서울 (108) · 41.2km</option><option value="232" >천안 (232) · 54.3km</option><option value="112" >인천 (112) · 55.5km</option>
             </select></label>
           <label class="sub">기상청 인증키 (공공데이터포털 · 일반 인증키)
-            <input name="key_kma" type="password" autocomplete="off" placeholder="붙여 넣기" class="btn" style="width:100%;margin-top:3px;cursor:text"></label>
+            <input name="key_kma" type="password" autocomplete="off" placeholder="시연판: 저장소 Secrets(KMA_SERVICE_KEY)에 넣음" disabled class="btn" style="width:100%;margin-top:3px;cursor:text"></label>
           
           <label class="sub">도로명주소 검색 API 승인키 (행정안전부 · business.juso.go.kr)
-            <input name="key_juso_search" type="password" autocomplete="off" placeholder="붙여 넣기" class="btn" style="width:100%;margin-top:3px;cursor:text"></label>
+            <input name="key_juso_search" type="password" autocomplete="off" placeholder="시연판: static/live-config.js 에 넣음" disabled class="btn" style="width:100%;margin-top:3px;cursor:text"></label>
           
           <label class="sub">브이월드 인증키 (국토교통부 · 배경지도와 주소 좌표)
-            <input name="key_vworld" type="password" autocomplete="off" placeholder="붙여 넣기" class="btn" style="width:100%;margin-top:3px;cursor:text"></label>
+            <input name="key_vworld" type="password" autocomplete="off" placeholder="시연판: static/live-config.js 에 넣음" disabled class="btn" style="width:100%;margin-top:3px;cursor:text"></label>
           
           <div><button type="submit" name="action" value="save" class="btn primary"><svg class="ic "><use href="#i-check"/></svg> 저장</button></div>
         </form>
-        <form method="post" action="/settings/weather/fetch" style="display:flex;gap:6px;flex-wrap:wrap;margin-top:10px">
+        <form data-live method="post" action="/settings/weather/fetch" style="display:flex;gap:6px;flex-wrap:wrap;margin-top:10px">
           <span class="sub" style="width:100%">기상청 키를 넣으면 오늘 날씨(30분마다)와 과거 날씨(매일)를 자동으로 받습니다.</span>
-          <button class="btn sm" name="what" value="today" type="submit" disabled><svg class="ic "><use href="#i-refresh"/></svg> 오늘 날씨 지금 다시 받기</button>
-          <button class="btn sm" name="what" value="history" type="submit" disabled><svg class="ic "><use href="#i-database"/></svg> 과거 104주 다시 받고 학습</button>
+          <button class="btn sm" name="what" value="today" type="submit"><svg class="ic "><use href="#i-refresh"/></svg> 오늘 날씨 지금 다시 받기</button>
+          <button class="btn sm" name="what" value="history" type="submit" disabled title="설치판에서 동작"><svg class="ic "><use href="#i-database"/></svg> 과거 104주 다시 받고 학습</button>
         </form>
+        <div id="live-msg" class="sub" style="margin-top:8px"></div>
       </div>
     </div>
     <div class="kpi" style="grid-template-columns:repeat(3,1fr);margin-top:12px">
       <div><div class="k">기준일 날씨</div><div class="v" style="font-size:15px">비 소식 없음 · 최저 7° · 최고 22°</div><div class="delta">입력 파일</div></div>
-      <div><div class="k">기상청에서 받은 오늘</div><div class="v" style="font-size:15px">아직 없음</div></div>
+      <div><div class="k">기상청에서 받은 오늘</div><div class="v" id="wx-today" style="font-size:15px">아직 없음</div><div class="delta" id="wx-today-sub"></div></div>
       <div><div class="k">가지고 있는 날씨 자료</div><div class="v" style="font-size:15px">2024-09-21 ~ 2026-10-28</div><div class="delta">18432시간 · 입력 파일</div></div>
     </div>
     
@@ -179,27 +181,8 @@
 </div>
 <link rel="stylesheet" href="static/vendor/leaflet/leaflet.css">
 <script src="static/vendor/leaflet/leaflet.js"></script>
-<script>
-(function () {
-  if (!window.L) { return; }
-  var lat = document.getElementById('wx-lat'), lon = document.getElementById('wx-lon');
-  var p = [parseFloat(lat.value) || 37.2411, parseFloat(lon.value) || 127.1776];
-  var map = L.map('wx-map').setView(p, 16);
-  L.Icon.Default.imagePath = '/static/vendor/leaflet/images/';
-  
-  L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {maxZoom: 19, attribution: '&copy; OpenStreetMap'}).addTo(map);
-  
-  var pin = L.marker(p, {draggable: true}).addTo(map);
-  function set(ll) { lat.value = ll.lat.toFixed(6); lon.value = ll.lng.toFixed(6); }
-  pin.on('dragend', function () { set(pin.getLatLng()); });
-  map.on('click', function (e) { pin.setLatLng(e.latlng); set(e.latlng); });
-  function typed() {  // 위도·경도를 직접 고치면 핀도 따라 움직인다
-    var a = parseFloat(lat.value), b = parseFloat(lon.value);
-    if (!isNaN(a) && !isNaN(b)) { pin.setLatLng([a, b]); map.panTo([a, b]); }
-  }
-  lat.addEventListener('change', typed); lon.addEventListener('change', typed);
-})();
-</script>
+<script src="static/live-config.js"></script>
+<script src="static/live.js"></script>
 
 
   </main>
