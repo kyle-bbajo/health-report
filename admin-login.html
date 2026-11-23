@@ -15,7 +15,7 @@
   var PAGE = '시연판에는 이 화면이 없습니다. 회원 상세 탭과 지난 달 달력은 M004·yuc·M051과 장기 미출석 회원만 있습니다.';
   document.addEventListener('click', function (e) {
     var a = e.target.closest && e.target.closest('a[href="#demo"], a[href="#demo-page"]');
-    if (a) { e.preventDefault(); toast(a.getAttribute('href') === '#demo' ? SAVE : PAGE); }
+    if (a) { e.preventDefault(); if (window.demoVirtual && a.getAttribute('href') === '#demo') { demoVirtual.link(a); return; } toast(a.getAttribute('href') === '#demo' ? SAVE : PAGE); }
   }, true);
   document.addEventListener('submit', function (e) {
     e.preventDefault();
@@ -27,6 +27,7 @@
       if (MEMBERS[id] && MEMBERS[id][1] === by) { location.href = 'my-' + MEMBERS[id][0] + '.html'; return; }
       toast('회원번호나 태어난 해가 맞지 않습니다. 예: yuc / 2011'); return;
     }
+    if (window.demoVirtual) { demoVirtual.submit(f, e.submitter); return; }   // static/demo-virtual.js: 가상으로 동작
     toast(SAVE);
   }, true);
   document.addEventListener('DOMContentLoaded', function () {
@@ -36,6 +37,7 @@
   });
 })();
 </script>
+<script src="static/demo-virtual.js" defer></script>
 <style>
 #demo-bar{background:#1b2533;color:#c5cdd8;font-size:12.5px;padding:6px 16px;text-align:center}
 #demo-bar a{color:#9ec1ff;text-decoration:underline}
