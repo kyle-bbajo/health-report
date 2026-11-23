@@ -21,6 +21,7 @@
   document.addEventListener('submit', function (e) {
     e.preventDefault();
     var f = e.target;
+    if (f.hasAttribute('data-live')) return;   // static/live.js 가 실제 API로 처리
     if (f.hasAttribute('data-demo-admin')) { location.href = 'admin.html'; return; }   // 시연: 비밀번호 없이 들어가기
     if (f.hasAttribute('data-demo-login')) {
       var id = (f.member_id.value || '').trim().toUpperCase(), by = (f.birth_year.value || '').trim();
@@ -129,21 +130,21 @@
   <div class="panel c-6">
     <div class="hd"><svg class="ic "><use href="#i-calendar"/></svg> 공휴일<span class="meta">한국천문연구원 특일 정보 (공공데이터포털)</span></div>
     <div class="bd">
-      <form method="post" action="/settings/closed" style="display:grid;gap:9px">
+      <form data-live method="post" action="/settings/closed" style="display:grid;gap:9px">
         <input type="hidden" name="action" value="mode">
         <label class="sub"><input type="radio" name="holidays" value="all" checked> 공휴일 모두 휴관</label><label class="sub"><input type="radio" name="holidays" value="lunar" > 설날·추석 연휴만 휴관</label><label class="sub"><input type="radio" name="holidays" value="none" > 공휴일에도 운영</label>
         <div><button class="btn primary" type="submit"><svg class="ic "><use href="#i-check"/></svg> 저장</button></div>
       </form>
-      <form method="post" action="/settings/closed" style="margin-top:12px"><input type="hidden" name="action" value="fetch">
+      <form data-live method="post" action="/settings/closed" style="margin-top:12px"><input type="hidden" name="action" value="fetch">
         <button class="btn sm" type="submit"><svg class="ic "><use href="#i-refresh"/></svg> 공휴일 다시 받기</button>
-        <span class="sub">아직 받지 않았습니다 (공공데이터포털 인증키 필요)</span></form>
+        <span class="sub" id="hol-status">아직 받지 않았습니다 (공공데이터포털 인증키 필요)</span></form>
     </div>
   </div>
   <div class="panel c-6">
     <div class="hd"><svg class="ic "><use href="#i-calendar"/></svg> 정기 휴관</div>
     <div class="bd">
       <div class="sub">없음</div>
-      <form method="post" action="/settings/closed" style="display:flex;gap:6px;flex-wrap:wrap;align-items:center;margin-top:10px">
+      <form data-live method="post" action="/settings/closed" style="display:flex;gap:6px;flex-wrap:wrap;align-items:center;margin-top:10px">
         <input type="hidden" name="action" value="add_rule">
         <select name="weekday" class="btn"><option value="0">월요일</option><option value="1">화요일</option><option value="2">수요일</option><option value="3">목요일</option><option value="4">금요일</option><option value="5">토요일</option><option value="6">일요일</option></select>
         <label class="sub"><input type="checkbox" name="nth" value="1"> 1째</label><label class="sub"><input type="checkbox" name="nth" value="2"> 2째</label><label class="sub"><input type="checkbox" name="nth" value="3"> 3째</label><label class="sub"><input type="checkbox" name="nth" value="4"> 4째</label><label class="sub"><input type="checkbox" name="nth" value="5"> 5째</label>
@@ -156,7 +157,7 @@
     <div class="hd"><svg class="ic "><use href="#i-calendar"/></svg> 임시 휴관</div>
     <div class="bd">
       <div class="sub">없음</div>
-      <form method="post" action="/settings/closed" style="display:flex;gap:6px;margin-top:10px">
+      <form data-live method="post" action="/settings/closed" style="display:flex;gap:6px;margin-top:10px">
         <input type="hidden" name="action" value="add_date"><input type="date" name="date" class="btn" required>
         <button class="btn sm primary" type="submit">추가</button></form>
     </div>
@@ -197,5 +198,7 @@
   });
 })();
 </script>
+<script src="static/live-config.js"></script>
+<script src="static/live.js"></script>
 </body>
 </html>
