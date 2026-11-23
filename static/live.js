@@ -100,7 +100,7 @@
       if (sel) sel.innerHTML = nearby(a, b).map(function (s, i) {
         return '<option value="' + s.id + '"' + (i ? '' : ' selected') + '>' + s.name + ' (' + s.id + ') · ' + s.km.toFixed(1) + 'km</option>';
       }).join('');
-      showWeather();
+      weatherSoon(a, b);
     }
     function set(ll) { lat.value = ll.lat.toFixed(6); lon.value = ll.lng.toFixed(6); refresh(); }
     function move(a, b, zoom) { pin.setLatLng([a, b]); map.setView([a, b], zoom || map.getZoom()); lat.value = a.toFixed(6); lon.value = b.toFixed(6); refresh(); }
@@ -164,38 +164,71 @@
         else msg('과거 날씨 받기와 학습은 설치판에서 동작합니다.');
       });
     });
-    refresh();
-    loadWeather(false);
+    // 내 위치 버튼 (주소로 찾기 옆)
+    var gbtn = document.querySelector('#weather button[value=geocode]');
+    if (gbtn && navigator.geolocation) {
+      var me = document.createElement('button');
+      me.type = 'button'; me.className = 'btn'; me.textContent = '내 위치';
+      me.addEventListener('click', function () { here(true); });
+      gbtn.parentNode.appendChild(me);
+    }
+    function here(manual) {  // 켜자마자 현재 위치로 지도 · 격자 · 날씨를 맞춘다
+      if (!navigator.geolocation) { if (manual) msg('이 브라우저는 위치 정보를 지원하지 않습니다.', true); return; }
+      msg('현재 위치를 확인하는 중… (브라우저에서 위치 권한을 허용해 주세요)');
+      navigator.geolocation.getCurrentPosition(function (pos) {
+        move(pos.coords.latitude, pos.coords.longitude, 15);
+        msg('현재 위치로 지도와 날씨를 맞췄습니다. 시설 위치로 쓰려면 [저장]을 누르세요.');
+      }, function (err) {
+        msg(err.code === 1 ? '위치 권한이 없어 저장된 시설 위치로 보여 드립니다. (주소창 옆 자물쇠에서 위치 허용)' : '현재 위치를 찾지 못해 시설 위치로 보여 드립니다.', !!manual);
+      }, { enableHighAccuracy: true, timeout: 10000, maximumAge: 300000 });
+    }
+    loadKma().then(function () { refresh(); here(false); });
   }
 
-  var WX = null;
-  function describe(w) {
-    var n = w.now || {}, parts = [];
-    if (n.temp != null) parts.push('지금 ' + Math.round(n.temp) + '°');
-    parts.push(n.pty ? (n.pty === 3 || n.pty === 7 ? '눈' : '비') + (n.rain_mm ? ' ' + n.rain_mm + 'mm' : '') : '비 없음');
-    if (w.tmin != null && w.tmax != null) parts.push('최저 ' + Math.round(w.tmin) + '° · 최고 ' + Math.round(w.tmax) + '°');
-    return parts.join(' · ');
+  var WX = null, wxTimer = null, wxSeq = 0;
+  function loadKma() {  // GitHub Actions가 매시간 받은 기상청 자료(시설 격자)
+    return getLive('static/live/weather.json').then(function (w) { WX = w; }, function () { WX = null; });
   }
-  function showWeather() {
-    var box = $('wx-today'), sub = $('wx-today-sub');
-    if (!box || !WX) return;
-    box.textContent = describe(WX);
-    var g = toGrid(parseFloat($('wx-lat').value), parseFloat($('wx-lon').value));
-    var same = g[0] === WX.nx && g[1] === WX.ny;
-    sub.textContent = WX.source + ' · ' + WX.fetched_at + ' 갱신 · 격자 ' + WX.nx + ', ' + WX.ny + (same ? '' : ' (시설 위치 기준 · 새 위치는 설치판에서 받음)');
+  function rainWord(code, mm) {
+    if ([71, 73, 75, 77, 85, 86].indexOf(code) >= 0) return '눈' + (mm ? ' ' + mm + 'mm' : '');
+    if (code >= 51 && code <= 67 || code >= 80 && code <= 82 || code >= 95) return '비' + (mm ? ' ' + mm + 'mm' : '');
+    return '비 없음';
+  }
+  function show(text, sub) { if ($('wx-today')) $('wx-today').textContent = text; if ($('wx-today-sub')) $('wx-today-sub').textContent = sub; }
+  function weatherSoon(lat, lon) { clearTimeout(wxTimer); wxTimer = setTimeout(function () { weatherAt(lat, lon); }, 500); }
+  function weatherAt(lat, lon, manual) {
+    if (!$('wx-today')) return;
+    var g = toGrid(lat, lon), seq = ++wxSeq;
+    if (WX && WX.nx === g[0] && WX.ny === g[1]) {  // 시설 격자면 기상청 자료
+      var n = WX.now || {}, parts = [];
+      if (n.temp != null) parts.push('지금 ' + Math.round(n.temp) + '°');
+      parts.push(n.pty ? (n.pty === 3 || n.pty === 7 ? '눈' : '비') + (n.rain_mm ? ' ' + n.rain_mm + 'mm' : '') : '비 없음');
+      if (WX.tmin != null && WX.tmax != null) parts.push('최저 ' + Math.round(WX.tmin) + '° · 최고 ' + Math.round(WX.tmax) + '°');
+      show(parts.join(' · '), WX.source + ' · ' + WX.fetched_at + ' 갱신 · 격자 ' + g[0] + ', ' + g[1]);
+      if (manual) msg('기상청 날씨를 불러왔습니다.');
+      return;
+    }
+    show('불러오는 중…', '격자 ' + g[0] + ', ' + g[1]);
+    // 다른 위치는 키 없이 부를 수 있는 Open-Meteo로 (설치판은 이 격자로 기상청 단기예보를 받음)
+    getJSON('https://api.open-meteo.com/v1/forecast?' + new URLSearchParams({
+      latitude: lat.toFixed(4), longitude: lon.toFixed(4), timezone: 'Asia/Seoul', forecast_days: 1,
+      current: 'temperature_2m,precipitation,weather_code', daily: 'temperature_2m_max,temperature_2m_min'
+    })).then(function (d) {
+      if (seq !== wxSeq) return;
+      var c = d.current || {}, dy = d.daily || {}, parts = [];
+      if (c.temperature_2m != null) parts.push('지금 ' + Math.round(c.temperature_2m) + '°');
+      parts.push(rainWord(c.weather_code, c.precipitation));
+      if (dy.temperature_2m_min && dy.temperature_2m_max) parts.push('최저 ' + Math.round(dy.temperature_2m_min[0]) + '° · 최고 ' + Math.round(dy.temperature_2m_max[0]) + '°');
+      show(parts.join(' · '), 'Open-Meteo · ' + String(c.time || '').replace('T', ' ') + ' · 격자 ' + g[0] + ', ' + g[1] + ' (설치판은 이 격자로 기상청 단기예보)');
+      if (manual) msg('이 위치의 날씨를 불러왔습니다.');
+    }).catch(function (e) {
+      if (seq !== wxSeq) return;
+      show('불러오지 못함', '날씨: ' + e.message + ' · 격자 ' + g[0] + ', ' + g[1]);
+    });
   }
   function loadWeather(manual) {
-    var box = $('wx-today'), sub = $('wx-today-sub');
-    if (!box) return;
-    if (manual) msg('기상청 자료를 다시 읽는 중…');
-    getLive('static/live/weather.json').then(function (w) {
-      WX = w; showWeather();
-      if (manual) msg('기상청 날씨를 불러왔습니다 (' + w.fetched_at + ' 갱신, 매시간 자동).');
-    }).catch(function (e) {
-      box.textContent = '아직 없음';
-      sub.textContent = '저장소 Secrets에 기상청 키(KMA_SERVICE_KEY)를 넣으면 매시간 자동 갱신';
-      if (manual) msg('기상청 자료: ' + e.message, true);
-    });
+    if (manual) msg('날씨를 다시 받는 중…');
+    loadKma().then(function () { weatherAt(parseFloat($('wx-lat').value), parseFloat($('wx-lon').value), manual); });
   }
 
   // ── 휴관일 탭: 공휴일 ──
