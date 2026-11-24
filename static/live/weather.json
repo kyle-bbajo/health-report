@@ -1,22 +1,22 @@
 {
  "ok": true,
  "source": "기상청 단기예보 · 초단기실황",
- "fetched_at": "2026-11-24 08:59",
+ "fetched_at": "2026-11-24 19:00",
  "date": "2026-11-24",
  "lat": 37.2411,
  "lon": 127.1776,
  "nx": 63,
  "ny": 120,
  "now": {
-  "time": "08:00",
-  "temp": 1.1,
+  "time": "18:00",
+  "temp": -0.5,
   "rain_mm": 0.0,
   "pty": 0,
-  "humidity": 38.0,
-  "wind": 1.7
+  "humidity": 36.0,
+  "wind": 2.2
  },
  "tmin": -1.0,
- "tmax": 3.0,
+ "tmax": 4.0,
  "hours": {
   "3": {
    "temp": 1.0,
@@ -67,7 +67,7 @@
    "snow_cm": 0.0
   },
   "11": {
-   "temp": 1.0,
+   "temp": 2.0,
    "pop": 0.0,
    "rain_mm": 0.0,
    "snow_cm": 0.0
@@ -79,7 +79,7 @@
    "snow_cm": 0.0
   },
   "13": {
-   "temp": 2.0,
+   "temp": 3.0,
    "pop": 0.0,
    "rain_mm": 0.0,
    "snow_cm": 0.0
@@ -127,7 +127,7 @@
    "snow_cm": 0.0
   },
   "21": {
-   "temp": -3.0,
+   "temp": -2.0,
    "pop": 0.0,
    "rain_mm": 0.0,
    "snow_cm": 0.0
