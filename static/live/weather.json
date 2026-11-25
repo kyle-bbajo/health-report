@@ -1,145 +1,145 @@
 {
  "ok": true,
  "source": "기상청 단기예보 · 초단기실황",
- "fetched_at": "2026-11-25 23:39",
- "date": "2026-11-25",
+ "fetched_at": "2026-11-26 08:40",
+ "date": "2026-11-26",
  "lat": 37.2411,
  "lon": 127.1776,
  "nx": 63,
  "ny": 120,
  "now": {
-  "time": "22:00",
-  "temp": 3.9,
+  "time": "07:00",
+  "temp": 6.7,
   "rain_mm": 0.0,
   "pty": 0,
-  "humidity": 73.0,
-  "wind": 0.6
+  "humidity": 76.0,
+  "wind": 0.7
  },
- "tmin": -5.0,
- "tmax": 7.0,
+ "tmin": 3.0,
+ "tmax": 15.0,
  "hours": {
   "3": {
-   "temp": -4.0,
+   "temp": 3.0,
    "pop": 0.0,
    "rain_mm": 0.0,
    "snow_cm": 0.0
   },
   "4": {
-   "temp": -4.0,
+   "temp": 3.0,
    "pop": 0.0,
    "rain_mm": 0.0,
    "snow_cm": 0.0
   },
   "5": {
-   "temp": -5.0,
+   "temp": 3.0,
    "pop": 0.0,
    "rain_mm": 0.0,
    "snow_cm": 0.0
   },
   "6": {
-   "temp": -5.0,
+   "temp": 3.0,
    "pop": 0.0,
    "rain_mm": 0.0,
    "snow_cm": 0.0
   },
   "7": {
-   "temp": -5.0,
+   "temp": 4.0,
    "pop": 0.0,
    "rain_mm": 0.0,
    "snow_cm": 0.0
   },
   "8": {
-   "temp": -4.0,
+   "temp": 5.0,
    "pop": 0.0,
    "rain_mm": 0.0,
    "snow_cm": 0.0
   },
   "9": {
-   "temp": -2.0,
-   "pop": 20.0,
+   "temp": 7.0,
+   "pop": 0.0,
    "rain_mm": 0.0,
    "snow_cm": 0.0
   },
   "10": {
-   "temp": 0.0,
+   "temp": 9.0,
    "pop": 0.0,
    "rain_mm": 0.0,
    "snow_cm": 0.0
   },
   "11": {
-   "temp": 2.0,
-   "pop": 20.0,
+   "temp": 11.0,
+   "pop": 0.0,
    "rain_mm": 0.0,
    "snow_cm": 0.0
   },
   "12": {
-   "temp": 4.0,
-   "pop": 20.0,
+   "temp": 13.0,
+   "pop": 0.0,
    "rain_mm": 0.0,
    "snow_cm": 0.0
   },
   "13": {
-   "temp": 5.0,
-   "pop": 20.0,
+   "temp": 14.0,
+   "pop": 0.0,
    "rain_mm": 0.0,
    "snow_cm": 0.0
   },
   "14": {
-   "temp": 6.0,
-   "pop": 20.0,
+   "temp": 15.0,
+   "pop": 0.0,
    "rain_mm": 0.0,
    "snow_cm": 0.0
   },
   "15": {
-   "temp": 7.0,
+   "temp": 15.0,
    "pop": 0.0,
    "rain_mm": 0.0,
    "snow_cm": 0.0
   },
   "16": {
-   "temp": 7.0,
-   "pop": 0.0,
+   "temp": 15.0,
+   "pop": 20.0,
    "rain_mm": 0.0,
    "snow_cm": 0.0
   },
   "17": {
-   "temp": 5.0,
+   "temp": 13.0,
    "pop": 0.0,
    "rain_mm": 0.0,
    "snow_cm": 0.0
   },
   "18": {
-   "temp": 4.0,
-   "pop": 20.0,
+   "temp": 11.0,
+   "pop": 0.0,
    "rain_mm": 0.0,
    "snow_cm": 0.0
   },
   "19": {
-   "temp": 3.0,
-   "pop": 20.0,
+   "temp": 10.0,
+   "pop": 0.0,
    "rain_mm": 0.0,
    "snow_cm": 0.0
   },
   "20": {
-   "temp": 3.0,
+   "temp": 10.0,
    "pop": 0.0,
    "rain_mm": 0.0,
    "snow_cm": 0.0
   },
   "21": {
-   "temp": 4.0,
-   "pop": 20.0,
+   "temp": 9.0,
+   "pop": 0.0,
    "rain_mm": 0.0,
    "snow_cm": 0.0
   },
   "22": {
-   "temp": 4.0,
+   "temp": 9.0,
    "pop": 0.0,
    "rain_mm": 0.0,
    "snow_cm": 0.0
   },
   "23": {
-   "temp": 4.0,
+   "temp": 9.0,
    "pop": 0.0,
    "rain_mm": 0.0,
    "snow_cm": 0.0
